@@ -47,14 +47,14 @@ Tài liệu theo dõi tiến độ từng mốc Checkpoint (CP1–CP4) và đầ
 ## CP3 — 10:00 Sáng Thứ Bảy 28/11 (4 điểm · GỌI AI THẬT)
 
 ### Bằng chứng Pain (`evidence/`)
-- [ ] Hoàn thiện `evidence/data-mining.md` (thống kê `x/N`, `%`, cách đếm chạy lại được, ≥5 ví dụ ẩn danh) *(Tường)*
+- [x] Hoàn thiện `evidence/data-mining.md` (thống kê `x/N`, `%`, cách đếm chạy lại được, ≥5 ví dụ ẩn danh) *(Tường — PR #6: A = 40/89 review 5★ natural Điện Máy Xanh là L/S)*
 - [ ] Hoàn thiện phỏng vấn (≥3 người ngoài nhóm trong `evidence/interviews/P1.md..P3.md`) và/hoặc khảo sát (≥20 người trong `evidence/survey/`) *(Nhật)*
-- [ ] Tổng hợp đầy đủ `evidence/summary.md` (đạt ngưỡng **≥1 nguồn** + **≥5 trích dẫn nguyên văn** ẩn tên) *(Tường)*
+- [x] Tổng hợp đầy đủ `evidence/summary.md` (đạt ngưỡng **≥1 nguồn** + **≥5 trích dẫn nguyên văn** ẩn tên) *(Tường)*
 
 ### Mở rộng dữ liệu & Benchmark (20–30 câu)
-- [ ] Đủ 25–30 mẫu sản phẩm thật ẩn danh trong `data/samples/` (Shopee + Tiki + TikTok Shop/Lazada) *(Tường & Nhật)*
-- [ ] Mở rộng `eval/benchmark.csv` lên **20–30 câu thử thật** (đủ **≥5 câu `kho`** và **≥2 câu `tu_choi` / tấn công**) *(Tường)*
-- [ ] Chạy `python run.py check` đạt **0 cảnh báo toàn bộ** *(Tường & Bảo)*
+- [x] Đủ 25–30 mẫu sản phẩm thật ẩn danh trong `data/samples/` (Shopee + Tiki + TikTok Shop/Lazada) *(Tường & Nhật — PR #6: 26 mẫu = 13 Shopee + 13 Điện Máy Xanh; chưa có Tiki/TikTok, ghi trong DATA_CARD)*
+- [x] Mở rộng `eval/benchmark.csv` lên **20–30 câu thử thật** (đủ **≥5 câu `kho`** và **≥2 câu `tu_choi` / tấn công**) *(Tường — PR #6: 30 câu, kho 6, tu_choi 3)*
+- [x] Chạy `python run.py check` đạt **0 cảnh báo toàn bộ** *(Tường & Bảo)*
 
 ### Bản chạy thử gọi AI thật & Eval Lượt 1
 - [ ] Nối `.env` bằng **Gemini thật** (`MODEL_PROVIDER=gemini`, `MODEL_NAME=gemini-3.6-flash` hoặc `gemini-3.5-flash-lite`, không commit `.env`) và chạy `python run.py eval --try` báo `"Nối model được"` *(Bảo)*
