@@ -1,44 +1,31 @@
-# Hồ sơ đánh giá — một trang
+# Hồ Sơ Đánh Giá Hệ Thống (Eval Profile) — ReviewShield
 
-> Điền ở guide bước 2.4 (mục 1–4, trước CP2) và 4.1 (mục 5–6, trước CP4). Ôn lại: ngày 9, ngày 14 · lab ngày 9. Chấm ở rubric R4, R5.
-> Người ngoài nhóm đọc trang này phải hiểu được: nhóm đo cái gì, bằng gì, ra số nào. Trang slide "Đánh giá thế nào" lấy từ đây.
+## 1. Bộ dữ liệu kiểm thử (`eval/benchmark.csv`)
+* **Quy mô:** 25–30 tình huống kiểm thử thật (mỗi dòng là một cụm 6–15 review sản phẩm công khai từ sàn TMĐT đã ẩn danh người mua).
+* **Phân bổ 4 nhóm kịch bản:**
+  1. `genuine_high` (7 cases): Sản phẩm chất lượng tốt thật, đa số review mô tả chi tiết trải nghiệm.
+  2. `seeding_heavy` (8 cases): Điểm sàn 4.8–5.0 nhưng hơn 50% là review nhận xu hoặc lặp mẫu câu quảng cáo.
+  3. `logistics_bias` (5 cases): Sản phẩm ổn nhưng bị đánh 1–2 sao do shipper/vận chuyển.
+  4. `hidden_defects` (5–10 cases): Điểm sàn cao nhưng review 1–3 sao gần đây lặp lại cùng 1–2 lỗi nghiêm trọng.
 
-## 1. Dataset → xử lý
+## 2. Quy trình dựng & gán nhãn `eval/benchmark.csv`
+1. Thu thập công khai từ 4–5 ngành hàng phổ biến (Phụ kiện điện tử, Thời trang, Gia dụng, Mỹ phẩm, Đồ ăn vặt).
+2. Ẩn danh toàn bộ thông tin tài khoản người mua thành `user_01`, `user_02`.
+3. Gán nhãn chuẩn theo đúng quy tắc phân định ranh giới tại `docs/AI_PROMPT_AND_SCORING.md`.
+4. Kiểm tra chéo giữa 2 thành viên đối với các review nằm ở ranh giới giữa `low_signal` và `verified_insight`.
 
-Dataset nào, xử lý gì: tóm 2–3 dòng từ `data/DATA_CARD.md`.
+## 3. Metric & Cách chấm (Khớp `eval/metric_spec.yaml`)
+* `label_accuracy` (`code`, ngưỡng `>= 85%`)
+* `direction_match` (`code`, ngưỡng `>= 85%`)
+* `citation_grounding` (`code`, ngưỡng `== 100%`)
+* `actionable_quality` (`nguoi`, ngưỡng `>= 80%`)
 
-## 2. Bộ câu thử dựng ra sao
+## 4. Lệnh chạy chuẩn theo khung repo
+```bash
+python run.py eval --try          # Chạy thử nhanh vài câu
+python run.py eval                # Chạy toàn bộ eval/benchmark.csv -> tạo eval/run-N.csv
+python run.py score eval/run-1.csv # Tổng hợp điểm sau khi điền cột pass/ghi_chu
+```
 
-- `eval/benchmark.csv`: __ câu (thuong __ · kho __ · tu_choi __, trong đó __ câu tấn công)
-- Nguồn (`python run.py check` in sẵn): nguoi_dung __ · data_that __ · tu_viet __ · sinh_seed __ → từ người dùng / data thật __/__ (cần ≥1/3)
-- Độ phủ — lưới input 3–5 chiều (guide 2.4 bước 5): __
-- Câu `kho` trỏ về 4 lớp chỗ khó (`spec.md` §5): lớp 1: __ · lớp 2: __ · lớp 3: __ · lớp 4: __
-
-## 3. Metric và cách chấm
-
-| Metric (`eval/metric_spec.yaml`) | Cách chấm | Ngưỡng |
-|---|---|---|
-| | code / llm / nguoi | |
-| | | |
-| | | |
-
-- **Người thứ hai chấm thử:** __ (không phải người viết spec) chấm độc lập 5 output → khớp __/5 *(cần ≥4/5; lệch thì viết lại định nghĩa)*
-- LLM chấm (nếu có): đã kiểm tay __ câu, khớp __/__
-- **Chuẩn "đạt"** (chép nguyên từ `spec.md` §7, chốt trước 19:30 Thứ Sáu 27/11): "__"
-
-## 4. Lệnh
-
-`python run.py eval` → `eval/run-N.csv` + `traces/run-N.jsonl` · điền cột `pass` · `python run.py score eval/run-N.csv`
-
-## 5. Đã chạy gì
-
-| Lượt | Run ID | Model | Cấu hình (prompt / công cụ / thay đổi) | Đạt / tổng | % | Đạt chuẩn? |
-|---|---|---|---|---|---|---|
-| 1 | | | | __/__ | | |
-| 2 | | | | __/__ | | |
-
-Lượt chạy lại vì lỗi kỹ thuật, lượt sau CP4: ghi thêm dòng, không sửa dòng cũ.
-
-## 6. Lỗi chính
-
-Tóm 2–3 dòng từ `eval/report.md`: nhóm lỗi lớn nhất · đã sửa gì · còn lại gì.
+## 5. Kết quả tổng hợp
+* `[Cập nhật sau khi chạy python run.py eval và dán bảng từ eval/report.md]`

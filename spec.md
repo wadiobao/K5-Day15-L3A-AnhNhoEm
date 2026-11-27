@@ -1,104 +1,57 @@
-# AI SPEC — [Tên lát cắt] · Nhóm [tên nhóm] · Phòng [XXX] · Zone [X]
+# SPEC — Đặc Tả Hệ Thống AI: ReviewShield
 
-> Mốc nộp: §7 chốt chuẩn "đạt" tại **CP2 19:30 Thứ Sáu 27/11** · §0–§7 nộp **CP3 10:00 Thứ Bảy 28/11** · đủ §0–§10 **CP4 14:30 Thứ Bảy 28/11** · §10 changelog ghi tiếp đến **23:59 Thứ Bảy 28/11**.
-> Đầu mỗi mục ghi bước guide (`02-guide.md` trong repo đề) chỉ cách điền. Mỗi mục ngắn, có số và nguồn; chi tiết để ở file được trỏ tới. Xoá dòng hướng dẫn trong ngoặc vuông khi điền xong.
+> Lộ trình mốc: Chốt `§7` trước CP2 (19:30 Thứ Sáu 27/11) • Nộp `§0–§7` tại CP3 (10:00 Thứ Bảy 28/11) • Đủ `§0–§10` tại CP4 (14:30 Thứ Bảy 28/11).
 
-Track: [ ] A · [ ] B · [ ] C · [ ] D · [ ] E — bài toán: [đề gợi ý trong file track, hoặc bài toán nhóm tự mở rộng] __
-Data BTC cấp đã dùng (nếu có — không commit nguyên file): __
+## §0. Bối cảnh & Bài toán hiện tại
+Người mua hàng trên các sàn thương mại điện tử thường dựa vào điểm sao hiển thị (4.8–5.0 sao) để quyết định nhanh. Thực tế, điểm này thường bị bóp méo bởi đánh giá nhận xu ("giao nhanh, chưa dùng nhưng cho 5 sao"), đánh giá lặp mẫu nghi vấn seeding và đánh giá 1–2 sao chỉ phàn nàn về shipper.
 
-## §0. Hiện tại việc này diễn ra thế nào *(guide 1.1)*
-- Luồng hiện tại của việc này, trong khoá hoặc trên app thật (3–5 bước; ảnh chụp từ tài khoản của mình, đã che thông tin):
-- Công cụ / AI đang được dùng cho việc này (nếu có) + nguồn. Không kiểm được thì ghi "chưa kiểm":
+## §1. Người dùng mục tiêu & Bằng chứng Pain
+* **Người dùng chính:** Người mua hàng online phổ thông cần thẩm định nhanh độ tin cậy của sản phẩm trước khi đặt mua.
+* **Bằng chứng pain:** Tổng hợp từ dữ liệu đào review công khai (`evidence/data-mining.md`), phỏng vấn người mua (`evidence/interviews/`) và khảo sát (`evidence/survey/`), xem chi tiết tại `evidence/summary.md`.
 
-## §1. Người dùng & bằng chứng *(guide 1.1, 1.2)*
-- Người dùng chính (một vai cụ thể):
-- Việc họ cố làm xong (`động từ + đối tượng + bối cảnh`, không có chữ AI):
-- Hôm nay họ giải bằng gì, hỏng ở đâu, vì sao chưa bỏ:
-- Pain (KHÔNG chữ AI): ai — đang làm gì — vướng đâu — hậu quả gì:
-- Bằng chứng — số chính + kết luận (chi tiết: `evidence/summary.md`): __
+## §2. Giải pháp & Lát cắt MVP
+**ReviewShield** nhận một cụm đánh giá sản phẩm (từ kho 25–30 mẫu thật đã ẩn danh hoặc người dùng dán trực tiếp), thực hiện:
+1. Tiền xử lý loại bỏ review trống và đếm số lượng review trùng lặp hoàn toàn.
+2. Gọi mô hình ngôn ngữ thật (Structured Output JSON) để phân loại từng review vào 1 trong 4 nhãn tín hiệu (`verified_insight`, `low_signal`, `suspicious_pattern`, `logistics_only`) kèm trích dẫn nguyên văn `evidence_quote`.
+3. Chạy lớp **Grounding Guard** kiểm chứng 100% trích dẫn phải xuất hiện trong review gốc.
+4. Tính **Điểm tin cậy thực (Real Trust Score)** bằng công thức trọng số tất định, tổng hợp Top 3 rủi ro thực tế từ nhóm `verified_insight` và sinh 3 câu hỏi kiểm chứng shop.
 
-## §2. Impact & quyết định chọn *(guide 1.3)*
+## §3. Phạm vi Không làm (Out of Scope)
+* Không xây crawler phía server tự động cào link Shopee/TikTok Shop (tránh captcha và rủi ro sập demo).
+* Không phán quyết tuyệt đối "review giả 100%".
+* Không tự gửi tin nhắn tới shop hoặc can thiệp trực tiếp vào tài khoản sàn của người dùng.
 
-| Hướng | Bao nhiêu người gặp | Bao nhiêu lần / tháng | Mỗi lần tốn gì | Impact / tháng | Làm kịp không | Chọn? |
-|---|---|---|---|---|---|---|
-|  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |
+## §4. Kiến trúc luồng & Ánh xạ vào `codebase/`
+* `codebase/ai.py`: Cài đặt `call_model(system, user)` nối API LLM thật (theo `docs/connect-model.md`), giữ nguyên `@model_call` và trả về đúng `text`, `model`, `tokens_in`, `tokens_out`.
+* `codebase/tools.py`: Khai báo các `@tool` gồm `preprocess_reviews`, `verify_grounding`, `compute_real_trust_score` (tất định 100%, không giao phép tính cho LLM).
+* `codebase/agent.py`: Hàm `answer(text)` nhận đầu vào review (JSON hoặc text), gọi các tool và `call_model`, tổng hợp câu trả lời có cấu trúc rõ ràng kèm bảng Điểm sàn vs Điểm thực, Top 3 rủi ro, 3 câu hỏi kiểm chứng và chi tiết nhãn từng review.
+* `codebase/app.py`: Giao diện web 1 màn hình phục vụ demo trực tiếp.
 
-- **Impact / tháng** của hướng chọn = __ người × __ lần × __ phút = __ — nguồn từng thừa số: __ (không có nguồn thì ghi rõ *(tự ước tính)*)
-- Hướng ĐÃ LOẠI + vì sao (giữ lại, đừng xoá):
-- Số lần / tháng của từng kiểu người dùng (dùng cho persona ở §8):
+## §5. Đặc tả Prompt, Nhãn & Công thức Điểm
+Chi tiết đầy đủ nằm tại `docs/AI_PROMPT_AND_SCORING.md`. Tóm tắt trọng số chất lượng:
+* `verified_insight` (Trải nghiệm cụ thể): trọng số `1.00`
+* `low_signal` (Nhận xu / Thiếu thông tin): trọng số `0.15`
+* `suspicious_pattern` (Nghi vấn lặp mẫu): trọng số `0.10`
+* `logistics_only` (Lỗi vận chuyển): trọng số `0.00` (tách riêng cảnh báo vận chuyển)
 
-## §3. Giải pháp tương tự *(guide 2.1)*
-- [sản phẩm / tính năng gần giống]: một điều đáng học · một điều đáng né · mình khác gì
+## §6. Quản trị rủi ro & An toàn
+* **Rủi ro AI bịa trích dẫn:** Chặn bằng `verify_grounding` trong `codebase/tools.py`.
+* **Rủi ro AI tính sai điểm:** Chặn bằng `compute_real_trust_score` tính hoàn toàn bằng Python.
+* **Rủi ro lộ dữ liệu cá nhân:** Toàn bộ dữ liệu mẫu đều ẩn danh người viết thành `user_01`, `user_02`.
 
-## §4. Thiết kế *(guide 2.2, 3.2)*
-- **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả):
-- Không làm (≥3 điều):
-- **Sơ đồ** (ảnh / Mermaid / draw.io): [chèn ở đây]
-- **Hình dạng:** [ ] workflow cố định · [ ] một agent · [ ] nhiều agent — 2 dòng lý do, và vì sao **không** chọn hình dạng phức tạp hơn:
-- **AI dựa vào đâu** — mỗi công cụ (khớp `codebase/tools.py`):
+## §7. Chuẩn "Đạt" (Khóa trước CP2 — khớp `eval/metric_spec.yaml`)
+Hệ thống đạt chuẩn phát hành MVP khi chạy `python run.py eval` trên bộ `eval/benchmark.csv` (>= 25 tình huống thật, đủ 4 nhóm kịch bản) thỏa mãn đồng thời 4 ngưỡng (và điều kiện kỹ thuật `schema_compliance = 100%` không vỡ định dạng JSON):
+1. **`label_accuracy` >= 85%**: Tỷ lệ phân loại đúng nhãn 4 nhóm so với nhãn chuẩn.
+2. **`direction_match` >= 85%**: Tỷ lệ case dự đoán đúng chiều biến động của Điểm tin cậy thực so với điểm sàn (`near_platform`, `lower_than_platform`, `higher_than_platform`).
+3. **`citation_grounding` = 100%**: Mọi `evidence_quote` hiển thị cho người dùng phải khớp nguyên văn chuỗi con trong review gốc.
+4. **`actionable_quality` >= 80%**: Đánh giá bởi người chấm xem Top 3 rủi ro và 3 câu hỏi kiểm chứng shop có sát với phàn nàn thực tế trong cụm review hay không.
 
-  | Công cụ | Input | Output | Tác động ra ngoài? |
-  |---|---|---|---|
-  |  |  |  |  |
+## §8. Kết quả đánh giá thực tế (Điền tại CP3–CP4)
+* `[Dán tóm tắt kết quả từ eval/report.md sau khi chạy python run.py eval và python run.py score]`
 
-- **Mức tự động:** [ ] AI gợi ý, người quyết · [ ] AI tự làm khi chắc, chuyển người khi không · [ ] AI tự làm — lý do (sai thì ai chịu gì, sửa đắt hay rẻ):
-- **Chỗ chặn rủi ro** (rủi ro lớn nhất của lát cắt bị chặn ở đâu, bằng gì):
-- **Chỗ người duyệt** (việc AI không được tự làm):
-- **Nguyên tắc thiết kế** (≥3, bắt buộc G10):
+## §9. Ước tính chi phí vận hành (Điền tại CP4)
+* `[Dán bảng mô phỏng từ cost/simulate-N-summary.md sau khi chạy python run.py simulate]`
 
-  | Nguyên tắc | Chỗ cụ thể trên sơ đồ / trong bản chạy thử |
-  |---|---|
-  | G10 — thu hẹp phạm vi khi không chắc |  |
-  |  |  |
-  |  |  |
-
-- Phần nào còn giả (công cụ trả dữ liệu giả, model chế độ giả…) — ghi rõ, không giả làm thật:
-
-## §5. Chỗ khó — 4 lớp + ≥6 kịch bản + 2 tấn công *(guide 2.3)*
-
-| Kịch bản | Lớp (1–4) | Hành vi mong muốn (nói gì, hiện gì, cho làm gì tiếp) | Câu thử |
-|---|---|---|---|
-|  |  |  |  |
-| *(tấn công)* |  |  |  |
-| *(tấn công)* |  |  |  |
-
-(1) nguồn sự thật · (2) mơ hồ / thiếu thông tin · (3) ngoài phạm vi / thẩm quyền · (4) đặc thù lĩnh vực (sai thì người dùng mất gì đắt nhất)
-
-## §6. Bốn đường đi của trải nghiệm
-- Mọi thứ suôn sẻ: · Không chắc (lớp 2): · Không có căn cứ (lớp 1): · Người dùng sửa:
-- Bị đòi ngoài phạm vi (lớp 3): · Trường hợp đặc thù lĩnh vực (lớp 4):
-
-## §7. Đánh giá & chuẩn "đạt" *(guide 2.4, 4.1)*
-- Data card: `data/DATA_CARD.md` · bộ câu thử: `eval/benchmark.csv` — __ câu (thuong __ · kho __ · tu_choi __) · metric: `eval/metric_spec.yaml` (__ metric)
-- **Chuẩn "đạt"** (chốt **trước 19:30 Thứ Sáu 27/11**, giữ nguyên đến 23:59 Thứ Bảy 28/11): "Đạt khi ≥ __% câu qua, và __"
-- Kết quả: lượt 1 __/__ (__%) · lượt 2 __/__ (__%) — run ID: __ / __ → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
-
-## §8. Chi phí khi dùng thật *(guide 4.2)*
-- Persona + giá: `cost/personas.yaml` · lượt mô phỏng: `cost/simulate-__.csv` (__ phiên)
-- Chi phí / task thành công: __ (model __) · __ (model __)
-- Chi phí / tháng ở quy mô thật: thấp __ · cơ sở __ · cao __ → chi tiết `cost/cost-estimate.md`
-- So với impact / người / tháng (§2): đáng làm không, vì sao:
-
-## §9. Rủi ro & an toàn
-- Dữ liệu: đã ẩn danh gì, không thu gì, không đưa gì vào model gói miễn phí:
-- AI **không được** làm gì kể cả khi người dùng yêu cầu:
-- Ai có thể bị hại nếu AI sai, và nhóm chặn thế nào:
-
-## §10. Phân công & changelog
-- Phân công có tên (theo chặng, chia cặp — guide "Cách chia việc"): __
-- Dùng AI vào việc gì (2–3 dòng; chi tiết `docs/ai-usage.md`):
-- Nhật ký thay đổi — **mọi thay đổi sau CP2 19:30 Thứ Sáu 27/11 phải có dòng ở đây**:
-
-**CP2 → CP4** (vd thu hẹp lát cắt, hỏi thêm người dùng, lần cải tiến trước lượt 2)
-
-| Thời điểm | Đổi gì | Vì sao (trỏ về câu thử / lỗi / bằng chứng nào) |
-|---|---|---|
-|  |  |  |
-
-**Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
-
-| Thời điểm | Đổi gì | Vì sao |
-|---|---|---|
-|  |  |  |
+## §10. Nhật ký thay đổi (Changelog — cập nhật đến 23:59 Thứ Bảy 28/11)
+* **2026-11-27 (CP1):** Khởi tạo đặc tả ReviewShield (Track D), chốt kiến trúc 3 chặng và bộ 4 nhãn tín hiệu.
+* `[Cập nhật tiếp các mốc chỉnh prompt, chạy eval và sửa lỗi đến hạn cuối]`

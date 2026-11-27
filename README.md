@@ -1,35 +1,17 @@
-> Đây là khung repo nộp bài. Điền mọi chỗ `____`, giữ nguyên tên các mục. **Mục 0 xoá đi sau khi tạo repo xong.**
-> Giờ, mốc, luật, rubric: xem `README.md`, `02-guide.md`, `03-rubric.md` trong repo đề (bộ đề BTC phát).
-
-# [Tên nhóm] — [Tên lát cắt]
+# AnhNhoEM — ReviewShield (Track D: Thương mại điện tử)
 
 **Thành viên, lớp, track:** xem [TEAMS.md](TEAMS.md). **Điền TEAMS.md đúng format**: khi chấm và đánh giá, BTC quét file này để ghép điểm cho từng người.
 
-*Lát cắt = phần nhỏ nhất làm xong được trong hackathon: một người dùng · một việc · một quyết định AI · một kết quả.*
+*Lát cắt MVP: Nhận cụm đánh giá sản phẩm (chọn từ 25–30 mẫu thật ẩn danh hoặc dán trực tiếp) → AI thật phân loại 4 tín hiệu kèm trích dẫn nguyên văn qua Grounding Guard → tính lại Điểm tin cậy thực bằng Python tất định → xuất Top 3 rủi ro & 3 câu hỏi kiểm chứng shop.*
 
----
-
-## 0. Tạo repo nhóm từ khung này *(guide bước 1.0 — xoá mục này khi xong)*
-
-**Hai luật:** repo **mới, công khai (Public)** · tên `K5-Day15-<lớp>-<tên nhóm>`, vd `K5-Day15-L3A-StudyPulse` (tên nhóm viết liền, không dấu). Chép **nội dung bên trong** `starter-repo/` — `README.md`, `run.py` phải nằm ngay ở trang đầu repo.
-
-**(a) Không cần terminal — làm trên web GitHub**
-1. **New repository** → tên theo mẫu → **Public** → không tick thêm gì → tạo.
-2. Trên máy mở thư mục `starter-repo/`, **bật hiện file ẩn** (Mac Finder: `Cmd + Shift + .` · Windows: View → Show → Hidden items) để thấy `.gitignore`, `.env.example`.
-3. Trên repo vừa tạo: **Add file → Upload files** → **kéo thả** tất cả file và thư mục bên trong `starter-repo/` → **Commit changes**. Kéo thả mới giữ được thư mục con; lỗi vì nhiều file quá thì tải từng thư mục.
-4. Kiểm: có `.gitignore` chưa (hay thiếu nhất). Thiếu thì **Add file → Create new file**, tên `.gitignore`, dán nội dung từ máy.
-5. Từ giờ sửa file ngay trên web (biểu tượng bút chì → Commit). Phần code vẫn cần **một** người chạy được trên máy: trước mỗi lượt chạy tải **Code → Download ZIP** về thư mục mới (mang `.env` sang), chạy xong chỉ upload file kết quả và file vừa sửa; trong lúc đang chạy không ai sửa `eval/benchmark.csv` trên web.
-
-**(b) Dùng git**
-```bash
-git clone https://github.com/<tai-khoan>/K5-Day15-L3A-TenNhom.git
-cd K5-Day15-L3A-TenNhom
-cp -R ../duong-dan-toi/starter-repo/. .      # Windows PowerShell: Copy-Item -Recurse -Force ..\duong-dan-toi\starter-repo\* .
-git status                                   # không được có .env, data-btc/
-git add -A && git commit -m "Khung repo từ starter-repo" && git push
-```
-
-**Xong khi:** mở link repo bằng **cửa sổ ẩn danh** thấy được file (link nộp CP1) · đã mời thành viên (Settings → Collaborators) · đã điền `TEAMS.md` và `python run.py check` không báo gì ở phần "Kiểm TEAMS.md".
+## Bắt đầu nhanh cho thành viên nhóm (Đọc theo thứ tự)
+1. **Đọc luật làm việc & quy tắc Git (tạo nhánh / commit / PR):** [AGENTS.md](AGENTS.md)
+2. **Xem hợp đồng giao tiếp chung & lấy file task của mình:** [docs/member/README.md](docs/member/README.md)
+   * Thành viên 1 (`2A202603362` — Dương Quang Bảo): [docs/member/member-1-core-ai-agent.md](docs/member/member-1-core-ai-agent.md)
+   * Thành viên 2 (`2A202603427`): [docs/member/member-2-tools-ui.md](docs/member/member-2-tools-ui.md)
+   * Thành viên 3 (`2A202603646`): [docs/member/member-3-data-evidence-eval.md](docs/member/member-3-data-evidence-eval.md)
+   * Thành viên 4 (`2A202603483`): [docs/member/member-4-cost-validation-slides.md](docs/member/member-4-cost-validation-slides.md)
+3. **Tài liệu kỹ thuật gốc:** [spec.md](spec.md) · [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · [docs/AI_PROMPT_AND_SCORING.md](docs/AI_PROMPT_AND_SCORING.md) · [docs/SRS.md](docs/SRS.md)
 
 ---
 
