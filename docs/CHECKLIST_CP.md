@@ -28,18 +28,18 @@ Tài liệu theo dõi tiến độ từng mốc Checkpoint (CP1–CP4) và đầ
 - [x] `data/DATA_CARD.md` hoàn thiện *(Tường)*
 - [x] Chốt cứng chuẩn "Đạt" bằng số tại `spec.md §7` khớp 100% `eval/metric_spec.yaml` *(Bảo)*
 - [x] Bổ sung **sơ đồ khối kiến trúc AI** (`Input → AI Core → Chặn rủi ro → Output`) vào `spec.md §4` *(Bảo)*
-- [ ] Cập nhật dòng 8 (mốc CP2) trong `canvas.md` *(Nhật)*
+- [x] Cập nhật dòng 8 (mốc CP2) trong `canvas.md` *(Nhật — PR #5)*
 
 ### Dữ liệu & Benchmark (mốc CP2)
-- [ ] Xóa 3 dòng mẫu `(ví dụ)` `B01–B03` trong `eval/benchmark.csv` *(Tường)*
-- [ ] Điền tối thiểu **≥10 câu thử thật** (`RS01–RS10`, đã ẩn danh `user_XX`) vào `eval/benchmark.csv` và mở PR `data/2a202603646-samples-evidence-eval` trước 19:00 *(Tường, Nhật hỗ trợ gom 5–10 SP Shopee/TikTok Shop)*
-- [ ] Đưa 10 mẫu sản phẩm đầu tiên vào `data/samples/sp_01.json` … `sp_10.json` *(Tường)*
+- [x] Xóa 3 dòng mẫu `(ví dụ)` `B01–B03` trong `eval/benchmark.csv` *(Tường)*
+- [x] Điền tối thiểu **≥10 câu thử thật** (`RS01–RS14`, đã ẩn danh `user_XX`) vào `eval/benchmark.csv` và mở PR `data/2a202603646-samples-evidence-eval` *(Tường)*
+- [x] Đưa 10 mẫu sản phẩm đầu tiên vào `data/samples/sp_21.json` … `sp_30.json` *(Tường)*
 
 ### Code khung chạy hết luồng (mock hoặc thật đều đạt CP2)
 - [x] Hoàn thiện `codebase/ai.py` (hỗ trợ Gemini/OpenAI/Anthropic/Ollama bằng `urllib`) và `codebase/agent.py` (pipeline 3 chặng + Guardrails + Retry JSON) trên nhánh `feat/2a202603362-core-ai-agent` *(Bảo)*
 - [x] Hoàn thiện 3 `@tool` trong `codebase/tools.py` (`preprocess_reviews`, `verify_grounding`, `compute_real_trust_score`) trên nhánh `feat/2a202603427-tools-and-ui` và mở PR trước 18:45 *(Khanh)*
 - [x] Merge PR #1 (Bảo) và PR #2 (Khanh) vào `main`; chạy `python run.py` xác nhận đi hết luồng 3 chặng không lỗi *(Bảo)*
-- [ ] Merge PR `data/2a202603646-samples-evidence-eval` (≥10 câu benchmark thật của Tường) vào `main` *(Bảo)*
+- [x] Merge PR #3 (`data/2a202603646-samples-evidence-eval` — 14 câu benchmark thật của Tường) và PR #4 (`fix/2a202603362-fake-mode-json`) vào `main` *(Bảo)*
 - [ ] Nộp **Form 2 → Nhánh CP2** trước 19:30 *(Bảo)*
 
 ---
