@@ -29,10 +29,13 @@ Regex D (giữ nguyên để chạy lại):
 
 ## 2. Đọc trước, đếm sau
 
-Đã đọc __ dòng đầu và từ điển cột. Các *kiểu* hành vi thấy được (trước khi định nghĩa thứ cần đếm):
-(Ghi sau khi đọc thật; chú ý `rating`, `picked` và mã ghép nhãn.)
-- __
-- __
+Đã đọc toàn bộ 317 review của 26 sản phẩm đã thu và từ điển cột của hai bộ công khai (`p-storm`: text, product, rating, source, category, product_id; ViMRHP: Comment, Rating, CommentDate, ProductId…). Các *kiểu* hành vi thấy được trước khi định nghĩa thứ cần đếm:
+- Review 5★ khen chung chung rất ngắn, không nói gì về sản phẩm ("Tốt . Đẹp", "Máy chạy ổn").
+- Review 5★ văn mẫu: cùng một câu lặp lại nhiều lần trong 1–2 ngày (ViMRHP sp_17), hoặc y hệt giữa hai sản phẩm khác nhau (sp_21/sp_22).
+- Review 5★ có nội dung không khớp sản phẩm (sp_22/r4 nói về cục pin sạc).
+- Review 1–2★ phần lớn nêu lỗi cụ thể (hỏng sau vài ngày, kết nối chập chờn, mất dữ liệu); một phần nhỏ chỉ chê giao hàng/lắp đặt.
+- Phàn nàn dịch vụ cửa hàng (tổng đài, bảo hành, đổi trả) và câu hỏi cách dùng được gửi dưới dạng đánh giá.
+- Số sao lệch nội dung (sp_27/r8: 1★ nhưng khen, "để nhiều người xem phần 1★").
 
 ## 3. Kết quả
 
@@ -49,6 +52,9 @@ Chạy lúc 2026-11-27 18:34:17 +0700, trên 26 sản phẩm, 317 review (natura
 Ghi dạng "x/N (y%)". "Nhiều bạn…" không phải số.
 (Điền riêng A, B-natural, B-natural+added, C, D; ghi mẫu số và thời điểm chạy từng dòng.)
 
+
+**Đọc số A đúng cách:** 72/125 là số gộp, bị đẩy lên vì 3 sản phẩm ViMRHP (sp_17–sp_19) được chọn có chủ đích cho nhóm `seeding_heavy` (32/36 L/S). Tỷ lệ chung dùng số của Điện Máy Xanh: **40/89 review 5★ `natural` (44,9%)** là L/S (32 L, 8 S). B-natural chỉ gồm review Điện Máy Xanh.
+
 ## 4. ≥5 ví dụ cụ thể (mã dòng / mã đã ẩn danh, không đoán ai là ai)
 
 (Chép nguyên văn từ dữ liệu đã ẩn danh, kèm `sp_XX/rX`, sao và `picked`; không dùng ví dụ minh họa làm bằng chứng.)
@@ -62,6 +68,11 @@ Ghi dạng "x/N (y%)". "Nhiều bạn…" không phải số.
 
 ## 5. Giới hạn của data
 
-Data cho biết người ta **làm gì**, không cho biết **vì sao**. Thiếu gì, lệch về phía nào: __
-→ Kiểm lại bằng phỏng vấn / khảo sát nào: __
-(Nêu mẫu mục tiêu 25–30 sản phẩm do nhóm chọn, thiên về hàng bán chạy; văn bản tại thời điểm chép; nhãn do một người gán; đối chiếu H2 bằng dữ liệu người mua thật.)
+Data cho biết người ta **làm gì**, không cho biết **vì sao**. Thiếu gì, lệch về phía nào:
+- Mẫu 26 sản phẩm do nhóm chọn: 13 Điện Máy Xanh (thiên về hàng điện tử – gia dụng), 13 Shopee (10 lấy qua bộ lọc sao, 3 chọn có chủ đích vì có dấu hiệu seeding). Không đại diện toàn sàn; tỷ lệ chung chỉ nên đọc từ phần `natural` của Điện Máy Xanh.
+- Điện Máy Xanh là chuỗi bán lẻ, ít cơ chế đánh giá nhận xu → có thể **đánh giá thấp** mức seeding so với sàn dạng chợ; ngược lại 3 sản phẩm ViMRHP **phóng đại** seeding.
+- Nhãn do AI gán theo tiêu chí một người đặt, có rà ranh giới nhưng chưa có người thứ hai gán độc lập để đo độ đồng thuận.
+- Văn bản tại thời điểm thu (2023–2024 với bộ công khai, 27/11/2026 với Shopee); không có lịch sử tài khoản nên không xác minh được review thật/giả.
+- "Điểm sàn" của dữ liệu công khai là trung bình review trong bộ, không phải điểm hiển thị trên web.
+
+→ Kiểm lại bằng phỏng vấn ≥3 người mua online (kịch bản `evidence/interviews/guide.md`): người mua có tin điểm sao không, mất bao lâu để lọc review (H2), và có từng mua nhầm vì review chung chung/văn mẫu không. Nếu kịp: khảo sát ≥20 người (`evidence/survey/questions.md`).
