@@ -40,7 +40,7 @@ Tài liệu theo dõi tiến độ từng mốc Checkpoint (CP1–CP4) và đầ
 - [x] Hoàn thiện 3 `@tool` trong `codebase/tools.py` (`preprocess_reviews`, `verify_grounding`, `compute_real_trust_score`) trên nhánh `feat/2a202603427-tools-and-ui` và mở PR trước 18:45 *(Khanh)*
 - [x] Merge PR #1 (Bảo) và PR #2 (Khanh) vào `main`; chạy `python run.py` xác nhận đi hết luồng 3 chặng không lỗi *(Bảo)*
 - [x] Merge PR #3 (`data/2a202603646-samples-evidence-eval` — 14 câu benchmark thật của Tường) và PR #4 (`fix/2a202603362-fake-mode-json`) vào `main` *(Bảo)*
-- [ ] Nộp **Form 2 → Nhánh CP2** trước 19:30 *(Bảo)*
+- [x] Nộp **Form 2 → Nhánh CP2** trước 19:30 *(Bảo)*
 
 ---
 
