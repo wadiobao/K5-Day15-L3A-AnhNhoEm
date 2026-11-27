@@ -48,7 +48,7 @@ Tài liệu theo dõi tiến độ từng mốc Checkpoint (CP1–CP4) và đầ
 
 ### Bằng chứng Pain (`evidence/`)
 - [x] Hoàn thiện `evidence/data-mining.md` (thống kê `x/N`, `%`, cách đếm chạy lại được, ≥5 ví dụ ẩn danh) *(Tường — PR #6: A = 40/89 review 5★ natural Điện Máy Xanh là L/S)*
-- [ ] Hoàn thiện phỏng vấn (≥3 người ngoài nhóm trong `evidence/interviews/P1.md..P3.md`) và/hoặc khảo sát (≥20 người trong `evidence/survey/`) *(Nhật)*
+- [x] Hoàn thiện phỏng vấn (≥3 người ngoài nhóm trong `evidence/interviews/P1.md..P3.md`) và/hoặc khảo sát (≥20 người trong `evidence/survey/`) *(Nhật — 3 phỏng vấn thật qua tin nhắn 27/11, đã đối chiếu H2 tại `evidence/summary.md`)*
 - [x] Tổng hợp đầy đủ `evidence/summary.md` (đạt ngưỡng **≥1 nguồn** + **≥5 trích dẫn nguyên văn** ẩn tên) *(Tường)*
 
 ### Mở rộng dữ liệu & Benchmark (20–30 câu)
