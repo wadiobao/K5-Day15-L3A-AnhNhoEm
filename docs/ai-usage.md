@@ -6,13 +6,13 @@ README của nhóm có mục "Dùng AI vào việc gì" (2–3 dòng, bắt bu�
 
 | Việc | Công cụ AI | AI làm gì | Người kiểm/sửa gì | Ai phụ trách |
 |---|---|---|---|---|
-| Code bản chạy thử | | | | |
-| Prompt / thiết kế lời gọi mô hình | | | | |
-| Đào data (viết script đếm, gợi ý nhãn) | | | Kiểm tay __ dòng, khớp __ | |
-| Rà câu hỏi phỏng vấn / khảo sát | | Chỉ rà câu dẫn dắt | | |
-| Viết câu thử (benchmark) | | | Mỗi câu thử có `source`; câu thử AI viết được ghi rõ | |
-| Sinh data `synthetic` (nếu có) | | | Seed __ · kiểm tay __ dòng | |
-| Chấm cột `pass` bằng LLM (nếu có) | | | Kiểm tra thủ công __ câu thử, khớp __/__ | |
-| Slide, văn bản | | | | |
+| Code bản chạy thử | Codex (gpt-6.1-sol) + Claude Code *(phần TV3)*; *(đang chờ TV1 & TV2 tự bổ sung công cụ AI phần `codebase/` trước CP4)* | Viết script dữ liệu `data/scripts/*`, `evidence/count_reviews.py`, `eval/grade_helper.py` *(phần TV3)*; phần lõi `codebase/` do TV1 & TV2 cập nhật sau khi tự rà | Nguyễn Mạnh Tường chạy và đọc lại script dữ liệu/eval; Dương Quang Bảo & Nguyễn Vũ Khanh bổ sung phần tự kiểm `codebase/` trước CP4 | Dương Quang Bảo (`2A202603362`), Nguyễn Vũ Khanh (`2A202603427`), Nguyễn Mạnh Tường (`2A202603646`) |
+| Prompt / thiết kế lời gọi mô hình | *(Đang chờ TV1 bổ sung trước CP4)* | *(Đang chờ TV1 ghi chi tiết quá trình thiết kế & tinh chỉnh prompt trong `codebase/agent.py`)* | Dương Quang Bảo kiểm thử JSON schema, guardrail và đối chiếu với `docs/AI_PROMPT_AND_SCORING.md` | Dương Quang Bảo (`2A202603362`) |
+| Đào data (viết script đếm, gợi ý nhãn) | Codex (gpt-6.1-sol) + Claude Code *(TV3)*; Antigravity *(TV4)* | TV3: viết script đếm `evidence/count_reviews.py`, gán nhãn nháp `sp_21–sp_30` theo tiêu chí của TV3. TV4: hỗ trợ thu thập qua trình duyệt đã đăng nhập và chuẩn hóa ẩn danh JSON 10 SP Shopee thật (`sp_21–sp_30`) | Nguyễn Mạnh Tường đặt tiêu chí, rà nhãn `sp_21–sp_30` (sửa 0/121 nhãn), tự gán tay các SP tiếp theo (chờ hoàn tất kiểm tay trước CP3). Đặng Long Nhật rà trực tiếp 10 SP/121 review gốc, chạy script kiểm 0 PII | Nguyễn Mạnh Tường (`2A202603646`), Đặng Long Nhật (`2A202603483`) |
+| Rà câu hỏi phỏng vấn / khảo sát | Codex (gpt-6.1-sol) + Claude Code | Chỉ soạn nháp và rà câu hỏi trung tính theo Mom Test (`evidence/interviews/guide.md`, `evidence/survey/questions.md`) | Nguyễn Mạnh Tường rà câu dẫn dắt; Đặng Long Nhật tự thực hiện phỏng vấn/khảo sát người thật ngoài nhóm trước CP3 (chưa có kết quả tại CP2) | Nguyễn Mạnh Tường (`2A202603646`), Đặng Long Nhật (`2A202603483`) |
+| Viết câu thử (benchmark) | Codex (gpt-6.1-sol) + Claude Code | Script ghép câu từ dữ liệu thật (`sp_21–sp_30`) và nhãn chuẩn; AI soạn 4 câu `X01–X04` ghi rõ `source=tu_viet` | Nguyễn Mạnh Tường đối chiếu `input`/`expected` với dữ liệu thật; mỗi câu có cột `source` (10 `data_that`, 4 `tu_viet` tại CP2) | Nguyễn Mạnh Tường (`2A202603646`) |
+| Sinh data `synthetic` (nếu có) | Không sử dụng tại mốc CP2 | Không sinh dữ liệu đánh giá giả (`synthetic`) | Nhóm dùng 100% review công khai đã ẩn danh cho mẫu sản phẩm | Nguyễn Mạnh Tường (`2A202603646`) |
+| Chấm cột `pass` bằng LLM (nếu có) | Chưa áp dụng tại mốc CP2 | Chưa chạy lượt `eval` chính thức (triển khai ở CP3–CP4) | Dự kiến chấm kết hợp `eval/grade_helper.py` + kiểm tra thủ công toàn bộ cột `pass` trước CP3–CP4 | Nguyễn Mạnh Tường (`2A202603646`), Dương Quang Bảo (`2A202603362`) |
+| Slide, văn bản | Antigravity *(TV4 — mốc CP2)* | Hỗ trợ lập lộ trình CP1–CP4, cập nhật `canvas.md` (mốc CP2), tra cứu & cập nhật bảng giá trả phí 2 mức model trong `cost/personas.yaml`; slide & báo cáo chi phí hoàn thiện ở CP4 | Đặng Long Nhật đối chiếu trực tiếp toàn bộ số liệu với nhánh TV3, xác minh giá gói Paid Tier tại `ai.google.dev/gemini-api/docs/pricing` ngày `2026-11-27` và chạy kiểm `simulate.load_config()` đạt 0 cảnh báo | Đặng Long Nhật (`2A202603483`) |
 
 **Không dùng AI để:** tạo người được phỏng vấn, trích dẫn, câu trả lời khảo sát; sửa kết quả các lượt đã chạy (`eval/run-*.csv`, `cost/simulate-*.csv`, `traces/`).
