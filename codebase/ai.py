@@ -162,13 +162,51 @@ def _call_ollama(system: str, user: str) -> dict:
     }
 
 
+def _build_fake_json(user: str) -> str:
+    """Sinh JSON mock hợp lệ khi MODEL_PROVIDER=fake để khung `python run.py` chạy thông 3 chặng trước CP2."""
+    reviews_out: list[dict] = []
+    start = user.find("{")
+    end = user.rfind("}")
+    if start != -1 and end > start:
+        try:
+            payload = json.loads(user[start : end + 1])
+            for item in payload.get("reviews") or []:
+                if not isinstance(item, dict) or not item.get("id"):
+                    continue
+                dup_size = int(item.get("duplicate_group_size") or 1)
+                label = "suspicious_pattern" if dup_size >= 2 else "verified_insight"
+                reviews_out.append(
+                    {
+                        "id": str(item["id"]),
+                        "label": label,
+                        "confidence": 0.5,
+                        "evidence_quote": "",
+                        "short_reason": "[Chế độ giả — chưa nối model thật]",
+                    }
+                )
+        except Exception:
+            reviews_out = []
+
+    return json.dumps(
+        {
+            "reviews": reviews_out,
+            "top_risks": [],
+            "questions_for_seller": [
+                "[Chế độ giả] Sản phẩm thực tế có đúng thông số như mô tả không?",
+                "[Chế độ giả] Shop có chính sách đổi trả nếu sản phẩm lỗi không?",
+                "[Chế độ giả] Sản phẩm đi kèm đầy đủ phụ kiện và bảo hành thế nào?",
+            ],
+        },
+        ensure_ascii=False,
+    )
+
+
 @model_call
 def call_model(system: str, user: str) -> dict:
     """Gọi model theo cấu hình .env và trả đúng 4 khóa hợp đồng cho tracing.py."""
     if MODEL_PROVIDER == "fake":
-        last = (user.strip().splitlines() or [""])[-1]
         return {
-            "text": "[câu trả lời giả — chưa nối model] " + last[:60],
+            "text": _build_fake_json(user),
             "model": "fake",
             "tokens_in": 0,
             "tokens_out": 0,
