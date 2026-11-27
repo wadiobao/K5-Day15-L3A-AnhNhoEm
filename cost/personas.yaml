@@ -1,6 +1,6 @@
 # Cấu hình mô phỏng chi phí cho ReviewShield (chạy qua: python run.py simulate)
 # Lưu ý: Các tỷ lệ người dùng và tần suất là giả định vận hành ban đầu (tự ước tính) cho giai đoạn MVP;
-# Thành viên 4 cập nhật lại theo số liệu khảo sát/phỏng vấn thật khi có evidence/summary.md.
+# Đặng Long Nhật (2A202603483) cập nhật lại theo số liệu khảo sát/phỏng vấn thật khi có evidence/summary.md.
 
 sessions: 50
 seed: 42

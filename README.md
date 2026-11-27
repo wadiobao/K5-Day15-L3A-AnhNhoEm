@@ -8,9 +8,9 @@
 1. **Đọc luật làm việc & quy tắc Git (tạo nhánh / commit / PR):** [AGENTS.md](AGENTS.md)
 2. **Xem hợp đồng giao tiếp chung & lấy file task của mình:** [docs/member/README.md](docs/member/README.md)
    * Thành viên 1 (`2A202603362` — Dương Quang Bảo): [docs/member/member-1-core-ai-agent.md](docs/member/member-1-core-ai-agent.md)
-   * Thành viên 2 (`2A202603427`): [docs/member/member-2-tools-ui.md](docs/member/member-2-tools-ui.md)
-   * Thành viên 3 (`2A202603646`): [docs/member/member-3-data-evidence-eval.md](docs/member/member-3-data-evidence-eval.md)
-   * Thành viên 4 (`2A202603483`): [docs/member/member-4-cost-validation-slides.md](docs/member/member-4-cost-validation-slides.md)
+   * Thành viên 2 (`2A202603427` — Nguyễn Vũ Khanh): [docs/member/member-2-tools-ui.md](docs/member/member-2-tools-ui.md)
+   * Thành viên 3 (`2A202603646` — Nguyễn Mạnh Tường): [docs/member/member-3-data-evidence-eval.md](docs/member/member-3-data-evidence-eval.md)
+   * Thành viên 4 (`2A202603483` — Đặng Long Nhật): [docs/member/member-4-cost-validation-slides.md](docs/member/member-4-cost-validation-slides.md)
 3. **Tài liệu kỹ thuật gốc:** [spec.md](spec.md) · [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · [docs/AI_PROMPT_AND_SCORING.md](docs/AI_PROMPT_AND_SCORING.md) · [docs/SRS.md](docs/SRS.md)
 
 ---
@@ -29,7 +29,11 @@
 
 ## Chạy trong 3 phút
 
-Bộ khung cần **Python 3.10 trở lên** (Python 3.9 có sẵn trên macOS vẫn chạy được, chỉ in một dòng nhắc). **Không cần `pip install`.**
+Bộ khung cần **Python 3.10 trở lên**. Lõi AI, `eval` và `simulate` chỉ dùng thư viện chuẩn; để chạy giao diện demo 1 màn hình (`codebase/app.py` dùng Streamlit), cài 1 lệnh duy nhất:
+
+```bash
+python -m pip install -r requirements.txt
+```
 
 **Bước 1 — Mở cửa sổ lệnh ngay trong thư mục repo**
 

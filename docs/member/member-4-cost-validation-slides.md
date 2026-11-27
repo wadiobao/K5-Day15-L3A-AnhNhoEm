@@ -1,6 +1,6 @@
 # Task Specification — Thành viên 4: Chi phí, Kiểm thử Người dùng, Canvas & Slide Demo
 
-* **Phụ trách:** Thành viên 4 (`2A202603483`)
+* **Phụ trách:** Đặng Long Nhật (`2A202603483`)
 * **Module:** `Cost Simulation, User Validation & Pitch/Demo`
 * **Nhánh Git:** `docs/2a202603483-cost-validation-slides`
 * **File được sửa:** `cost/personas.yaml`, `cost/cost-estimate.md`, `validation/log.md`, `canvas.md`, `slides/outline.md`, `docs/ai-usage.md`, `reflection/`
@@ -43,7 +43,7 @@
 4. Trích xuất số liệu `tokens_in`, `tokens_out`, đơn giá model theo bảng giá nhà cung cấp, tính chi phí/phiên và chi phí/tháng ở 3 mức `300 / 700 / 1000` người dùng, điền vào `cost/cost-estimate.md`.
 
 ### 3.2. Quy trình hỗ trợ gom data thật, Validation & chuẩn bị Demo
-1. **Hỗ trợ gom data thật (trước khi chạy `simulate`):** Trong lúc chờ Module 1+2 code xong, tự mở trình duyệt gom 10 sản phẩm thật từ Shopee & TikTok Shop (mỗi sản phẩm 6–15 review đủ 1–5 sao, ghi rõ tên SP + điểm sàn, không lưu tên người mua) gửi Thành viên 3 chuẩn hóa vào `data/samples/*.json` và `evidence/data-mining.md`.
+1. **Hỗ trợ gom data thật (trước khi chạy `simulate`):** Trong lúc chờ Module 1+2 code xong, tự mở trình duyệt gom 10 sản phẩm thật từ Shopee & TikTok Shop (mỗi sản phẩm 6–15 review đủ 1–5 sao, ghi rõ tên SP + điểm sàn, không lưu tên người mua) gửi Nguyễn Mạnh Tường chuẩn hóa vào `data/samples/*.json` và `evidence/data-mining.md`.
 2. **User Validation:** Cho người dùng thật thao tác trực tiếp trên `codebase/app.py` với ít nhất 3 loại sản phẩm (hàng tốt thật, hàng seeding dày, hàng bị 1 sao do shipper).
 3. Ghi lại nguyên văn phản hồi (không chỉnh sửa cho đẹp) vào `validation/log.md`.
 4. Tổng hợp danh sách bug/UX issue gửi Module 1–2 sửa trước mốc CP4, sau đó xác minh lại và cập nhật trạng thái `Đã sửa` trong `validation/log.md`.

@@ -7,9 +7,9 @@ Thư mục này chứa tài liệu giao việc chi tiết cho 4 thành viên nh�
 | STT | Thành viên | Mã HV | Module | File tài liệu | Nhánh Git |
 | :-: | :--- | :--- | :--- | :--- | :--- |
 | 1 | Dương Quang Bảo (Đội trưởng) | `2A202603362` | Lõi AI & Điều phối Pipeline | `member-1-core-ai-agent.md` | `feat/2a202603362-core-ai-agent` |
-| 2 | Thành viên 2 | `2A202603427` | Công cụ Tất định & Demo UI | `member-2-tools-ui.md` | `feat/2a202603427-tools-and-ui` |
-| 3 | Thành viên 3 | `2A202603646` | Dữ liệu, Evidence & Eval | `member-3-data-evidence-eval.md` | `data/2a202603646-samples-evidence-eval` |
-| 4 | Thành viên 4 | `2A202603483` | Cost, Validation & Slide Demo | `member-4-cost-validation-slides.md` | `docs/2a202603483-cost-validation-slides` |
+| 2 | Nguyễn Vũ Khanh | `2A202603427` | Công cụ Tất định & Demo UI | `member-2-tools-ui.md` | `feat/2a202603427-tools-and-ui` |
+| 3 | Nguyễn Mạnh Tường | `2A202603646` | Dữ liệu, Evidence & Eval | `member-3-data-evidence-eval.md` | `data/2a202603646-samples-evidence-eval` |
+| 4 | Đặng Long Nhật | `2A202603483` | Cost, Validation & Slide Demo | `member-4-cost-validation-slides.md` | `docs/2a202603483-cost-validation-slides` |
 
 ## 2. Hợp đồng giao tiếp dùng chung (Shared Contracts)
 
@@ -105,7 +105,7 @@ Chi tiết phân loại review:
 
 ## 4. Phân bổ thu thập dữ liệu thật đa sàn (Offline, không nhúng crawler vào app)
 * **Tổng mục tiêu:** 25–30 sản phẩm thật ẩn danh trong `data/samples/*.json` (**Shopee:** 10–12 SP, **Tiki:** 8–10 SP, **TikTok Shop / Lazada:** 5–8 SP).
-* **Phân công:** Thành viên 3 chủ trì thu thập 15–20 SP (Tiki API công khai + Shopee) và chuẩn hóa toàn bộ schema/ẩn danh PII; Thành viên 4 hỗ trợ gom 10 SP từ Shopee/TikTok Shop trong lúc chờ Module 1+2 hoàn thiện để chạy `simulate`.
+* **Phân công:** Nguyễn Mạnh Tường (`2A202603646`) chủ trì thu thập 15–20 SP (Tiki API công khai + Shopee) và chuẩn hóa toàn bộ schema/ẩn danh PII; Đặng Long Nhật (`2A202603483`) hỗ trợ gom 10 SP từ Shopee/TikTok Shop trong lúc chờ Module 1+2 hoàn thiện để chạy `simulate`.
 * **Nguyên tắc:** Không xây server-side crawler trong `codebase/`, không vượt CAPTCHA/anti-bot, không commit dữ liệu thô chưa ẩn danh.
 
 ## 5. Quy tắc chung bắt buộc

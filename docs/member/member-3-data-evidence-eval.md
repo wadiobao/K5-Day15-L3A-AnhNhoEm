@@ -1,6 +1,6 @@
 # Task Specification — Thành viên 3: Dữ liệu Mẫu, Bằng chứng Pain & Bộ Eval
 
-* **Phụ trách:** Thành viên 3 (`2A202603646`)
+* **Phụ trách:** Nguyễn Mạnh Tường (`2A202603646`)
 * **Module:** `Data, Evidence & Evaluation`
 * **Nhánh Git:** `data/2a202603646-samples-evidence-eval`
 * **File được sửa:** `data/samples/*.json`, `data/DATA_CARD.md`, `evidence/data-mining.md`, `evidence/interviews/*`, `evidence/survey/*`, `evidence/summary.md`, `eval/benchmark.csv`, `eval/metric_spec.yaml` (chỉ trước CP2), `eval/report.md`
@@ -14,7 +14,7 @@
   * **Shopee (10–12 sản phẩm):** Tập trung các sản phẩm có rõ hiện tượng review nhận xu ("chưa dùng cho 5 sao"), seeding lặp mẫu và 1 sao do shipper.
   * **Tiki (8–10 sản phẩm):** Thu thập trực tiếp từ trang sản phẩm hoặc API review công khai (`tiki.vn/api/v2/reviews?product_id=...`).
   * **TikTok Shop / Lazada (5–8 sản phẩm):** Tập trung sản phẩm bán chạy theo trend, nhiều review ngắn/teencode hoặc phàn nàn giao hàng.
-* **Phối hợp chia tải:** Thành viên 3 phụ trách chính 15–20 sản phẩm (Tiki + Shopee) và chuẩn hóa toàn bộ kho mẫu; Thành viên 4 hỗ trợ gom 10 sản phẩm thật từ Shopee/TikTok Shop bàn giao lại cho Thành viên 3 chuẩn hóa trước CP2.
+* **Phối hợp chia tải:** Nguyễn Mạnh Tường phụ trách chính 15–20 sản phẩm (Tiki + Shopee) và chuẩn hóa toàn bộ kho mẫu; Đặng Long Nhật hỗ trợ gom 10 sản phẩm thật từ Shopee/TikTok Shop bàn giao lại cho Nguyễn Mạnh Tường chuẩn hóa trước CP2.
 * Phỏng vấn người mua online thật (ngoài nhóm, tối thiểu 3 người) và/hoặc khảo sát người mua thật (ngoài nhóm, tối thiểu 20 người).
 * Kết quả chạy `python run.py eval` sau khi Module 1 + Module 2 hoàn tất tích hợp.
 

@@ -1,4 +1,6 @@
-# Bộ khung (run.py, codebase/, eval/run_eval.py, cost/simulate.py) chỉ dùng thư viện chuẩn của Python 3.10+:
-# KHÔNG cần pip install để chạy.
-# Nhóm dùng thêm thư viện (vd SDK của nhà cung cấp model) thì ghi tên gói vào đây, mỗi dòng một gói,
-# và ghi lệnh cài vào README: python -m pip install -r requirements.txt
+# Bộ khung (run.py, codebase/ai.py, codebase/agent.py, codebase/tools.py, eval/run_eval.py, cost/simulate.py)
+# chỉ dùng thư viện chuẩn của Python 3.10+ (gọi API LLM bằng urllib theo docs/connect-model.md).
+# Cài đặt thư viện giao diện demo 1 màn hình (codebase/app.py):
+#   python -m pip install -r requirements.txt
+
+streamlit>=1.38.0,<2.0.0

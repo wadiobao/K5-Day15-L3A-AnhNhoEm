@@ -1,6 +1,6 @@
 # Task Specification — Thành viên 2: Công cụ Tất định & Giao diện Demo
 
-* **Phụ trách:** Thành viên 2 (`2A202603427`)
+* **Phụ trách:** Nguyễn Vũ Khanh (`2A202603427`)
 * **Module:** `Deterministic Tools & Demo UI`
 * **Nhánh Git:** `feat/2a202603427-tools-and-ui`
 * **File được sửa:** `codebase/tools.py`, `codebase/app.py` (nếu thêm thư viện UI như `streamlit`/`gradio`, báo Đội trưởng cập nhật `requirements.txt`)
