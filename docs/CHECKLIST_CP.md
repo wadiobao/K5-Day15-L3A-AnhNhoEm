@@ -37,7 +37,7 @@ Tài liệu theo dõi tiến độ từng mốc Checkpoint (CP1–CP4) và đầ
 
 ### Code khung chạy hết luồng (mock hoặc thật đều đạt CP2)
 - [x] Hoàn thiện `codebase/ai.py` (hỗ trợ Gemini/OpenAI/Anthropic/Ollama bằng `urllib`) và `codebase/agent.py` (pipeline 3 chặng + Guardrails + Retry JSON) trên nhánh `feat/2a202603362-core-ai-agent` *(Bảo)*
-- [ ] Hoàn thiện 3 `@tool` trong `codebase/tools.py` (`preprocess_reviews`, `verify_grounding`, `compute_real_trust_score`) trên nhánh `feat/2a202603427-tools-and-ui` và mở PR trước 18:45 *(Khanh)*
+- [x] Hoàn thiện 3 `@tool` trong `codebase/tools.py` (`preprocess_reviews`, `verify_grounding`, `compute_real_trust_score`) trên nhánh `feat/2a202603427-tools-and-ui` và mở PR trước 18:45 *(Khanh)*
 - [ ] Merge PR của Bảo, Khanh, Tường vào `main`; chạy `python run.py` xác nhận đi hết luồng không lỗi *(Bảo)*
 - [ ] Nộp **Form 2 → Nhánh CP2** trước 19:30 *(Bảo)*
 
