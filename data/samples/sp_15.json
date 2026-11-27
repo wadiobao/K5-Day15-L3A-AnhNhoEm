@@ -1,0 +1,82 @@
+{
+  "product_id": "sp_15",
+  "product_name": "Loa vi tính Bluetooth Enkor E700 Đen",
+  "category": "loa_dan_karaoke",
+  "platform": "Điện Máy Xanh",
+  "platform_rating": 3.9,
+  "expected_direction": "near_platform",
+  "reviews": [
+    {
+      "id": "r1",
+      "author": "user_01",
+      "rating": 5,
+      "text": "Mình mua máy cũ bị thiếu remote với cap 3.5mm r ạ"
+    },
+    {
+      "id": "r2",
+      "author": "user_02",
+      "rating": 5,
+      "text": "Nhân viên tư vấn nhiệt tình,sản phẩm tốt."
+    },
+    {
+      "id": "r3",
+      "author": "user_03",
+      "rating": 5,
+      "text": "cam jac vao may tinh nhung khong nghe"
+    },
+    {
+      "id": "r4",
+      "author": "user_04",
+      "rating": 5,
+      "text": "xài quá ngon bass đập khoẻ"
+    },
+    {
+      "id": "r5",
+      "author": "user_05",
+      "rating": 5,
+      "text": "Tốt so với tầm giá."
+    },
+    {
+      "id": "r6",
+      "author": "user_06",
+      "rating": 5,
+      "text": "cho em hỏi loa của mình xài micro karaoke đc k ạ"
+    },
+    {
+      "id": "r7",
+      "author": "user_07",
+      "rating": 5,
+      "text": "Loa quá tốt trong tầm giá, kết nối PC nghe khá hay Tổng đài chăm sóc khách hàng rất nhanh và nhiệt tình"
+    },
+    {
+      "id": "r8",
+      "author": "user_08",
+      "rating": 5,
+      "text": "Lo nghe ổn thái độ nhân viên tốt dễ thương nhiệt tình"
+    },
+    {
+      "id": "r9",
+      "author": "user_09",
+      "rating": 5,
+      "text": "Loa giá rẻ chất lượng cao nhiều tính năng, âm thanh bass rất hay cho phòng nhỏ 15m2 nhé mọi người."
+    },
+    {
+      "id": "r10",
+      "author": "user_10",
+      "rating": 5,
+      "text": "Xin cach ghep loa với tv LG qua jack 3.5"
+    },
+    {
+      "id": "r11",
+      "author": "user_11",
+      "rating": 1,
+      "text": "Jack 3.5 gắn vào laptop hay điện thoại đều không xuất được âm thanh"
+    },
+    {
+      "id": "r12",
+      "author": "user_12",
+      "rating": 3,
+      "text": "loa 20w mà sao mở lên nhỏ xíu nhỉ"
+    }
+  ]
+}

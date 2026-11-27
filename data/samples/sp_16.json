@@ -1,0 +1,82 @@
+{
+  "product_id": "sp_16",
+  "product_name": "Tai nghe Bluetooth True Wireless Havit TW947",
+  "category": "tai_nghe",
+  "platform": "Điện Máy Xanh",
+  "platform_rating": 3.7,
+  "expected_direction": "higher_than_platform",
+  "reviews": [
+    {
+      "id": "r1",
+      "author": "user_01",
+      "rating": 5,
+      "text": "Tai nghe Havit TW947 mình sử dụng tròn 1 năm nên quay lại đây đánh giá. Tai nghe tốt trong tầm giá, sạc nhanh, hộp sạc sạc tai nghe được nhiều lần. Sử dụng 1 năm rồi chưa có dấu hiệu hư hỏng hay lệch pin tai nghe. Nghe nhạc bass cao sẽ hơi rè, chưa ôm tai lắm hơi dễ rớt, không có chống ồn với bật nhạc volume lớn tiếng lọt ra ngoài. Nhưng với giá như này và chất lượng thì nên mua nhé, xài 1 năm vẫn còn bền bỉ như lúc mới mua lắm nha."
+    },
+    {
+      "id": "r2",
+      "author": "user_02",
+      "rating": 5,
+      "text": "Âm thanh nghe tuyệt vời"
+    },
+    {
+      "id": "r3",
+      "author": "user_03",
+      "rating": 5,
+      "text": "Tai nghe tốt trong tầm giá, dễ kết nối, đáng mua nha mng"
+    },
+    {
+      "id": "r4",
+      "author": "user_04",
+      "rating": 5,
+      "text": "Hàng cũ nhưng dùng rất ok"
+    },
+    {
+      "id": "r5",
+      "author": "user_05",
+      "rating": 5,
+      "text": "Âm thanh khá ổn..pin đc lâu"
+    },
+    {
+      "id": "r6",
+      "author": "user_06",
+      "rating": 5,
+      "text": "Tai nghe ok"
+    },
+    {
+      "id": "r7",
+      "author": "user_07",
+      "rating": 5,
+      "text": "Chất âm sống động nghe cực kì oke .Giao nhanh nữa .Cảm ơn nhiều"
+    },
+    {
+      "id": "r8",
+      "author": "user_08",
+      "rating": 5,
+      "text": "Sản phẩm tốt vừa túi tiền"
+    },
+    {
+      "id": "r9",
+      "author": "user_09",
+      "rating": 5,
+      "text": "Nghe ok lắm"
+    },
+    {
+      "id": "r10",
+      "author": "user_10",
+      "rating": 3,
+      "text": "Tai nghe tốt trong tầm giá nhưng kết nối với Macbook chip M1 thì lỗi nghe dựt đứt quảng, Macbook chip intel thì bình thường."
+    },
+    {
+      "id": "r11",
+      "author": "user_11",
+      "rating": 2,
+      "text": "Rồi riset kiểu gì"
+    },
+    {
+      "id": "r12",
+      "author": "user_12",
+      "rating": 3,
+      "text": "Không có âm bass. Nghe nhạc chỉ ở mức thấp."
+    }
+  ]
+}

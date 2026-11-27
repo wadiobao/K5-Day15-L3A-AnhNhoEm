@@ -1,0 +1,82 @@
+{
+  "product_id": "sp_08",
+  "product_name": "Lò vi sóng Sharp R-C825VN(ST) 25 lít",
+  "category": "lo_vi_song",
+  "platform": "Điện Máy Xanh",
+  "platform_rating": 4.6,
+  "expected_direction": "near_platform",
+  "reviews": [
+    {
+      "id": "r1",
+      "author": "user_01",
+      "rating": 5,
+      "text": "Sản phẩm có thiết kế đẹp, sử dụng dễ dàng, màu sắc đẹp, dễ vệ sinh, hoạt động tốt"
+    },
+    {
+      "id": "r2",
+      "author": "user_02",
+      "rating": 5,
+      "text": "Sản phẩm tốt, nướng thức ăn ngon, thiết kế dễ vệ sinh, nv nói tư vấn nói chuyện dễ thương"
+    },
+    {
+      "id": "r3",
+      "author": "user_03",
+      "rating": 5,
+      "text": "giá cả phải chăng, hoạt động tốt, dễ sử dụng. màu sắc sạch sẽ dễ dàng vệ sinh, nhân viên rất tốt"
+    },
+    {
+      "id": "r4",
+      "author": "user_04",
+      "rating": 5,
+      "text": "Thiết kế sang trọng, dễ sử dụng , thép không rỉ dễ lau chùi , ngoài ra tích hợp nhiều chức năng hâm thức ăn , rã đông và nướng, thức ăn rất ngon và giới thiệu nhiều người sử dụng."
+    },
+    {
+      "id": "r5",
+      "author": "user_05",
+      "rating": 5,
+      "text": "Sản phẩm giá tốt giá ưu đãi, Thiết kế đẹp phu hợp với mọi gia đình, nhiều chức năng thuận tiện cho việc nâu nướng, Nhân viên nhiệt tình, chu đáo"
+    },
+    {
+      "id": "r6",
+      "author": "user_06",
+      "rating": 5,
+      "text": "Lò thiết kế đẹp các nút phím tiện dụng chất liệu thép lo gỉ bền tốt.Dùng nướng các thức ăn tiện lợi nhanh gọn lẹ."
+    },
+    {
+      "id": "r7",
+      "author": "user_07",
+      "rating": 5,
+      "text": "mình mua với giá rất ưu đãi, thiết kế rộng rãi phù hợp cho đại gia đình nhiều người, nhân viên bán hàng và giao hàng rất nhiệt tình"
+    },
+    {
+      "id": "r8",
+      "author": "user_08",
+      "rating": 5,
+      "text": "Sản phẩm sử dụng rất tốt. Bếp to nướng đồ gì cũng rộng rãi thoải mái. Nhân viên của điện máy xanh rất nhiệt tình"
+    },
+    {
+      "id": "r9",
+      "author": "user_09",
+      "rating": 5,
+      "text": "Sản phẩm giá rất rẽ. Mẫu mã đẹp. Phù hợp vs bếp. Có đầy đủ chức năng tiện lợi. Phím bấm hơi cứng nhưng không sao. Vì hàng giảm giá nên k đòi hỏi nhiều hoàng hảo."
+    },
+    {
+      "id": "r10",
+      "author": "user_10",
+      "rating": 5,
+      "text": "Sản phẩm rẻ mà chất, lò to nướng gì cũng sướng, sp đẹp mất nữa.Nv tư vấn nhiệt tình"
+    },
+    {
+      "id": "r11",
+      "author": "user_11",
+      "rating": 4,
+      "text": "Sản phẩm đẹp, dễ sử dụng, khoang lò làm bằng inox nên rất dễ vệ sinh, chế độ đối lưu nhiệt làm chún đều món ăn, rất tuyệt vời."
+    },
+    {
+      "id": "r12",
+      "author": "user_12",
+      "rating": 4,
+      "text": "Bề mặt khoang lò bằng inox nên lau chùi rất rễ, bền. Có nướng đối lưu cho món nướng tiện lợi."
+    }
+  ]
+}

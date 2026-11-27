@@ -1,0 +1,82 @@
+{
+  "product_id": "sp_04",
+  "product_name": "Máy hút mùi âm tủ Hafele HC-BI70B (538.86.095)",
+  "category": "may_hut_mui",
+  "platform": "Điện Máy Xanh",
+  "platform_rating": 2.7,
+  "expected_direction": "lower_than_platform",
+  "reviews": [
+    {
+      "id": "r1",
+      "author": "user_01",
+      "rating": 5,
+      "text": "Máy chạy ổn"
+    },
+    {
+      "id": "r2",
+      "author": "user_02",
+      "rating": 5,
+      "text": "Máy dùng rất ok"
+    },
+    {
+      "id": "r3",
+      "author": "user_03",
+      "rating": 5,
+      "text": "Tốt . Đẹp"
+    },
+    {
+      "id": "r4",
+      "author": "user_04",
+      "rating": 1,
+      "text": "Máy quá tệ Mua 23/9 không dùng được đến nay vẫn chưa sử lý Dùng hàng điện máy xanh hơn 10 năm lần đầu gặp phải quá thất vọng"
+    },
+    {
+      "id": "r5",
+      "author": "user_05",
+      "rating": 1,
+      "text": "sao nhà mình lắp hút mùi này bị đọng nước nhỏ xuống mặt bếp,cần dmx kiểm tra lại giúp"
+    },
+    {
+      "id": "r6",
+      "author": "user_06",
+      "rating": 2,
+      "text": "Thợ lắp đặt rất chán, bảo ko có ống hút mùi vẫn hút bình thường. Chả biết hút kiểu gì mà nấu xong mùi vẫn i chang. Thợ ko có tâm 1 chút nào"
+    },
+    {
+      "id": "r7",
+      "author": "user_07",
+      "rating": 3,
+      "text": "Hút hơi yếu ạ"
+    },
+    {
+      "id": "r8",
+      "author": "user_08",
+      "rating": 3,
+      "text": "Dùng khá ok"
+    },
+    {
+      "id": "r9",
+      "author": "user_09",
+      "rating": 1,
+      "text": "máy hút cực kỳ kém, bảo hành đẩy trách nhiệm cho hãng, hãng đẩy sang cho bên bán hàng, hậu mãi kém, thất vọng. Mua rất nhiều sản phẩm rồi nhưng DMX chăm sóc KH cực kỳ kém."
+    },
+    {
+      "id": "r10",
+      "author": "user_10",
+      "rating": 2,
+      "text": "Máy thì không có vấn đề. Mua ở dmx chủ yếu do bao gồm công lắp đặt. Mà thợ lắp đặt làm ăn làm quá chán. Lắp qua loa xong bỏ về trong. Dây điện cấn kênh không để ý, lắp méo xẹo. Rồi bên trong có cái núm chỉnh hướng gió, nhà không có ống thông thì phải xoay núm qua hướng tuần hoàn phía trước. Vậy mà thợ mà không làm, quạt chạy ù ù mà không có tí gió nào mà cũng bỏ về được. Tốn cả buổi tự khoan tường rồi lắp. Biết vậy mua chỗ khác rồi tự lắp cho rẻ mà còn đỡ bực."
+    },
+    {
+      "id": "r11",
+      "author": "user_11",
+      "rating": 2,
+      "text": "Máy này em mới mua muốn đổi cũ sang máy khác có được ko"
+    },
+    {
+      "id": "r12",
+      "author": "user_12",
+      "rating": 1,
+      "text": "Quá tệ Nhân viên tư vấn 1 đằng, kỹ thuật vào lắp 1 nẻo.Không hộ trợ khoan tủ, tường lắp đặt đường ống thông hơi ra ngoài thì máy này có tác dụng gì Kỹ thuật lắp cho chạy tuần hoàn thì lại không bật sang chế độ chạy tuần hoàn.Riết DMX còn thua cái chợ trời."
+    }
+  ]
+}
