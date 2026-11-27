@@ -14,6 +14,8 @@
 3. `logistics_bias` (5 câu): sản phẩm ổn nhưng bị đánh 1–2 sao do shipper/vận chuyển.
 4. `hidden_defects` (5–10 câu): điểm sàn cao nhưng review 1–3 sao gần đây lặp lại cùng 1–2 lỗi nghiêm trọng.
 
+**Thực tế bản benchmark 30 câu (27/11/2026 18:40)**, phân nhóm bằng quy tắc trên nhãn chuẩn (một sản phẩm có thể thuộc 2 nhóm): `genuine_high` 6 (sp_02, 05, 06, 08, 09, 15) · `seeding_heavy` 3 (sp_17, 18, 19) · `logistics_bias` 2 (sp_04, sp_30) · `hidden_defects` 14 (sp_11–14, sp_21–30). Chiều điểm: 9 `near_platform`, 2 `higher_than_platform` (sp_03, sp_16 — sinh do mẫu 12 review tích cực hơn trung bình toàn bộ, không phải do lỗi giao hàng), 15 `lower_than_platform`. **Giới hạn:** `seeding_heavy` và `logistics_bias` ít hơn mục tiêu (3/8 và 2/5); câu 1–2★ chỉ chê giao hàng hiếm trong dữ liệu thật (2/35 review 1–2★ natural).
+
 Đây là nhóm nội dung, không phải giá trị cột `type`. Cột `type` dùng `thuong`, `kho`, `tu_choi`; mục tiêu có ≥5 câu `kho`, ≥2 câu `tu_choi`, ≥1/3 câu nguồn `nguoi_dung` hoặc `data_that`. Chỉ xếp nhóm khi dữ liệu thực tế hỗ trợ, không ép nhãn theo chỉ tiêu phân bổ.
 
 ## 2. Quy trình dựng và gán nhãn

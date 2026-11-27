@@ -24,7 +24,16 @@ MARKDOWN_HEADERS = {
     "tên sản phẩm": "product_name", "sàn": "platform", "ngành hàng": "category",
     "điểm sao": "platform_rating", "loại câu": "type",
 }
-PLATFORM_ALIASES = {platform.casefold(): platform for platform in PLATFORMS} | {"tiktok": "TikTok Shop"}
+def platform_key(value: str) -> str:
+    """Bỏ dấu, chuẩn hóa hoa/thường và khoảng trắng của tên sàn."""
+    folded = unicodedata.normalize("NFD", value.casefold().replace("đ", "d"))
+    return " ".join("".join(char for char in folded if not unicodedata.combining(char)).split())
+
+
+PLATFORM_ALIASES = {platform_key(platform): platform for platform in PLATFORMS} | {
+    "tiktok": "TikTok Shop", "dienmayxanh": "Điện Máy Xanh",
+    "thegioididong": "Thế Giới Di Động", "tgdd": "Thế Giới Di Động",
+}
 
 
 def markdown_cells(raw: str) -> list[str]:
@@ -95,7 +104,7 @@ def read_markdown(
             for kind in pii_hits(value):
                 error(line_number, f"header {key}: nghi PII — {kind}")
             if key == "platform":
-                value = PLATFORM_ALIASES.get(" ".join(value.casefold().split()), value)
+                value = PLATFORM_ALIASES.get(platform_key(value), value)
             elif key == "platform_rating":
                 value = value.replace(",", ".")
             headers[key], header_lines[key] = value, line_number
@@ -162,6 +171,8 @@ def parse_raw(path: Path) -> tuple[dict[str, Any] | None, list[dict[str, Any]], 
             if key not in HEADERS or key in headers or not value:
                 error(line_number, f"header lạ, trùng hoặc rỗng: {key!r}")
                 continue
+            if key == "platform":
+                value = PLATFORM_ALIASES.get(platform_key(value), value)
             headers[key], header_lines[key] = value, line_number
             for kind in pii_hits(value):
                 error(line_number, f"header {key}: nghi PII — {kind}")
@@ -203,7 +214,7 @@ def parse_raw(path: Path) -> tuple[dict[str, Any] | None, list[dict[str, Any]], 
     for key in sorted(HEADERS - headers.keys()):
         error(header_lines.get(key, separator_line), f"thiếu header {key}")
     if "platform" in headers and headers["platform"] not in PLATFORMS:
-        error(header_lines["platform"], "platform phải là Shopee, Tiki, TikTok Shop hoặc Lazada")
+        error(header_lines["platform"], "platform phải thuộc: " + ", ".join(sorted(PLATFORMS)))
     if "type" in headers and headers["type"] not in {"thuong", "kho"}:
         error(header_lines["type"], "type phải là thuong hoặc kho")
     if "category" in headers and not re.fullmatch(r"[a-z][a-z0-9]*(?:_[a-z0-9]+)*", headers["category"]):

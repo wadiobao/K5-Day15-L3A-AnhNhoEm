@@ -25,7 +25,7 @@ WEIGHT_MAP = {
 LABELS = list(WEIGHT_MAP)
 LABEL_ALIASES = dict(zip("vlsg", LABELS)) | {label: label for label in LABELS}
 LABEL_ALIASES.update({key.upper(): value for key, value in LABEL_ALIASES.copy().items()})
-PLATFORMS = {"Shopee", "Tiki", "TikTok Shop", "Lazada"}
+PLATFORMS = {"Shopee", "Tiki", "TikTok Shop", "Lazada", "Điện Máy Xanh", "Thế Giới Di Động"}
 DIRECTIONS = {
     "near_platform", "lower_than_platform", "higher_than_platform", "insufficient_data",
 }

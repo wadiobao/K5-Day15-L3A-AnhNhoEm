@@ -36,10 +36,15 @@ Regex D (giữ nguyên để chạy lại):
 
 ## 3. Kết quả
 
+Chạy lúc 2026-11-27 18:34:17 +0700, trên 26 sản phẩm, 317 review (natural 192, added 125). Lệnh: `python3 evidence/count_reviews.py`. **Nhãn do AI gán theo tiêu chí TV3** (xem `docs/ai-usage.md`); `natural` gồm 156 review Điện Máy Xanh + 36 review ViMRHP.
+
 | Đếm gì | x / N | % | Ghi chú |
 |---|---|---|---|
-| | | | |
-| | | | |
+| A | 72 / 125 | 57.6% | Review 5★ natural; low_signal hoặc suspicious_pattern |
+| B-natural | 2 / 35 | 5.7% | Review 1–2★ natural; logistics_only |
+| B-natural+added | 5 / 98 | 5.1% | Review 1–2★ gồm added; không phải tỷ lệ tự nhiên |
+| C | 15 / 26 | 57.7% | Sản phẩm đủ nhãn; tính cả added; insufficient_data: 0 sản phẩm (vẫn trong mẫu số) |
+| D | 1 / 185 | 0.5% | Review 5★ natural+added; khớp regex NFC, không cần nhãn |
 
 Ghi dạng "x/N (y%)". "Nhiều bạn…" không phải số.
 (Điền riêng A, B-natural, B-natural+added, C, D; ghi mẫu số và thời điểm chạy từng dòng.)
@@ -48,11 +53,12 @@ Ghi dạng "x/N (y%)". "Nhiều bạn…" không phải số.
 
 (Chép nguyên văn từ dữ liệu đã ẩn danh, kèm `sp_XX/rX`, sao và `picked`; không dùng ví dụ minh họa làm bằng chứng.)
 
-1.
-2.
-3.
-4.
-5.
+1. sp_02/r5 · 5★ · natural · low_signal · "Hàng rất tốt.... dùng rễ ràng"
+2. sp_02/r7 · 5★ · natural · low_signal · "Vì sao camera của tôi không có trong danh sách bảo hành"
+3. sp_04/r10 · 2★ · natural · logistics_only · "Máy thì không có vấn đề. Mua ở dmx chủ yếu do bao gồm công lắp đặt. Mà thợ lắp đặt làm ăn làm quá chán. Lắp qua loa xong bỏ về trong. Dây điện cấn kênh không để ý, lắp méo xẹo. Rồi bên trong có cái núm chỉnh hướng gió, nhà không có ống thông thì phải xoay núm qua hướng tuần hoàn phía trước. Vậy mà thợ mà không làm, quạt chạy ù ù mà không có tí gió nào mà cũng bỏ về được. Tốn cả buổi tự khoan tường rồi lắp. Biết vậy mua chỗ khác rồi tự lắp cho rẻ mà còn đỡ bực."
+4. sp_04/r12 · 1★ · natural · logistics_only · "Quá tệ Nhân viên tư vấn 1 đằng, kỹ thuật vào lắp 1 nẻo.Không hộ trợ khoan tủ, tường lắp đặt đường ống thông hơi ra ngoài thì máy này có tác dụng gì Kỹ thuật lắp cho chạy tuần hoàn thì lại không bật sang chế độ chạy tuần hoàn.Riết DMX còn thua cái chợ trời."
+5. sp_19/r2 · 5★ · natural · low_signal · "Shop ship hàng nhanh và đóng gói cẩn thận chắc chắn , sản phẩm chưa dùng nên sẽ đáng giá chất lượng sau nè, shipper tận tình dễ thương, hi vọng máy chạy tốt"
+6. sp_17/r2, r5, r12 · 5★ · natural · suspicious_pattern · cùng một câu "Mình đã nhận được hàng, chất vải mềm mịn, hình sắc nét, shop giao hàng nhanh rất ưng ý sẽ ủng hộ shop tiếp nữa nhé" lặp 3 lần trong 2 ngày (ViMRHP)
 
 ## 5. Giới hạn của data
 

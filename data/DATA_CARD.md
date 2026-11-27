@@ -1,6 +1,6 @@
 # DATA CARD — Dữ liệu dự án ReviewShield
 
-**Phụ trách:** Nguyễn Mạnh Tường (`2A202603646`). Các con số dưới đây là mục tiêu; bảng thực tế chỉ điền sau khi thu và kiểm dữ liệu.
+**Phụ trách:** Nguyễn Mạnh Tường (`2A202603646`). Bảng §2 ghi cả mục tiêu và số thực tế (cập nhật 27/11/2026 18:40).
 
 ## 1. Nguồn và cách thu
 
@@ -8,19 +8,37 @@
 - Theo ghi nhận của nhóm ngày 27/11/2026, mọi yêu cầu tự động từ máy nhóm tới `tiki.vn` (cả trang chủ và `api/v2`) đều trả **HTTP 403**. Vì vậy không dùng script lấy Tiki; không vượt chặn anti-bot theo `AGENTS.md`.
 - Người thu ghi tên sản phẩm, sàn, ngành hàng, điểm sàn đang hiển thị và thời điểm chép trong ghi chép nguồn ngoài repo. Script chỉ chuẩn hóa dữ liệu đã chép, không truy cập sàn.
 
+### Nguồn thứ hai: bộ dữ liệu công khai
+
+- **Bộ dữ liệu công khai `p-storm/vietnamese-electronics-product-reviews`** (Hugging Face, giấy phép **apache-2.0**, nguồn **Điện Máy Xanh + Thế Giới Di Động**, **32.099 review** theo bản JSONL đã chuyển và `../raw_reviews/public/README_dataset.md`). Chỉ đọc bản có sẵn ngoài repo, không truy cập mạng hoặc cào sàn.
+- Chạy từ gốc repo: `python3 data/scripts/import_public.py --candidates` để xem thống kê, `python3 data/scripts/import_public.py --select` để xem bộ chọn, rồi `python3 data/scripts/import_public.py --write` để ghi bảng ngoài repo. Có thể đổi JSONL bằng `--input <đường_dẫn>`. Mặc định không cờ chỉ in hướng dẫn.
+- Gom theo `(source, product_id)`, sắp `row_order` tăng dần. **12 review không rỗng đầu theo thứ tự file gốc = natural**, không phải thứ tự mặc định hiện tại của website. Khi xuất bỏ review nghi SĐT/email/link, mã dài hoặc tài khoản và lấy review kế tiếp; nếu 12 dòng hợp lệ không có 1–2★, thêm tối đa 2 review 1–2★ tiếp theo, đánh dấu `added` bằng `x` ở “Lọc thêm”.
+- Quy tắc chọn (quota cuối: 4 `higher` vì bộ dữ liệu chỉ có 4 ứng viên đạt, 6 `near`, 4 `lower`, 2 `kho`): ứng viên `higher` có ít nhất 2 review 1–2★ nhắc giao/lắp nhưng không nhắc từ khóa lỗi; 6 `near` có tối đa 2 review 1–2★ và độ dài trung bình ít nhất 60 ký tự; 4 `lower` có `platform_rating >= 4.0` và ít nhất 3 review 1–2★ nhắc lỗi; 2 `kho` ưu tiên tỷ lệ chữ không dấu cao nhất. Mọi chỉ số nhóm dùng 12 review không rỗng đầu. Tỷ lệ không dấu là số chữ cái ASCII chia tổng chữ cái, không tính số/dấu câu; đây chỉ là chỉ số gần đúng cho không dấu/teencode.
+- Chọn tất định, không ngẫu nhiên: xét nhóm ít ứng viên so với quota trước; ưu tiên category chưa dùng, nguồn đang ít hơn, rồi điểm phù hợp và ID/nguồn theo thứ tự cố định; riêng `kho` ưu tiên tỷ lệ không dấu trước. Mỗi category tối đa 2 sản phẩm, ưu tiên đa dạng gia dụng/điện tử và cân bằng hai nguồn khi dữ liệu cho phép. Thiếu metadata không tự suy ID/category hoặc gom mọi ID rỗng thành một sản phẩm; không đủ quota thì dừng, không nới tiêu chí. Nhóm ứng viên chỉ phục vụ chọn mẫu, **không phải nhãn V/L/S/G hoặc chiều điểm chuẩn**.
+- **`platform_rating` là điểm suy ra**: trung bình rating của **toàn bộ review sản phẩm trong bộ dữ liệu**, kể cả dòng không được xuất, làm tròn 1 chữ số thập phân. **Không phải điểm đang hiển thị trên web**; review trong bộ có thể đã được người tạo bộ lọc trước. Không dùng điểm này để kết luận điểm sàn sai.
+- Gộp khoảng trắng, escape dấu `|`, thay tên người sau từ xưng hô/nghề bằng **`[tên]`** và giữ từ xưng hô; in từng vị trí đã thay để người kiểm xem, không in lại tên gốc. V/L/S/G để trống cho người gán rà lại. Regex không bảo đảm loại hết tên/địa chỉ; vẫn phải kiểm tay trước khi đưa mẫu vào repo.
+- Bản JSONL gốc, bảng `sp_XX.md` và `public/selection_log.md` nằm trong `../raw_reviews/` **ngoài repo**. Không commit nguyên bộ dữ liệu; bảng đã có nội dung được bảo vệ khỏi ghi đè, không đụng `sp_21–sp_30`. Chưa ghi số sản phẩm thực tế của nguồn này; người phụ trách điền sau khi rà dữ liệu.
+
+### Nguồn thứ ba: ViMRHP (Shopee, bộ công khai)
+
+- **`trucmtnguyen/ViMRHP`** (Hugging Face, giấy phép **CC BY-NC-ND 4.0**): review Shopee thật cào năm 2023–2024 kèm `CommentDate`. Dùng cho nhóm kịch bản `seeding_heavy` (sp_17 thời trang, sp_18 khẩu trang, sp_19 máy xay sinh tố).
+- Mỗi sản phẩm lấy **12 review mới nhất theo `CommentDate`** (natural); bỏ hẳn review có SĐT/email/link (không gặp trường hợp nào). Chỉ giữ số sao, nội dung, tên sản phẩm; **bỏ** `UserId`, `ShopId`, `UserShopId` và trường `Response` (do AI sinh trong bộ gốc).
+- **Tuân thủ giấy phép:** NC — dùng cho bài lab phi thương mại; BY — ghi nguồn tại đây; ND — **giữ nguyên văn nội dung review**, chỉ gộp xuống dòng thành dấu cách để đưa vào bảng/JSON, không sửa chữ, không che tên (review cần che sẽ bị loại thay vì sửa). `platform_rating` = trung bình rating của toàn bộ review sản phẩm đó trong bộ (24 review/sản phẩm).
+- Sản phẩm đã nhập nhưng **không đưa vào benchmark** (bảng thô để riêng ở `../raw_reviews/loai_khoi_benchmark/`, không có JSON trong `data/samples`): sp_01, sp_07, sp_10 — để benchmark giữ 30 câu, cân bằng 4 nhóm kịch bản và giữ 2 ca `higher_than_platform`.
+
 ## 2. Quy mô mục tiêu và thực tế
 
 | Hạng mục | Mục tiêu | Thực tế sau kiểm tra |
 |---|---|---|
-| Tổng sản phẩm | 25–30 | 10 (bản CP2, 27/11 17:20) |
-| Shopee | 10–12 | 10 (sp_21–sp_30, Đặng Long Nhật thu) |
+| Tổng sản phẩm | 25–30 | 26 (sp_02–sp_06, sp_08, sp_09, sp_11–sp_19, sp_21–sp_30) |
+| Shopee | 10–12 | 13 (sp_21–sp_30 Đặng Long Nhật thu thủ công; sp_17–sp_19 từ ViMRHP) |
 | Tiki | 8–10 | 0 |
-| TikTok Shop / Lazada (gộp) | 5–8 | 0 |
-| Ngành hàng | 4–5 | 1 (`phu_kien_dien_tu`) |
-| Review / sản phẩm | 6–15 | 10–14 (tổng 121) |
-| Tổng review `natural` | (điền sau khi thu dữ liệu) | 0 |
-| Tổng review `added` | (điền sau khi thu dữ liệu) | 121 (sp_21–sp_30 lấy 5★ và 1★ qua bộ lọc sao) |
-| Ngày bắt đầu / kết thúc thu | 27–28/11/2026 | 27/11/2026 (nhận bản thu sp_21–sp_30) / __ |
+| TikTok Shop / Lazada (gộp) | 5–8 | 0 — thay bằng Điện Máy Xanh: 13 (bộ p-storm, sp_02–sp_16) |
+| Ngành hàng | 4–5 | 16 (vd phu_kien_dien_tu, gia_dung, thoi_trang, suc_khoe_lam_dep, tu_lanh, may_lanh, noi_com_dien…) |
+| Review / sản phẩm | 6–15 | 10–14 (tổng 317) |
+| Tổng review `natural` | (điền sau khi thu dữ liệu) | 192 (Điện Máy Xanh + ViMRHP) |
+| Tổng review `added` | (điền sau khi thu dữ liệu) | 125 (121 của sp_21–sp_30 lấy qua bộ lọc sao + 4 review 1–2★ bổ sung) |
+| Ngày bắt đầu / kết thúc thu | 27–28/11/2026 | 27/11/2026 / 27/11/2026 (bản benchmark CP2–CP3) |
 
 Phân bổ sàn phải đồng thời nằm trong tổng 25–30 sản phẩm. Ngành hàng dự kiến: phụ kiện điện tử, gia dụng, thời trang, mỹ phẩm, đồ ăn vặt.
 
