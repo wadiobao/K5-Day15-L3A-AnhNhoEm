@@ -74,7 +74,7 @@ Trên máy dùng `python3`, thay `python` bằng `python3`. Lượt có lỗi k�
 
 | Lượt | Run ID | Ngày giờ | Model | Đạt/tổng | % | Ghi chú lỗi kỹ thuật |
 |---|---|---|---|---|---|---|
-| | | | | | | |
+| `run-1` | `run-1@20261127-184552` | 2026-11-27 18:45 | `gemini-3.5-flash-lite` | 10/30 | 33% | 1 lỗi HTTP 503 (high demand) tại `RS08`; metric tổng: `citation_grounding` 100.0% (305/305), `direction_match` 88.5% (23/26), `label_accuracy` 71.0% (225/317), `tu_choi` 3/3 (100%). |
 
 ## 5. Kết quả tổng hợp
 
