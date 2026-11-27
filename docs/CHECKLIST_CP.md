@@ -27,7 +27,7 @@ Tài liệu theo dõi tiến độ từng mốc Checkpoint (CP1–CP4) và đầ
 - [x] `eval/metric_spec.yaml` có đủ 4 metric đo được (≥3 metric) *(Tường)*
 - [x] `data/DATA_CARD.md` hoàn thiện *(Tường)*
 - [x] Chốt cứng chuẩn "Đạt" bằng số tại `spec.md §7` khớp 100% `eval/metric_spec.yaml` *(Bảo)*
-- [ ] Bổ sung **sơ đồ khối kiến trúc AI** (`Input → AI Core → Chặn rủi ro → Output`) vào `spec.md §4` *(Bảo)*
+- [x] Bổ sung **sơ đồ khối kiến trúc AI** (`Input → AI Core → Chặn rủi ro → Output`) vào `spec.md §4` *(Bảo)*
 - [ ] Cập nhật dòng 8 (mốc CP2) trong `canvas.md` *(Nhật)*
 
 ### Dữ liệu & Benchmark (mốc CP2)

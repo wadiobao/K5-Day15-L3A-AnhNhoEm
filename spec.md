@@ -22,6 +22,23 @@ Người mua hàng trên các sàn thương mại điện tử thường dựa v
 * Không tự gửi tin nhắn tới shop hoặc can thiệp trực tiếp vào tài khoản sàn của người dùng.
 
 ## §4. Kiến trúc luồng & Ánh xạ vào `codebase/`
+
+### Sơ đồ kiến trúc AI (`Input → AI Core → Chặn rủi ro → Output`)
+
+```mermaid
+flowchart TD
+    IN["1. Input: Chọn mẫu data/samples/*.json hoặc dán danh sách review"] --> G0["Chặng 0 — Scope & Safety Guard (agent.py): Chặn rỗng, cào link sàn, tự nhắn shop, prompt injection"]
+    G0 -->|Hợp lệ| T1["Chặng 1 — Tiền xử lý tất định (@tool preprocess_reviews): Lọc rỗng, chuẩn hóa, đếm duplicate, cắt lô <= 20"]
+    G0 -->|Ngoài phạm vi / Tấn công| REF["Output Từ chối chuẩn 2 ý: Lý do giới hạn + Hướng dẫn thay thế"]
+    T1 --> AI["2. AI Core — LLM thật (@model_call call_model trong ai.py): Phân loại 4 nhãn + evidence_quote + Top 3 rủi ro + 3 câu hỏi JSON"]
+    AI --> R1{"Parse JSON & Schema hợp lệ?"}
+    R1 -->|Lỗi cú pháp — retry tối đa 1 lần| AI
+    R1 -->|Hợp lệ| GG["3. Chặn rủi ro — Grounding Guard (@tool verify_grounding): Đối chiếu 100% evidence_quote khớp nguyên văn (fallback nếu lệch)"]
+    GG --> TS["Tính điểm tất định (@tool compute_real_trust_score): Trọng số 1.00 / 0.15 / 0.10 / 0.00 · Xử lý an toàn logistics_only"]
+    TS --> OUT["4. Output (answer -> app.py / eval / simulate): Điểm sàn vs Điểm thực · Top 3 rủi ro · 3 câu hỏi bản nháp · Chi tiết nhãn"]
+```
+
+### Ánh xạ vào `codebase/`
 * `codebase/ai.py`: Cài đặt `call_model(system, user)` nối API LLM thật (theo `docs/connect-model.md`), giữ nguyên `@model_call` và trả về đúng `text`, `model`, `tokens_in`, `tokens_out`.
 * `codebase/tools.py`: Khai báo các `@tool` gồm `preprocess_reviews`, `verify_grounding`, `compute_real_trust_score` (tất định 100%, không giao phép tính cho LLM).
 * `codebase/agent.py`: Hàm `answer(text)` nhận đầu vào review (JSON hoặc text), gọi các tool và `call_model`, tổng hợp câu trả lời có cấu trúc rõ ràng kèm bảng Điểm sàn vs Điểm thực, Top 3 rủi ro, 3 câu hỏi kiểm chứng và chi tiết nhãn từng review.
