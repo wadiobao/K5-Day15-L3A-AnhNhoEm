@@ -40,7 +40,7 @@ Nhãn V/L/S/G do AI (Claude Code, Codex) gán theo tiêu chí do Nguyễn Mạnh
 4. "Tốt . Đẹp" — `sp_04/r3` · 5★ · Điện Máy Xanh — *5★ không có thông tin gì về sản phẩm*
 5. "Shop ship hàng nhanh và đóng gói cẩn thận chắc chắn , sản phẩm chưa dùng nên sẽ đáng giá chất lượng sau nè, shipper tận tình dễ thương, hi vọng máy chạy tốt" — `sp_19/r2` · 5★ · ViMRHP/Shopee — *5★ nhưng tự nhận chưa dùng sản phẩm*
 6. "Máy thì không có vấn đề. Mua ở dmx chủ yếu do bao gồm công lắp đặt. Mà thợ lắp đặt làm ăn làm quá chán. Lắp qua loa xong bỏ về trong. Dây điện cấn kênh không để ý, lắp méo xẹo. Rồi bên trong có cái núm chỉnh hướng gió, n…" — `sp_04/r10` · 2★ · Điện Máy Xanh — *2★ chỉ vì lắp đặt, máy không có vấn đề*
-7. `"1. gần 3 năm trước, rubik · 2. Đọc 1 sao · 3. Lâu vãi c*** · 4. Có, quyết định đ** mua"` — `P2` (phỏng vấn tin nhắn 27/11/2026, đã che ký tự từ tục) — *lọc thẳng 1 sao, thấy mất nhiều thời gian và bỏ đơn vì rủi ro*
+7. `"1. gần 3 năm trước, rubik · 2. Đọc 1 sao · 3. Lâu vãi [đã lược từ tục] · 4. Có, quyết định không mua"` — `P2` (phỏng vấn tin nhắn 27/11/2026, đã lược/làm mềm từ tục cho phù hợp báo cáo) — *lọc thẳng 1 sao, thấy mất nhiều thời gian và bỏ đơn vì rủi ro*
 8. `"5. 6-7 lần, đọc đc 1 2 lần"` (`P1`) và `"2. có, đọc được cái comment đầu tiên · 3. 7s"` (`P3`) — phỏng vấn tin nhắn 27/11/2026 — *bằng chứng trái giả thuyết với hàng giá rẻ: mua đồ nhỏ như bấm móng tay/kẹp gắp thức ăn thì lướt rất nhanh hoặc không đọc review*
 
 ## 4. Các nguồn có khớp nhau không
