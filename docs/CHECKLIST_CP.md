@@ -38,7 +38,8 @@ Tài liệu theo dõi tiến độ từng mốc Checkpoint (CP1–CP4) và đầ
 ### Code khung chạy hết luồng (mock hoặc thật đều đạt CP2)
 - [x] Hoàn thiện `codebase/ai.py` (hỗ trợ Gemini/OpenAI/Anthropic/Ollama bằng `urllib`) và `codebase/agent.py` (pipeline 3 chặng + Guardrails + Retry JSON) trên nhánh `feat/2a202603362-core-ai-agent` *(Bảo)*
 - [x] Hoàn thiện 3 `@tool` trong `codebase/tools.py` (`preprocess_reviews`, `verify_grounding`, `compute_real_trust_score`) trên nhánh `feat/2a202603427-tools-and-ui` và mở PR trước 18:45 *(Khanh)*
-- [ ] Merge PR của Bảo, Khanh, Tường vào `main`; chạy `python run.py` xác nhận đi hết luồng không lỗi *(Bảo)*
+- [x] Merge PR #1 (Bảo) và PR #2 (Khanh) vào `main`; chạy `python run.py` xác nhận đi hết luồng 3 chặng không lỗi *(Bảo)*
+- [ ] Merge PR `data/2a202603646-samples-evidence-eval` (≥10 câu benchmark thật của Tường) vào `main` *(Bảo)*
 - [ ] Nộp **Form 2 → Nhánh CP2** trước 19:30 *(Bảo)*
 
 ---
@@ -56,7 +57,7 @@ Tài liệu theo dõi tiến độ từng mốc Checkpoint (CP1–CP4) và đầ
 - [ ] Chạy `python run.py check` đạt **0 cảnh báo toàn bộ** *(Tường & Bảo)*
 
 ### Bản chạy thử gọi AI thật & Eval Lượt 1
-- [ ] Nối `.env` bằng **Gemini thật** (`MODEL_PROVIDER=gemini`, `MODEL_NAME=gemini-3.5-flash` hoặc `gemini-2.5-flash-lite`, không commit `.env`) và chạy `python run.py eval --try` báo `"Nối model được"` *(Bảo)*
+- [ ] Nối `.env` bằng **Gemini thật** (`MODEL_PROVIDER=gemini`, `MODEL_NAME=gemini-3.6-flash` hoặc `gemini-3.5-flash-lite`, không commit `.env`) và chạy `python run.py eval --try` báo `"Nối model được"` *(Bảo)*
 - [ ] Hoàn thiện giao diện demo 1 màn hình Streamlit trong `codebase/app.py` *(Khanh)*
 - [ ] Chạy `python run.py eval` tạo kết quả **Lượt 1** (`eval/run-1.csv` + `traces/run-1.jsonl`, ghi nhận `Run ID`) *(Bảo)*
 - [ ] Chấm đủ cột `pass` (`1`/`0`) và `ghi_chu` trong `eval/run-1.csv`, chạy `python run.py score eval/run-1.csv` *(Tường & Bảo)*
