@@ -58,7 +58,7 @@ Tài liệu theo dõi tiến độ từng mốc Checkpoint (CP1–CP4) và đầ
 
 ### Bản chạy thử gọi AI thật & Eval Lượt 1
 - [x] Nối `.env` bằng **Gemini thật** (`MODEL_PROVIDER=gemini`, `MODEL_NAME=gemini-3.5-flash-lite`, không commit `.env`) và chạy `python run.py eval --try` báo `"Nối model được"` *(Bảo)*
-- [ ] Hoàn thiện giao diện demo 1 màn hình Streamlit trong `codebase/app.py` *(Khanh)*
+- [x] Hoàn thiện giao diện demo 1 màn hình Streamlit trong `codebase/app.py` *(Khanh — PR #9)*
 - [x] Chạy `python run.py eval` tạo kết quả **Lượt 1** (`eval/run-1.csv` + `traces/run-1.jsonl`, Run ID `run-1@20261127-184552`) *(Bảo)*
 - [x] Chấm đủ cột `pass` (`1`/`0`) và `ghi_chu` trong `eval/run-1.csv`, chạy `python run.py score eval/run-1.csv` (10/30 đạt · `tu_choi` 3/3 · `direction_match` 88.5% · `citation_grounding` 100%) *(Bảo & Tường)*
 - [ ] Quay **Video 30 giây** bản chạy thử gọi **AI THẬT** (không lộ `.env`/API key), tải YouTube Unlisted / Drive công khai và kiểm tra bằng **Tab Ẩn Danh** *(Nhật)*
