@@ -19,9 +19,10 @@ from tracing import model_call
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SHOW_RAW = False
-REQUEST_TIMEOUT_SECONDS = 25
+REQUEST_TIMEOUT_SECONDS = 30
 RETRYABLE_HTTP_CODES = (429, 503)
 RETRY_BACKOFF_SECONDS = 2.0
+DEFAULT_MAX_RETRIES = 3
 
 
 def load_env(path: str = os.path.join(ROOT, ".env")) -> None:
@@ -49,9 +50,9 @@ def post_json(
     headers: dict[str, str],
     body: dict,
     timeout: int = REQUEST_TIMEOUT_SECONDS,
-    max_retries: int = 1,
+    max_retries: int = DEFAULT_MAX_RETRIES,
 ) -> dict:
-    """Gửi HTTP POST JSON bằng urllib chuẩn, retry 1 lần khi gặp lỗi quá tải 429/503."""
+    """Gửi HTTP POST JSON bằng urllib chuẩn, retry exponential backoff (2s -> 4s -> 8s) khi gặp 429/503."""
     payload = json.dumps(body, ensure_ascii=False).encode("utf-8")
     merged_headers = {"Content-Type": "application/json", **headers}
 
@@ -66,9 +67,14 @@ def post_json(
         except urllib.error.HTTPError as exc:
             err_body = exc.read().decode("utf-8", "replace")[:300]
             if exc.code in RETRYABLE_HTTP_CODES and attempt < max_retries:
-                time.sleep(RETRY_BACKOFF_SECONDS)
+                time.sleep(RETRY_BACKOFF_SECONDS * (2 ** attempt))
                 continue
             raise RuntimeError(f"HTTP {exc.code}: {err_body}") from exc
+        except (urllib.error.URLError, TimeoutError) as exc:
+            if attempt < max_retries:
+                time.sleep(RETRY_BACKOFF_SECONDS * (2 ** attempt))
+                continue
+            raise RuntimeError(f"Lỗi kết nối API: {exc}") from exc
 
 
 def _call_gemini(system: str, user: str) -> dict:
