@@ -1,0 +1,82 @@
+{
+  "product_id": "sp_03",
+  "product_name": "Pin sạc dự phòng Polymer 10000mAh Không dây Magnetic Type C PD 20W Xmobile JP331",
+  "category": "sac_dtdd",
+  "platform": "Điện Máy Xanh",
+  "platform_rating": 2.5,
+  "expected_direction": "higher_than_platform",
+  "reviews": [
+    {
+      "id": "r1",
+      "author": "user_01",
+      "rating": 5,
+      "text": "Dùng được một thời gian, pin bị phồng thì làm sao ạ"
+    },
+    {
+      "id": "r2",
+      "author": "user_02",
+      "rating": 5,
+      "text": "Sạc sài gần giáp 1 năm bị phòng pin có được bảo hành không ạ"
+    },
+    {
+      "id": "r3",
+      "author": "user_03",
+      "rating": 5,
+      "text": "Hết bão hành bị phòng pin thì làm sao ạ"
+    },
+    {
+      "id": "r4",
+      "author": "user_04",
+      "rating": 5,
+      "text": "Nhận viên ok sảng phẩm sạc ok"
+    },
+    {
+      "id": "r5",
+      "author": "user_05",
+      "rating": 5,
+      "text": "Mới mua thì dùng ok lắm hỏng biết lâu dài thì ra sao"
+    },
+    {
+      "id": "r6",
+      "author": "user_06",
+      "rating": 4,
+      "text": "sao công suất sạc ko dây là 15w mà tôi sạc chậm quá chậm cứ như đang sạc 5w vậy nhỉ"
+    },
+    {
+      "id": "r7",
+      "author": "user_07",
+      "rating": 3,
+      "text": "Sao em sạc tới 80% là sạc nó ngưng vậy ạ"
+    },
+    {
+      "id": "r8",
+      "author": "user_08",
+      "rating": 3,
+      "text": "mua tháng 5 dùng đc dôi lần sạc k lên nữa"
+    },
+    {
+      "id": "r9",
+      "author": "user_09",
+      "rating": 1,
+      "text": "Pin bị phồng sau thời gian sử dụng"
+    },
+    {
+      "id": "r10",
+      "author": "user_10",
+      "rating": 2,
+      "text": "giống giao đồ cũ, sạc bị xướt"
+    },
+    {
+      "id": "r11",
+      "author": "user_11",
+      "rating": 2,
+      "text": "Mua từ tháng 8 năm ngoái 2025, đến tháng 1 năm 2026 là sử dụng được tầm 5 tháng thì pin có hiện tượng phù, giờ để đó không dám xài luôn."
+    },
+    {
+      "id": "r12",
+      "author": "user_12",
+      "rating": 2,
+      "text": "Sạc cho iphone 17 rất chậm, mình muốn đổi trả cục sạc này lấy loại khác được không ạ"
+    }
+  ]
+}

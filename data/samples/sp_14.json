@@ -1,0 +1,82 @@
+{
+  "product_id": "sp_14",
+  "product_name": "Lò nướng Sanaky VH259S2D 25 lít",
+  "category": "lo_nuong",
+  "platform": "Điện Máy Xanh",
+  "platform_rating": 4.0,
+  "expected_direction": "lower_than_platform",
+  "reviews": [
+    {
+      "id": "r1",
+      "author": "user_01",
+      "rating": 5,
+      "text": "Lò nướng dùng tốt lắm."
+    },
+    {
+      "id": "r2",
+      "author": "user_02",
+      "rating": 5,
+      "text": "Hang ok.đã mua 3 cai"
+    },
+    {
+      "id": "r3",
+      "author": "user_03",
+      "rating": 5,
+      "text": "Lò nướng chín đều, ngon hơn lò thủy tinh á mn"
+    },
+    {
+      "id": "r4",
+      "author": "user_04",
+      "rating": 5,
+      "text": "Dùng gần 1 tháng rồi .thấy ok"
+    },
+    {
+      "id": "r5",
+      "author": "user_05",
+      "rating": 2,
+      "text": "Mua hồi trước Tết về bị hư đem ra đổi cái khác về xài được thời gian giờ bị hư tiếp nữa , bị đứt 2 điện trở ở dưới chán thật giờ ko biết sao đây"
+    },
+    {
+      "id": "r6",
+      "author": "user_06",
+      "rating": 1,
+      "text": "Tôi muốn khiếu nại về bảo hành , mới mua 4 tháng đã hỏng rồi"
+    },
+    {
+      "id": "r7",
+      "author": "user_07",
+      "rating": 3,
+      "text": "Nướng 1 mặt thì nhanh mà nướng 2 mặt thì lâu"
+    },
+    {
+      "id": "r8",
+      "author": "user_08",
+      "rating": 3,
+      "text": "Hơi nước bay vào khe giữa 2 mặt kính khi nướng, tạm ổn"
+    },
+    {
+      "id": "r9",
+      "author": "user_09",
+      "rating": 4,
+      "text": "Hàng dùng tốt"
+    },
+    {
+      "id": "r10",
+      "author": "user_10",
+      "rating": 2,
+      "text": "Dùng chưa được 20 lần thì đồng hồ hẹn giờ thường xuyên không hoạt động"
+    },
+    {
+      "id": "r11",
+      "author": "user_11",
+      "rating": 4,
+      "text": "Dùng ok lắm"
+    },
+    {
+      "id": "r12",
+      "author": "user_12",
+      "rating": 4,
+      "text": "Nhỏ gọn đẹp dễ dùng"
+    }
+  ]
+}

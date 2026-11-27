@@ -1,0 +1,82 @@
+{
+  "product_id": "sp_12",
+  "product_name": "Máy xay sinh tố đa năng Toshiba BL-70PR2NV",
+  "category": "may_xay_sinh_to",
+  "platform": "Điện Máy Xanh",
+  "platform_rating": 4.0,
+  "expected_direction": "lower_than_platform",
+  "reviews": [
+    {
+      "id": "r1",
+      "author": "user_01",
+      "rating": 5,
+      "text": "Xay đá thì dùng cối nào nhỉ"
+    },
+    {
+      "id": "r2",
+      "author": "user_02",
+      "rating": 5,
+      "text": "Sai tốt"
+    },
+    {
+      "id": "r3",
+      "author": "user_03",
+      "rating": 5,
+      "text": "Xay tot rất khoe"
+    },
+    {
+      "id": "r4",
+      "author": "user_04",
+      "rating": 5,
+      "text": "Máy xài ok xay nhanh. Nên mua"
+    },
+    {
+      "id": "r5",
+      "author": "user_05",
+      "rating": 5,
+      "text": "Santa phẩm tốt"
+    },
+    {
+      "id": "r6",
+      "author": "user_06",
+      "rating": 1,
+      "text": "Xài hơn 1 năm hư ron báo thay 500 mấy ngàn"
+    },
+    {
+      "id": "r7",
+      "author": "user_07",
+      "rating": 2,
+      "text": "Máy thiết kế đẹp, chắc chắn. Nhưng mau nóng và tự ngắt. Mình xây có 1 ly sinh tố bơ, đá đã đập nhuyễn nhưng máy chạy được 45s60s là tự ngắt, 5 phút sau bật mới lên lại. do vậy nên dù công suất máy cao nhưng không tận dụng được. thất vọng khi mua mẫu này."
+    },
+    {
+      "id": "r8",
+      "author": "user_08",
+      "rating": 4,
+      "text": "Tôi đã mua máy này dùng được lâu ổn định. Nhưng nay cắm điện lên thì không biết vì sao không xay được nữa. Máy không hoạt động, cần liên hệ để hỗ trợ sửa chữa"
+    },
+    {
+      "id": "r9",
+      "author": "user_09",
+      "rating": 1,
+      "text": "Lúc giao thì máy hoạt động nhưng bây giờ lấy ra xài thì nhấn nút nào cũng không hoạt động hết."
+    },
+    {
+      "id": "r10",
+      "author": "user_10",
+      "rating": 2,
+      "text": "máy kêu to quá như máy nổ"
+    },
+    {
+      "id": "r11",
+      "author": "user_11",
+      "rating": 1,
+      "text": "Sài có 2,3 lần cháy rồi có bảo hành lại giùm đc ko"
+    },
+    {
+      "id": "r12",
+      "author": "user_12",
+      "rating": 4,
+      "text": "May xay rat mạnh"
+    }
+  ]
+}
