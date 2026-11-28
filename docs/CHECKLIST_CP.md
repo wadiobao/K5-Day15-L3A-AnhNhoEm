@@ -74,12 +74,12 @@ Tài liệu theo dõi tiến độ từng mốc Checkpoint (CP1–CP4) và đầ
 - [ ] Hoàn thiện bảng so sánh **Lượt 1 → Lượt 2** trong `eval/report.md` và tóm tắt vào `spec.md §8` *(Tường & Bảo)*
 
 ### Mô phỏng Chi phí & Kiểm thử Người dùng
-- [ ] Chạy mô phỏng chi phí ≥50 phiên thật bằng đúng model đã chấm Lượt 2:
+- [x] Chạy mô phỏng chi phí ≥50 phiên thật bằng đúng model đã chấm Lượt 2:
   ```bash
   python run.py simulate --rate-from eval/run-2.csv
   ```
-  *(Nhật & Bảo)*
-- [ ] Dán bảng chi phí vào `cost/cost-estimate.md` (có chi phí/task thành công + tên model) và tóm tắt vào `spec.md §9` *(Nhật)*
+  *(Nhật — `simulate-1@20261128-123751`, 49/50 phiên thành công, 1 lỗi 503, `gemini-3.5-flash-lite`: 428 ₫/task thành công)*
+- [x] Dán bảng chi phí vào `cost/cost-estimate.md` (có chi phí/task thành công + tên model) và soạn tóm tắt cho `spec.md §9` *(Nhật)*
 - [ ] *(Bonus)* Tổ chức test 2–3 người dùng thật ngoài nhóm và ghi log vào `validation/log.md`; fix lỗi ưu tiên cao trước demo *(Nhật & Khanh)*
 
 ### Slide, Video Dự Phòng & Nộp bài
