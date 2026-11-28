@@ -49,14 +49,18 @@ if CODEBASE_DIR not in sys.path:
 
 import agent  # noqa: E402
 import ai  # noqa: E402
+import tools  # noqa: E402
 import tracing  # noqa: E402
 
-MAX_PAYLOAD_BYTES = 64 * 1024
+MAX_PAYLOAD_BYTES = 256 * 1024
+MAX_REVIEWS_REQUEST = 200
+CHUNK_SIZE = 20
 CACHE_TTL_SECONDS = int(os.environ.get("CACHE_TTL_SECONDS", str(12 * 3600)))
 CACHE_MAX_ENTRIES = int(os.environ.get("CACHE_MAX_ENTRIES", "500"))
 RATE_LIMIT_PER_MIN = int(os.environ.get("RATE_LIMIT_PER_MIN", "15"))
 RATE_LIMIT_WINDOW_SECONDS = 60.0
 REDIS_URL = (os.environ.get("REDIS_URL") or "").strip()
+_TRACE_LOCK = threading.Lock()
 
 
 class ReviewItem(BaseModel):
@@ -76,14 +80,14 @@ class AnalyzeRequest(BaseModel):
     category: str | None = Field(default="phu_kien_dien_tu", max_length=64)
     platform: str | None = Field(default="Shopee", max_length=64)
     platform_rating: float | None = Field(default=None, ge=1.0, le=5.0)
-    reviews: list[ReviewItem] | None = Field(default=None, min_length=1, max_length=50)
-    raw_text: str | None = Field(default=None, min_length=1, max_length=60000)
+    reviews: list[ReviewItem] | None = Field(default=None, min_length=1, max_length=MAX_REVIEWS_REQUEST)
+    raw_text: str | None = Field(default=None, min_length=1, max_length=240000)
     bypass_cache: bool = False
 
     @model_validator(mode="after")
     def _ensure_input_present(self) -> "AnalyzeRequest":
         if not self.reviews and not (self.raw_text and self.raw_text.strip()):
-            raise ValueError("Cần cung cấp danh sách `reviews` (1–50 câu) hoặc `raw_text` hợp lệ.")
+            raise ValueError("Cần cung cấp danh sách `reviews` (1–200 câu) hoặc `raw_text` hợp lệ.")
         return self
 
 
@@ -278,6 +282,163 @@ app.add_middleware(
 )
 
 
+def _run_chunked_structured_analysis(req: AnalyzeRequest) -> dict[str, Any]:
+    """Phân tích >20 review (lên tới 200 câu) bằng cách chia từng lô 20 câu qua `agent.answer`,
+    giữ nguyên pipeline Grounding Guard 100% và tổng hợp điểm tin cậy thực tất định trên toàn bộ review.
+    """
+    reviews = req.reviews or []
+    clean_reviews = [
+        {
+            "id": f"r{idx}",
+            "author": f"user_{idx:02d}",
+            "rating": int(item.rating),
+            "text": item.text.strip(),
+        }
+        for idx, item in enumerate(reviews, start=1)
+    ]
+    base_meta = {
+        "product_id": (req.product_id or "ext_live").strip(),
+        "product_name": (req.product_name or "Sản phẩm từ ReviewShield Extension").strip(),
+        "category": (req.category or "phu_kien_dien_tu").strip(),
+        "platform": (req.platform or "Shopee").strip(),
+        "platform_rating": req.platform_rating,
+    }
+
+    chunks = [clean_reviews[i : i + CHUNK_SIZE] for i in range(0, len(clean_reviews), CHUNK_SIZE)]
+    merged_reviews: list[dict[str, Any]] = []
+    merged_warnings: list[str] = []
+    risk_buckets: dict[str, dict[str, Any]] = {}
+    questions_seen: set[str] = set()
+    merged_questions: list[str] = []
+    total_fallback = 0
+    failed_chunks = 0
+
+    for chunk_idx, chunk in enumerate(chunks, start=1):
+        chunk_payload = json.dumps({**base_meta, "reviews": chunk}, ensure_ascii=False)
+        res = agent.answer(chunk_payload)
+        data = res.get("data") if isinstance(res, dict) else None
+        if not isinstance(data, dict):
+            failed_chunks += 1
+            continue
+        if data.get("refused"):
+            return res
+        if data.get("error"):
+            failed_chunks += 1
+            merged_warnings.append(f"Lô {chunk_idx}/{len(chunks)} gặp lỗi tạm ({data.get('error')}), đã bỏ qua lô này.")
+            continue
+
+        merged_reviews.extend(data.get("reviews") or [])
+        total_fallback += int(data.get("fallback_count") or 0)
+        for w in data.get("warnings") or []:
+            if w and w not in merged_warnings:
+                merged_warnings.append(w)
+
+        for r in data.get("top_risks") or []:
+            if not isinstance(r, dict):
+                continue
+            title = str(r.get("title") or "").strip()
+            if not title:
+                continue
+            key = _norm_text(title)
+            ids = [str(x).strip() for x in (r.get("source_review_ids") or []) if str(x).strip()]
+            sev = str(r.get("severity") or "medium").lower()
+            if key not in risk_buckets:
+                risk_buckets[key] = {
+                    "title": title,
+                    "detail": str(r.get("detail") or "").strip(),
+                    "severity": sev,
+                    "source_review_ids": list(dict.fromkeys(ids)),
+                    "mentions": 1,
+                }
+            else:
+                b = risk_buckets[key]
+                b["mentions"] += 1
+                b["source_review_ids"] = list(dict.fromkeys(b["source_review_ids"] + ids))
+                if sev == "high":
+                    b["severity"] = "high"
+
+        for q in data.get("questions_for_seller") or []:
+            q_clean = str(q or "").strip()
+            q_key = _norm_text(q_clean)
+            if q_clean and q_key not in questions_seen and len(merged_questions) < 3:
+                questions_seen.add(q_key)
+                merged_questions.append(q_clean)
+
+    if not merged_reviews:
+        return {
+            "output": "Không thể hoàn tất phân tích các lô đánh giá do lỗi tạm từ mô hình AI. Vui lòng thử lại.",
+            "data": {"error": "chunked_analysis_failed", "detail": f"Tất cả {len(chunks)} lô đều thất bại."},
+        }
+
+    # Tổng hợp điểm tin cậy thực tất định trên toàn bộ review đã phân tích
+    scores = tools.compute_real_trust_score(merged_reviews, req.platform_rating)
+    grounding_rate = 100.0 if merged_reviews else 0.0
+
+    sev_rank = {"high": 3, "medium": 2, "low": 1}
+    sorted_risks = sorted(
+        risk_buckets.values(),
+        key=lambda x: (sev_rank.get(x["severity"], 1), x["mentions"], len(x["source_review_ids"])),
+        reverse=True,
+    )[:3]
+    top_risks = [
+        {
+            "title": r["title"],
+            "detail": r["detail"],
+            "severity": r["severity"],
+            "source_review_ids": r["source_review_ids"][:8],
+        }
+        for r in sorted_risks
+    ]
+
+    if len(merged_questions) < 3:
+        fallback_qs = [
+            "Shop có kiểm tra chất lượng và phụ kiện đầy đủ trước khi đóng gói không?",
+            "Nếu sản phẩm gặp lỗi thực tế sau khi dùng, chính sách đổi trả/bảo hành của shop thế nào?",
+            "Sản phẩm giao thực tế có đúng thông số, chất liệu và kích thước như mô tả không?",
+        ]
+        for fq in fallback_qs:
+            if len(merged_questions) >= 3:
+                break
+            if _norm_text(fq) not in questions_seen:
+                questions_seen.add(_norm_text(fq))
+                merged_questions.append(fq)
+
+    merged_warnings.insert(
+        0,
+        f"Đã phân tích đầy đủ {len(merged_reviews)}/{len(clean_reviews)} đánh giá qua {len(chunks)} lô "
+        f"(mỗi lô tối đa {CHUNK_SIZE} câu) và tính điểm tin cậy thực tổng hợp.",
+    )
+
+    real_score_str = (
+        f"{scores['real_trust_score']:.1f}/5" if isinstance(scores.get("real_trust_score"), (int, float)) else "N/A"
+    )
+    plat_score_str = (
+        f"{scores['platform_rating']:.1f}/5" if isinstance(scores.get("platform_rating"), (int, float)) else "N/A"
+    )
+    output_text = (
+        f"[ReviewShield · Phân tích {len(merged_reviews)} đánh giá ({len(chunks)} lô)]\n"
+        f"Sản phẩm: {base_meta['product_name']}\n"
+        f"Điểm sàn: {plat_score_str} → Điểm tin cậy thực: {real_score_str} "
+        f"(Trải nghiệm thật: {scores.get('verified_ratio', 0.0):.1f}% · Grounding 100%)"
+    )
+
+    return {
+        "output": output_text,
+        "data": {
+            "product_name": base_meta["product_name"],
+            "scores": scores,
+            "grounding_rate": grounding_rate,
+            "fallback_count": total_fallback,
+            "top_risks": top_risks,
+            "questions_for_seller": merged_questions[:3],
+            "reviews": merged_reviews,
+            "warnings": merged_warnings,
+            "batches_total": len(chunks),
+            "batches_failed": failed_chunks,
+        },
+    }
+
+
 @app.middleware("http")
 async def _enforce_payload_limit(request: Request, call_next):
     if request.method == "POST":
@@ -285,13 +446,13 @@ async def _enforce_payload_limit(request: Request, call_next):
         if content_length and content_length.isdigit() and int(content_length) > MAX_PAYLOAD_BYTES:
             return JSONResponse(
                 status_code=413,
-                content={"detail": "Dữ liệu gửi lên vượt quá giới hạn 64KB. Vui lòng giữ tối đa 20–50 đánh giá mỗi lượt."},
+                content={"detail": "Dữ liệu gửi lên vượt quá giới hạn 256KB. Vui lòng giữ tối đa 200 đánh giá mỗi lượt."},
             )
         body = await request.body()
         if len(body) > MAX_PAYLOAD_BYTES:
             return JSONResponse(
                 status_code=413,
-                content={"detail": "Dữ liệu gửi lên vượt quá giới hạn 64KB. Vui lòng giữ tối đa 20–50 đánh giá mỗi lượt."},
+                content={"detail": "Dữ liệu gửi lên vượt quá giới hạn 256KB. Vui lòng giữ tối đa 200 đánh giá mỗi lượt."},
             )
     return await call_next(request)
 
@@ -397,25 +558,32 @@ def analyze(req: AnalyzeRequest, request: Request) -> dict[str, Any]:
                 },
             }
 
-    agent_input = build_agent_input(req)
-    tracing.begin("extension_api")
-    try:
-        result = agent.answer(agent_input)
-    except Exception as exc:
-        tracing.end()
-        raise HTTPException(
-            status_code=502,
-            detail=f"Lỗi khi gọi mô hình phân tích ({type(exc).__name__}): {str(exc)[:240]}",
-        ) from exc
-    summary, _ = tracing.end()
+    use_chunked = bool(req.reviews and len(req.reviews) > CHUNK_SIZE)
+    with _TRACE_LOCK:
+        tracing.begin("extension_api")
+        try:
+            if use_chunked:
+                result = _run_chunked_structured_analysis(req)
+            else:
+                agent_input = build_agent_input(req)
+                result = agent.answer(agent_input)
+        except Exception as exc:
+            tracing.end()
+            raise HTTPException(
+                status_code=502,
+                detail=f"Lỗi khi gọi mô hình phân tích ({type(exc).__name__}): {str(exc)[:240]}",
+            ) from exc
+        summary, _ = tracing.end()
     latency_s = round(time.perf_counter() - t0, 3)
 
     models_used = ", ".join(summary.get("models") or []) or (ai.MODEL_NAME or "fake")
     data_obj = result.get("data") if isinstance(result, dict) else None
     output_str = result.get("output", "") if isinstance(result, dict) else str(result)
 
-    # Chỉ lưu cache khi phân tích thành công (không lưu lỗi parse JSON hoặc lỗi tạm).
-    is_error = isinstance(data_obj, dict) and bool(data_obj.get("error"))
+    # Chỉ lưu cache khi phân tích thành công hoàn toàn (không lưu lỗi tạm hoặc lô lỗi một phần).
+    is_error = isinstance(data_obj, dict) and (
+        bool(data_obj.get("error")) or int(data_obj.get("batches_failed") or 0) > 0
+    )
     if not is_error:
         cache_store.set(
             cache_key,

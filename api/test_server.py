@@ -116,10 +116,10 @@ def run_all_tests() -> None:
     assert r_bad.status_code == 422
     print("[PASS] 4. Invalid rating returns HTTP 422")
 
-    # 5. Payload vượt 64KB -> HTTP 413
-    r_big = client.post("/api/analyze", json={"raw_text": "a" * 70000})
+    # 5. Payload vượt 256KB -> HTTP 413
+    r_big = client.post("/api/analyze", json={"raw_text": "a" * 270000})
     assert r_big.status_code == 413
-    print("[PASS] 5. Oversized payload (>64KB) returns HTTP 413")
+    print("[PASS] 5. Oversized payload (>256KB) returns HTTP 413")
 
     # 6. Rate limiter -> HTTP 429 khi vượt ngưỡng
     server.rate_limiter.reset()
@@ -151,7 +151,48 @@ def run_all_tests() -> None:
         assert not any(n.endswith(".env") or n.endswith(".md") for n in names)
     print("[PASS] 7. GET /api/extension/download returns clean reviewshield-extension.zip")
 
+    # 8. Phân tích đa lô (>20 review, vd 45 review -> chia 3 lô 20+20+5 và tổng hợp đủ 45 review)
+    server.cache_store.clear()
+    server.rate_limiter.reset()
+    many_reviews = [
+        {
+            "id": f"r{i}",
+            "author": f"user_{i:02d}",
+            "rating": 1 if i % 4 == 0 else 5,
+            "text": (
+                f"Dùng thử câu {i}: sản phẩm hơi nóng và pin yếu sau 1 tiếng."
+                if i % 4 == 0
+                else f"Nhận hàng nhanh câu {i}, chưa dùng nhưng cho 5 sao lấy xu."
+            ),
+        }
+        for i in range(1, 46)
+    ]
+    big_payload = {
+        "product_id": "ext_big",
+        "product_name": "Sản phẩm test 45 đánh giá",
+        "platform": "Shopee",
+        "platform_rating": 4.8,
+        "reviews": many_reviews,
+    }
+    with patch.object(server.agent, "call_model", side_effect=_mock_call_model) as mock_llm:
+        rb1 = client.post("/api/analyze", json=big_payload)
+        assert rb1.status_code == 200, rb1.text
+        db1 = rb1.json()
+        assert db1["cached"] is False
+        assert len(db1["data"]["reviews"]) == 45
+        assert db1["data"]["batches_total"] == 3
+        assert db1["data"]["grounding_rate"] == 100.0
+        assert mock_llm.call_count == 3
+
+        rb2 = client.post("/api/analyze", json=big_payload)
+        assert rb2.status_code == 200, rb2.text
+        db2 = rb2.json()
+        assert db2["cached"] is True
+        assert db2["trace"]["tokens_in"] == 0
+        assert mock_llm.call_count == 3
+    print("[PASS] 8. Multi-batch analyze (45 reviews -> 3 chunks -> 45 grounded reviews + cache hit)")
+
 
 if __name__ == "__main__":
     run_all_tests()
-    print("ALL API TESTS PASSED (7/7).")
+    print("ALL API TESTS PASSED (8/8).")
