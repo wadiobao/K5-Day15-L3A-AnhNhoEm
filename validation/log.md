@@ -10,7 +10,7 @@
 | Người mua serum, muốn biết điểm thấp do hàng hay do giao hàng | Đọc riêng ý kiến về chất lượng serum trước khi mua | Chọn mẫu oan shipper và bấm soi đánh giá. Trong 5 câu, r3 và r4 chỉ nói về giao hàng nhưng app vẫn ghi 5/5 là trải nghiệm thật, 0 câu vận chuyển, điểm giữ ở 3,4/5 thay vì 5,0/5. | r4: "Đơn vị vận chuyển làm móp nát vỏ thùng carton bên ngoài, giao quá chậm." | cao — chạy thiếu cấu hình api nên không tách được lỗi giao hàng |
 | | | | | |
 
-Câu hỏi sau: *"Nếu mai không được dùng nữa, bạn thấy: rất tiếc / hơi tiếc / không sao?"* → __ / __ / __
+Câu hỏi sau: *"Nếu mai không được dùng nữa, bạn thấy: rất tiếc / hơi tiếc / không sao?"* → hơi tiếc /hơi tiếc / __
 
 ## Tổng hợp
 
