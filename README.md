@@ -134,5 +134,5 @@ Nhóm sử dụng **Antigravity** (TV1, TV2, TV4) và **Claude Code + Codex** (T
 | 4 | Bản chạy thử làm trọn lát cắt | `codebase/` · lệnh ở mục "Lệnh" |
 | 5 | Định nghĩa "tốt" + bộ câu thử | `data/DATA_CARD.md` · `eval/` |
 | 6 | Mô phỏng chi phí khi dùng thật | `cost/` |
-| 7 | Slide + demo + video dự phòng | slide trong repo (PDF, PPTX, HTML…) hoặc link slide ở form CP4 · link video: ____ |
+| 7 | Slide + demo + video dự phòng | slide trong repo (PDF, PPTX, HTML…) hoặc link slide ở form CP4 · link video: https://drive.google.com/drive/folders/1UUJT507cWSMcg8nJDjdybfxOpcNFS3Yd?usp=drive_link |
 | + | *Bonus:* người dùng thử | `validation/log.md` |
