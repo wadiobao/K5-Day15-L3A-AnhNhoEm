@@ -1281,7 +1281,8 @@ def _build_interactive_score_lens_html(
     background: transparent;
     color: var(--ink);
     padding: 2px 2px 4px 2px;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
   }}
   .card-shell {{
     position: relative;
@@ -1924,8 +1925,27 @@ def _render_dossier_stage_html(
     img_url, cat_label = resolve_product_photo(photo_key, custom_image_url or str(meta.get("image_url") or ""))
 
     if isinstance(res, dict) and isinstance(res.get("data"), dict) and res["data"].get("refused"):
-        reason_code = html.escape(str(res["data"].get("reason") or "guardrail"))
+        reason_raw = str(res["data"].get("reason") or "guardrail")
+        reason_code = html.escape(reason_raw)
         out_txt = html.escape(str(res.get("output") or ""))
+        if reason_raw in ("no_valid_reviews", "empty_input"):
+            return (
+                '<div class="rs-panel rs-verdict-stage rs-reveal">'
+                '<div class="rs-verdict-top">'
+                "<div>"
+                f'<div class="rs-tag-row"><span class="rs-chip tone-coin">Định dạng đầu vào</span><span class="rs-chip rs-fig">{reason_code}</span></div>'
+                '<h2 class="rs-product-title">Chưa đọc được danh sách đánh giá theo mẫu</h2>'
+                "</div>"
+                f'<div class="rs-verdict-badge verdict-coin">{_svg_icon("alert", 15)}<span>Cần bổ sung số sao</span></div>'
+                "</div>"
+                f'<div class="rs-callout">{out_txt}</div>'
+                '<div class="rs-callout">'
+                "<strong>Ví dụ hợp lệ (mỗi dòng 1 đánh giá kèm số sao 1–5):</strong><br/>"
+                "<code>[5] Giao nhanh, chưa dùng nên cho 5 sao lấy xu</code><br/>"
+                "<code>1⭐ Pin yếu dùng 1 tiếng đã sập nguồn, sạc rất nóng</code>"
+                "</div>"
+                "</div>"
+            )
         return (
             '<div class="rs-panel rs-verdict-stage rs-reveal">'
             '<div class="rs-verdict-top">'
@@ -1978,6 +1998,12 @@ def _render_dossier_stage_html(
         grounding_rate = float(data.get("grounding_rate", 100.0))
         fallback_count = int(data.get("fallback_count", 0))
         tl = TRUST_LEVEL_META.get(trust_level, TRUST_LEVEL_META["insufficient_data"])
+        tl_summary = tl["summary"]
+        if trust_level == "medium" and verified_ratio >= 80.0:
+            tl_summary = (
+                "Tỷ lệ trải nghiệm thật cao nhưng điểm chất lượng ở mức trung bình hoặc có chênh lệch sao "
+                "— nên xem kỹ các nhược điểm trước khi chốt đơn."
+            )
 
         header_html = (
             '<div class="rs-product-hero" style="margin-bottom:0;">'
@@ -1994,7 +2020,7 @@ def _render_dossier_stage_html(
             f'<div class="rs-verdict-badge {tl["badge_cls"]}">{_svg_icon(tl["icon"], 14)}<span>{html.escape(tl["badge"])}</span></div>'
             "</div>"
             f'<h2 class="rs-product-title">{html.escape(disp_name)}</h2>'
-            f'<p class="rs-product-sub">{html.escape(tl["summary"])}</p>'
+            f'<p class="rs-product-sub">{html.escape(tl_summary)}</p>'
             "</div>"
             "</div>"
         )
@@ -3245,8 +3271,10 @@ def render_streamlit_app() -> None:
 
     try:
         import ai as ai_mod
+        is_fake_provider = (getattr(ai_mod, "MODEL_PROVIDER", "fake") or "fake") == "fake"
         provider_label = f"{ai_mod.MODEL_PROVIDER}" + (f" / {ai_mod.MODEL_NAME}" if ai_mod.MODEL_NAME else "")
     except Exception:
+        is_fake_provider = True
         provider_label = "chưa cấu hình"
 
     samples = load_sample_files(SAMPLES_DIR)
@@ -3298,6 +3326,17 @@ def render_streamlit_app() -> None:
 
     st.markdown("<div style='height:18px;'></div>", unsafe_allow_html=True)
 
+    if is_fake_provider:
+        st.warning(
+            "Đang chạy ở chế độ mô phỏng (`MODEL_PROVIDER=fake`) do chưa cấu hình `.env` "
+            "(cần khai báo `MODEL_PROVIDER`, `MODEL_NAME`, `API_KEY` để gọi AI thật trước khi demo)."
+        )
+
+    def _clear_analysis_state() -> None:
+        st.session_state["rs_result"] = None
+        st.session_state["rs_trace"] = None
+        st.session_state["rs_error"] = None
+
     col_left, col_right = st.columns([0.92, 1.18], gap="large")
 
     with col_left:
@@ -3317,6 +3356,8 @@ def render_streamlit_app() -> None:
                 options=["Kho mẫu thật", "Dán review / Kịch bản"],
                 horizontal=True,
                 label_visibility="collapsed",
+                key="rs_input_mode",
+                on_change=_clear_analysis_state,
             )
 
             active_payload = ""
@@ -3331,8 +3372,7 @@ def render_streamlit_app() -> None:
                         btn_label = f"{sp['product_id']} · {sp['platform_rating']}★"
                         if q_cols[idx].button(btn_label, key=f"qsp_{idx}", use_container_width=True):
                             st.session_state["rs_sample_idx"] = idx
-                            st.session_state["rs_result"] = None
-                            st.session_state["rs_error"] = None
+                            _clear_analysis_state()
 
                     if st.session_state["rs_sample_idx"] >= len(samples):
                         st.session_state["rs_sample_idx"] = 0
@@ -3341,6 +3381,7 @@ def render_streamlit_app() -> None:
                         f"Chọn trong {len(samples)} sản phẩm mẫu",
                         options=list(range(len(samples))),
                         key="rs_sample_idx",
+                        on_change=_clear_analysis_state,
                         format_func=lambda i: (
                             f"{samples[i]['product_id']} — {samples[i]['product_name'][:46]}"
                             f"{'…' if len(samples[i]['product_name']) > 46 else ''} "
@@ -3359,22 +3400,20 @@ def render_streamlit_app() -> None:
                 p1, p2, p3 = st.columns(3)
                 if p1.button(QUICK_PRESETS["seeding"]["title"], use_container_width=True):
                     st.session_state["rs_custom_text"] = QUICK_PRESETS["seeding"]["payload"]
-                    st.session_state["rs_result"] = None
-                    st.session_state["rs_error"] = None
+                    _clear_analysis_state()
                 if p2.button(QUICK_PRESETS["shipper"]["title"], use_container_width=True):
                     st.session_state["rs_custom_text"] = QUICK_PRESETS["shipper"]["payload"]
-                    st.session_state["rs_result"] = None
-                    st.session_state["rs_error"] = None
+                    _clear_analysis_state()
                 if p3.button(QUICK_PRESETS["refusal_link"]["title"], use_container_width=True):
                     st.session_state["rs_custom_text"] = QUICK_PRESETS["refusal_link"]["payload"]
-                    st.session_state["rs_result"] = None
-                    st.session_state["rs_error"] = None
+                    _clear_analysis_state()
 
                 active_payload = st.text_area(
-                    "Dán JSON sản phẩm hoặc từng dòng dạng [5] nội dung",
+                    "Dán JSON sản phẩm hoặc từng dòng dạng [5] nội dung hoặc 5⭐ nội dung",
                     key="rs_custom_text",
                     height=136,
-                    placeholder="[5] Giao nhanh, chưa dùng nhưng cho 5 sao lấy xu\n[1] Pin dùng tầm 1.5 tiếng là sập nguồn...",
+                    on_change=_clear_analysis_state,
+                    placeholder="[5] Giao nhanh, chưa dùng nhưng cho 5 sao lấy xu\n1⭐ Pin dùng tầm 1.5 tiếng là sập nguồn...",
                 )
                 active_meta = infer_meta_from_raw_input(active_payload)
 
@@ -3434,7 +3473,7 @@ def render_streamlit_app() -> None:
                     grounding_rate=float(res_data.get("grounding_rate", 100.0)),
                     fallback_count=int(res_data.get("fallback_count", 0)),
                 ),
-                height=318,
+                height=344,
             )
 
     st.markdown(
