@@ -24,11 +24,11 @@ VALID_LABELS: tuple[str, ...] = tuple(WEIGHT_MAP.keys())
 MAX_REVIEWS_PER_BATCH: int = 20
 
 # Khớp các dạng văn bản review phổ biến theo dòng:
-# "[5] nội dung", "[5 sao] nội dung", "5* - nội dung", "5 sao: nội dung", "5★: nội dung"
+# "[5] nội dung", "[5 sao] nội dung", "5* - nội dung", "5 sao: nội dung", "5★: nội dung", "5⭐ nội dung"
 _LINE_REVIEW_RE = re.compile(
     r"^\s*(?:"
-    r"\[\s*(?P<r1>-?\d+)\s*(?:sao|\*|★)?\s*\]"
-    r"|(?P<r2>-?\d+)\s*(?:sao|\*|★|/5)"
+    r"\[\s*(?P<r1>-?\d+)\s*(?:sao|\*|★|⭐|☆)?\s*\]"
+    r"|(?P<r2>-?\d+)\s*(?:sao|\*|★|⭐|☆|/5)"
     r")\s*[-:–—|.]*\s*(?P<text>.*)$",
     flags=re.IGNORECASE,
 )
@@ -322,7 +322,8 @@ def verify_grounding(
         short_reason = str(item.get("short_reason", "")).strip()
 
         exact_span = _find_exact_span(orig_text, quote) if quote else None
-        if exact_span is not None:
+        is_fallback = exact_span is None
+        if not is_fallback:
             final_quote = exact_span
         else:
             final_quote = _extract_verbatim_fallback(orig_text)
@@ -338,6 +339,7 @@ def verify_grounding(
                 "evidence_quote": final_quote,
                 "short_reason": short_reason,
                 "grounded": True,
+                "is_fallback": is_fallback,
             }
         )
 
