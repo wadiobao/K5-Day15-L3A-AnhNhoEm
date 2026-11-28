@@ -102,7 +102,7 @@ Nhóm dùng stack khác (Node, Streamlit, notebook…): sửa hàm `run_app()` t
 
 2–3 dòng (bắt buộc): nhóm dùng công cụ AI nào để làm gì, người kiểm lại phần nào. Chi tiết: [docs/ai-usage.md](docs/ai-usage.md). Coding agent đọc [AGENTS.md](AGENTS.md).
 
-Nhóm sử dụng **Antigravity** (TV1, TV4) và **Claude Code + Codex** (TV3) để hỗ trợ lập kế hoạch, viết code lõi `codebase/ai.py`/`agent.py`, script chuẩn hóa dữ liệu/eval, tinh chỉnh System Prompt v2 và đối chiếu nháp `actionable_quality`. Toàn bộ 4 thành viên tự kiểm tra diff, chạy unit test & kiểm thử tích hợp thực tế, kiểm 0 PII trên 26 mẫu dữ liệu, đối chiếu bảng giá Paid Tier và tự thực hiện 3 cuộc phỏng vấn người thật ngoài nhóm (`P1–P3.md`). Nhóm **không dùng AI** để bịa người phỏng vấn/trích dẫn hay chỉnh sửa kết quả các lượt đã chạy (`eval/run-*.csv`, `cost/simulate-*.csv`, `traces/`).
+Nhóm sử dụng **Antigravity** (TV1, TV2, TV4) và **Claude Code + Codex** (TV3) để hỗ trợ lập kế hoạch, viết code lõi `codebase/ai.py`/`agent.py`/`tools.py`/`app.py`, script chuẩn hóa dữ liệu/eval, tinh chỉnh System Prompt v2 và đối chiếu nháp `actionable_quality`. Toàn bộ 4 thành viên tự kiểm tra diff, chạy unit test & kiểm thử tích hợp thực tế, kiểm 0 PII trên 26 mẫu dữ liệu, đối chiếu bảng giá Paid Tier và tự thực hiện 3 cuộc phỏng vấn người thật ngoài nhóm (`P1–P3.md`). Nhóm **không dùng AI** để bịa người phỏng vấn/trích dẫn hay chỉnh sửa kết quả các lượt đã chạy (`eval/run-*.csv`, `cost/simulate-*.csv`, `traces/`).
 
 ## File mẫu — điền ở bước nào
 
