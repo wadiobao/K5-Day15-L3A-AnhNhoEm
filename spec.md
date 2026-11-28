@@ -67,8 +67,9 @@ Hệ thống đạt chuẩn phát hành MVP khi chạy `python run.py eval` trê
 * **Lượt 1 (`run-1@20261127-184552`):** `10/30` câu đạt (`33%`: `thuong` 5/21, `kho` 2/6, `tu_choi` 3/3); `citation_grounding` **100,0%** (305/305), `direction_match` **88,5%** (23/26), `label_accuracy` **71,0%** (225/317), 1 lỗi kỹ thuật HTTP 503 tại `RS08`.
 * **Lượt 2 (`run-2@20261128-073745` — sau cải tiến Prompt v2 + retry backoff 3 lần):** `13/30` câu đạt (`43%`: `thuong` 6/21, `kho` **4/6 [67%]**, `tu_choi` **3/3 [100%]**); **0 lỗi kỹ thuật**; `citation_grounding` **100,0%** (317/317 — đạt), `direction_match` **92,3%** (24/26 — đạt, +3,8%), `label_accuracy` **79,8%** (253/317 — tăng **+8,8%**, riêng `RS28` từ 2/12 → 9/12, `RS30` từ 0/12 → 6/12). Chi tiết so sánh tại `eval/report.md`.
 
-## §9. Ước tính chi phí vận hành (Điền tại CP4)
-* `[Dán bảng mô phỏng từ cost/simulate-N-summary.md sau khi chạy python run.py simulate]`
+## §9. Ước tính chi phí vận hành (CP4 · `simulate-1@20261128-123636`, 50 phiên, seed 42, `--rate-from eval/run-2.csv` [43%])
+* **Model chính (`gemini-3.5-flash-lite`, đo token thật):** `$0.0069`/phiên (≈ 177 ₫) · **`$0.0160`/task thành công (≈ 407 ₫)** · Chi phí/tháng: thấp (300 người) `$28.17` (718k ₫) · cơ sở (700 người) `$65.72` (1,68 triệu ₫, tức **2.394 ₫/người/tháng**) · cao (1.000 người) `$93.89` (2,39 triệu ₫).
+* **Model đối chiếu (`gemini-3.1-pro-preview`):** `$0.0353`/phiên (≈ 900 ₫) · `$0.0814`/task thành công (≈ 2.076 ₫) · cơ sở (700 người) `$335.15`/tháng (12.209 ₫/người/tháng). Chi tiết xem `cost/cost-estimate.md` và `cost/simulate-1-summary.md` (ghi nhận trung thực 6/50 phiên lỗi HTTP 503 không tính vào trung bình).
 
 ## §10. Nhật ký thay đổi (Changelog — cập nhật đến 23:59 Thứ Bảy 28/11)
 * **2026-11-27 (CP1–CP2):** Khởi tạo đặc tả ReviewShield (Track D), bổ sung sơ đồ kiến trúc AI (`§4`), chốt khóa 4 ngưỡng đạt (`§7` khớp `eval/metric_spec.yaml`), hoàn thiện lõi `ai.py`, `agent.py`, `tools.py` và 14 câu benchmark CP2.
