@@ -22,12 +22,14 @@ from __future__ import annotations
 
 import glob
 import html
+import io
 import json
 import os
 import re
 import subprocess
 import sys
 import unicodedata
+import zipfile
 from typing import Any
 
 for _stream in (sys.stdout, sys.stderr, sys.stdin):
@@ -39,6 +41,18 @@ for _stream in (sys.stdout, sys.stderr, sys.stdin):
 CODEBASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(CODEBASE_DIR)
 SAMPLES_DIR = os.path.join(ROOT_DIR, "data", "samples")
+EXTENSION_DIR = os.path.join(ROOT_DIR, "extension")
+EXTENSION_PACKAGE_FILES = (
+    "manifest.json",
+    "background.js",
+    "content.js",
+    "sidepanel.html",
+    "sidepanel.css",
+    "sidepanel.js",
+    "icons/icon16.png",
+    "icons/icon48.png",
+    "icons/icon128.png",
+)
 
 if CODEBASE_DIR not in sys.path:
     sys.path.insert(0, CODEBASE_DIR)
@@ -3255,6 +3269,20 @@ def _render_workspace_blocks(
             st.code(output_text, language=None)
 
 
+def build_extension_zip_bytes(extension_dir: str = EXTENSION_DIR) -> bytes | None:
+    """Đóng gói gọn thư mục Chrome Extension thành bytes `.zip` phục vụ nút tải trên Web."""
+    manifest_path = os.path.join(extension_dir, "manifest.json")
+    if not os.path.isfile(manifest_path):
+        return None
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, mode="w", compression=zipfile.ZIP_DEFLATED) as zf:
+        for rel_path in EXTENSION_PACKAGE_FILES:
+            abs_path = os.path.join(extension_dir, *rel_path.split("/"))
+            if os.path.isfile(abs_path):
+                zf.write(abs_path, arcname=rel_path)
+    return buf.getvalue()
+
+
 def render_streamlit_app() -> None:
     """Render giao diện demo 1 màn hình ReviewShield trong Streamlit runtime."""
     import streamlit as st
@@ -3296,11 +3324,20 @@ def render_streamlit_app() -> None:
     if "rs_intro_is_replay" not in st.session_state:
         st.session_state["rs_intro_is_replay"] = False
 
-    # Floating Dynamic Pill Navbar + Nút "Xem lại Intro" căn gọn bên phải (không bị Header Streamlit che)
-    try:
-        nav_main, nav_act = st.columns([6.1, 1.05], gap="small", vertical_alignment="center")
-    except TypeError:
-        nav_main, nav_act = st.columns([6.1, 1.05], gap="small")
+    ext_zip_bytes = build_extension_zip_bytes()
+
+    # Floating Dynamic Pill Navbar + Nút "Tải Extension" & "Xem lại Intro" căn gọn bên phải
+    if ext_zip_bytes:
+        try:
+            nav_main, nav_ext, nav_act = st.columns([5.3, 1.35, 1.05], gap="small", vertical_alignment="center")
+        except TypeError:
+            nav_main, nav_ext, nav_act = st.columns([5.3, 1.35, 1.05], gap="small")
+    else:
+        try:
+            nav_main, nav_act = st.columns([6.1, 1.05], gap="small", vertical_alignment="center")
+        except TypeError:
+            nav_main, nav_act = st.columns([6.1, 1.05], gap="small")
+        nav_ext = None
 
     with nav_main:
         st.markdown(
@@ -3319,6 +3356,17 @@ def render_streamlit_app() -> None:
             "</header>",
             unsafe_allow_html=True,
         )
+    if nav_ext is not None and ext_zip_bytes:
+        with nav_ext:
+            st.download_button(
+                "Tải Extension",
+                data=ext_zip_bytes,
+                file_name="reviewshield-extension.zip",
+                mime="application/zip",
+                key="rs_download_ext_nav",
+                help="Tải Chrome Extension (Manifest V3) để tự cuộn quét review ngay trên Shopee / Tiki",
+                use_container_width=True,
+            )
     with nav_act:
         if st.button("Xem lại Intro", key="rs_replay_intro", use_container_width=True):
             st.session_state["rs_intro_nonce"] += 1
@@ -3427,6 +3475,29 @@ def render_streamlit_app() -> None:
                 )
                 if active_payload:
                     st.code(active_payload, language="json")
+
+            if ext_zip_bytes:
+                with st.expander("Cài Chrome Extension soi trực tiếp trên Shopee / Tiki (30 giây)", expanded=False):
+                    st.markdown(
+                        "Tự động cuộn & gom cân bằng đánh giá **5★ + 1–3★** ngay trên trang sản phẩm đang mở, "
+                        "ẩn danh **100% PII** tại trình duyệt và gọi AI phân tích ngay trong Side Panel."
+                    )
+                    st.download_button(
+                        "Tải reviewshield-extension.zip",
+                        data=ext_zip_bytes,
+                        file_name="reviewshield-extension.zip",
+                        mime="application/zip",
+                        key="rs_download_ext_panel",
+                        type="primary",
+                        use_container_width=True,
+                    )
+                    st.markdown(
+                        "1. **Giải nén** file `reviewshield-extension.zip` ra một thư mục.\n"
+                        "2. Mở Chrome/Edge → truy cập `chrome://extensions` → bật **Chế độ dành cho nhà phát triển (Developer mode)**.\n"
+                        "3. Bấm **Tải tiện ích đã giải nén (Load unpacked)** → chọn thư mục vừa giải nén.\n"
+                        "4. Mở sản phẩm Shopee / Tiki / Điện Máy Xanh → bấm biểu tượng **ReviewShield** → **Tự động quét review**.\n\n"
+                        "Hoặc tải trực tiếp qua API: [`/api/extension/download`](/api/extension/download)"
+                    )
 
     if analyze_clicked:
         st.session_state["rs_error"] = None
