@@ -85,6 +85,6 @@ Tài liệu theo dõi tiến độ từng mốc Checkpoint (CP1–CP4) và đầ
 ### Slide, Video Dự Phòng & Nộp bài
 - [ ] Đẩy file **`demo-slides.pdf`** vào **thư mục gốc repo** (`./demo-slides.pdf`) *(Nhật)*
 - [ ] Quay **Video Demo dự phòng** (2 phút, chạy AI thật, kiểm Tab Ẩn Danh) và cập nhật link vào `README.md` *(Nhật)*
-- [x] Hoàn thiện `docs/ai-usage.md` và mục "Dùng AI vào việc gì" trong `README.md` *(Nhật & Cả nhóm — đã điền đủ `README.md` và TV1/TV3/TV4 trong `docs/ai-usage.md`; TV2 có thể bổ sung thêm nếu cần)*
-- [ ] Hoàn thiện `reflection/<ten>.md` (hạn chót 23:59 Thứ Bảy 28/11) *(Cả nhóm — đã có `tuong.md`, `bao.md`; còn Khanh & Nhật)*
+- [x] Hoàn thiện `docs/ai-usage.md` và mục "Dùng AI vào việc gì" trong `README.md` *(Nhật & Cả nhóm — đã điền đủ `README.md` và cả 4 thành viên TV1–TV4 trong `docs/ai-usage.md`)*
+- [ ] Hoàn thiện `reflection/<ten>.md` (hạn chót 23:59 Thứ Bảy 28/11) *(Cả nhóm — đã có `tuong.md`, `bao.md`, `khanh.md`; còn Nhật)*
 - [ ] Kiểm tra `git status`, `python run.py check`, push toàn bộ lên `main` và nộp **Form 2 → Nhánh CP4** (tick đủ 4 điều kiện cứng xét giải) trước 14:30 *(Bảo)*
