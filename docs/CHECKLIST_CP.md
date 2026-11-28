@@ -69,7 +69,7 @@ Tài liệu theo dõi tiến độ từng mốc Checkpoint (CP1–CP4) và đầ
 ## CP4 — 14:30 Chiều Thứ Bảy 28/11 (4 điểm · CHỐT DEMO)
 
 ### Vòng lặp Cải tiến & Eval Lượt 2
-- [ ] Đọc các câu trượt ở `eval/run-1.csv` → chọn **1 cải tiến rõ ràng** trong prompt/code (`agent.py` hoặc `tools.py`), ghi nhật ký vào `spec.md §10` *(Bảo & Khanh)*
+- [x] Đọc các câu trượt ở `eval/run-1.csv` → chọn **1 cải tiến rõ ràng** trong prompt/code (`agent.py` hoặc `tools.py`), ghi nhật ký vào `spec.md §10` *(Bảo & Khanh)*
 - [ ] Chạy lại `python run.py eval` tạo **Lượt 2** (`eval/run-2.csv`), chấm `pass` & chạy `python run.py score eval/run-2.csv` *(Bảo & Tường)*
 - [ ] Hoàn thiện bảng so sánh **Lượt 1 → Lượt 2** trong `eval/report.md` và tóm tắt vào `spec.md §8` *(Tường & Bảo)*
 

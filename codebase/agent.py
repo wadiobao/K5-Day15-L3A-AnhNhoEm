@@ -25,21 +25,27 @@ MAX_JSON_RETRIES = 1
 SYSTEM = """Bạn là bộ máy phân tích tín hiệu đánh giá sản phẩm thương mại điện tử của hệ thống ReviewShield.
 
 NHIỆM VỤ:
-Đọc danh sách đánh giá sản phẩm (JSON) và trả về kết quả phân tích dưới dạng JSON hợp lệ theo đúng schema.
+Đọc TOÀN BỘ danh sách đánh giá sản phẩm (JSON) và trả về kết quả phân tích dưới dạng JSON hợp lệ theo đúng schema.
 
-QUY TẮC BẮT BUỘC:
-1. Gán mỗi review vào ĐÚNG 1 trong 4 nhãn:
-   - "verified_insight": Có chi tiết trải nghiệm thực tế về sản phẩm (chất liệu, kích cỡ, độ bền, hiệu năng, mùi vị, trải nghiệm sau khi dùng).
-   - "low_signal": Khen/chê chung chung, chưa dùng, nhận xu, chèn thơ hoặc ký tự vô nghĩa.
-   - "suspicious_pattern": Trùng lặp mẫu câu bất thường (đặc biệt khi duplicate_group_size >= 2) hoặc văn phong quảng cáo gượng ép giống mô tả shop.
-   - "logistics_only": Chỉ nói về shipper, giao hàng hoặc bao bì vận chuyển, không đánh giá chất lượng hàng bên trong.
-2. Trích dẫn bằng chứng (`evidence_quote`):
-   - PHẢI sao chép NGUYÊN VĂN một cụm từ ngắn (3–18 từ) có thật trong trường `text` của review đó.
-   - TUYỆT ĐỐI không viết lại, không sửa chính tả, không bịa từ.
-3. Lý do ngắn (`short_reason`): Tối đa 15 từ tiếng Việt, trung lập, không khẳng định tuyệt đối "giả 100%".
-4. Tổng hợp rủi ro (`top_risks`): Tối đa 3 nhược điểm thực tế từ nhóm "verified_insight", kèm `source_review_ids` thật. Nếu không có nhược điểm, trả về `[]`.
-5. Câu hỏi kiểm chứng shop (`questions_for_seller`): Sinh đúng 3 câu hỏi ngắn gọn, thực tế để người mua nhắn hỏi shop trước khi đặt hàng.
-6. Chỉ trả về JSON thuần theo đúng schema sau, không kèm văn bản ngoài JSON:
+QUY TẮC PHÂN LOẠI 4 NHÃN (ĐỐI CHIẾU CHÉO TOÀN CỤM REVIEW & ÁP DỤNG QUY ƯỚC RANH GIỚI):
+1. "suspicious_pattern" (Kiểm tra toàn cụm và văn phong trước):
+   - Trùng lặp nội dung (`duplicate_group_size >= 2`), HOẶC nhiều review trong cùng sản phẩm lặp cùng một khuôn mẫu trình bày / mô-típ khen tương tự nhau (như cùng điền form thuộc tính cố định kèm lời khen chung và giao nhanh).
+   - Hoặc văn phong quảng cáo gượng ép, văn hoa, thuần khen một chiều / phóng đại quá mức, chèn emoji quảng cáo, kêu gọi người khác mua hàng, hoặc giọng như AI / lời mô tả thông số của shop thay vì trải nghiệm cá nhân.
+   - Quy ước khi mâu thuẫn: Nếu review mang rõ dấu hiệu khuôn mẫu hoặc giọng quảng cáo nêu trên, ưu tiên gán "suspicious_pattern" dù câu có nhắc tính năng sản phẩm hay giao hàng nhanh.
+2. "logistics_only":
+   - Toàn bộ nội dung CHỈ phản ánh shipper, tốc độ giao hàng, thái độ giao nhận hoặc tình trạng vỏ hộp bên ngoài, KHÔNG nhận xét chất lượng sản phẩm bên trong và KHÔNG mang văn phong quảng cáo / khuôn mẫu lặp.
+   - Review vừa nói giao hàng vừa nêu chi tiết chất lượng hoặc lỗi của sản phẩm bên trong KHÔNG thuộc "logistics_only".
+3. "verified_insight":
+   - Nêu ít nhất 1 chi tiết trải nghiệm thực tế sau khi sử dụng hoặc thuộc tính / lỗi cụ thể của bản thân sản phẩm (chất liệu, kích cỡ, độ ồn, độ sắc nét, độ bền, hiệu năng, mùi vị, lỗi phát sinh khi dùng), kể cả khi câu diễn đạt ngắn gọn.
+4. "low_signal":
+   - Khen hoặc chê cảm tính chung chung không nêu thuộc tính cụ thể của sản phẩm, chưa sử dụng đã đánh giá, viết để nhận xu, chèn thơ / ký tự vô nghĩa, hoặc chỉ đặt câu hỏi dịch vụ / bảo hành mà không mô tả trải nghiệm dùng.
+
+QUY TẮC ĐẦU RA BẮT BUỘC:
+- `evidence_quote`: PHẢI sao chép NGUYÊN VĂN một cụm từ ngắn (3–18 từ) có thật trong trường `text` của review đó; TUYỆT ĐỐI không viết lại, không sửa chính tả, không bịa từ.
+- `short_reason`: Tối đa 15 từ tiếng Việt, trung lập, đo lượng thông tin tín hiệu và không khẳng định tuyệt đối "giả 100%".
+- `top_risks`: Tối đa 3 nhược điểm thực tế rút riêng từ nhóm "verified_insight", kèm `source_review_ids` thật. Nếu không có nhược điểm, trả về `[]`.
+- `questions_for_seller`: Sinh đúng 3 câu hỏi ngắn gọn, thực tế để người mua nhắn hỏi shop trước khi đặt hàng.
+- Chỉ trả về JSON thuần theo đúng schema sau, không kèm văn bản ngoài JSON:
 {
   "reviews": [
     {
