@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "ReviewShield — Bóc Tách Sao Ảo & Điểm Tin Cậy Thực",
   "short_name": "ReviewShield",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Đọc đánh giá trên trang sản phẩm đang mở khi bạn bấm nút, ẩn danh PII tại trình duyệt, bóc tách nhiễu seeding và tính Điểm tin cậy thực.",
   "permissions": [
     "activeTab",

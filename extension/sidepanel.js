@@ -165,7 +165,7 @@ async function scanActiveTab(scanMode = "auto") {
   const btnStop = $("btnStopScan");
   const btnClear = $("btnClearList");
 
-  const targetCount = Math.min(50, Math.max(10, parseInt($("selectTargetCount").value, 10) || 20));
+  const targetCount = Math.min(200, Math.max(10, parseInt($("selectTargetCount").value, 10) || 20));
   const balanceStars = $("chkBalanceStars").checked;
 
   state.isScanning = true;
@@ -277,7 +277,7 @@ async function scanActiveTab(scanMode = "auto") {
     );
     let added = 0;
     for (const rev of res.reviews) {
-      if (state.reviews.length >= 50) break;
+      if (state.reviews.length >= 200) break;
       const key = `${rev.rating}|${rev.text.toLowerCase().replace(/\s+/g, " ").trim()}`;
       if (!existingKeys.has(key)) {
         existingKeys.add(key);
@@ -498,7 +498,12 @@ async function runAnalyze() {
   const btn = $("btnAnalyze");
   const txt = $("btnAnalyzeText");
   btn.disabled = true;
-  txt.textContent = "Đang phân tích bằng AI thật…";
+  if (state.mode === "scan" && state.reviews.length > 20) {
+    const batches = Math.ceil(state.reviews.length / 20);
+    txt.textContent = `Đang phân tích ${state.reviews.length} review (${batches} lô AI thật)…`;
+  } else {
+    txt.textContent = "Đang phân tích bằng AI thật…";
+  }
 
   try {
     const resp = await fetch(`${state.backendUrl}/api/analyze`, {

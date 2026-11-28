@@ -5,7 +5,7 @@
  *
  * Nguyên tắc an toàn:
  * - Không vượt CAPTCHA/anti-bot, không gửi request cào ngầm; tự động dừng ngay nếu phát hiện trang xác minh/đăng nhập.
- * - Giới hạn cứng tối đa 50 review và tối đa 12 lần chuyển bộ lọc/trang với độ trễ lịch sự.
+ * - Giới hạn tối đa 200 review với độ trễ lịch sự và nút Dừng bất kỳ lúc nào.
  * - Không thu thập tên tài khoản, avatar, địa chỉ hay cookie của người mua.
  * - Ẩn danh toàn bộ PII (SĐT, email, URL cá nhân, mã đơn dài) ngay tại trình duyệt.
  */
@@ -13,17 +13,17 @@
   const cfg = Object.assign(
     {
       mode: "auto", // "auto" (tự cuộn + gom cân bằng) | "visible" (chỉ đọc màn hình hiện tại)
-      targetCount: 20, // 20 | 30 | 50
+      targetCount: 20, // 20 | 30 | 50 | 100 | 150 | 200
       balanceStars: true,
       restoreScroll: true,
     },
     window.__RS_SCAN_CONFIG__ || {}
   );
 
-  const HARD_MAX_REVIEWS = Math.min(50, Math.max(5, Number(cfg.targetCount) || 20));
+  const HARD_MAX_REVIEWS = Math.min(200, Math.max(5, Number(cfg.targetCount) || 20));
   const MAX_SCROLL_STEPS = 24;
-  const MAX_INTERACTIONS = 12;
-  const MAX_DURATION_MS = 30000;
+  const MAX_INTERACTIONS = Math.min(65, Math.max(12, Math.ceil(HARD_MAX_REVIEWS / 4) + 12));
+  const MAX_DURATION_MS = Math.min(180000, Math.max(30000, HARD_MAX_REVIEWS * 750));
   const startedAt = Date.now();
   const origScrollY = window.scrollY || window.pageYOffset || 0;
 
@@ -658,6 +658,7 @@
     const filters = findShopeeFilters();
     const lowQuota = cfg.balanceStars ? Math.max(4, Math.round(HARD_MAX_REVIEWS * 0.4)) : 0;
     const generalLimit = Math.max(6, HARD_MAX_REVIEWS - lowQuota);
+    const generalMaxPages = Math.min(35, Math.max(4, Math.ceil(generalLimit / 5) + 2));
 
     // Chặng 1: Gom đánh giá tổng hợp (ưu tiên "Có Bình Luận" để tránh sao trống không chữ)
     if (filters.withComment && filters.withComment.count > 0 && interactionCount < MAX_INTERACTIONS) {
@@ -673,7 +674,7 @@
       addBatch(extractShopee(), generalLimit);
     }
 
-    await paginateShopee(null, generalLimit, cfg.balanceStars ? 4 : 8, "Có Bình Luận");
+    await paginateShopee(null, generalLimit, generalMaxPages, "Có Bình Luận");
 
     // Chặng 2: Tự động chuyển sang bộ lọc 1★, 2★, 3★ để bắt rủi ro thực tế
     if (cfg.balanceStars && collected.length < HARD_MAX_REVIEWS && !isAborted() && !detectBlockedState()) {
@@ -682,7 +683,9 @@
         { key: "star2", star: 2, name: "2 Sao" },
         { key: "star3", star: 3, name: "3 Sao" },
       ];
-      for (const item of lowOrder) {
+      let lowCollected = 0;
+      for (let i = 0; i < lowOrder.length; i += 1) {
+        const item = lowOrder[i];
         if (
           collected.length >= HARD_MAX_REVIEWS ||
           interactionCount >= MAX_INTERACTIONS ||
@@ -695,16 +698,25 @@
         const tab = refreshed[item.key];
         if (!tab || tab.count <= 0) continue;
 
+        const remainingLow = Math.max(6, lowQuota - lowCollected);
+        const remainingTabs = Math.max(1, lowOrder.length - i);
+        const starQuota = Math.max(6, Math.ceil(remainingLow / remainingTabs));
+        const starTargetLimit = Math.min(HARD_MAX_REVIEWS, collected.length + starQuota);
+        const starMaxPages = Math.min(15, Math.max(2, Math.ceil(starQuota / 5) + 1));
+
         const prevFp = getFingerprint(extractShopee());
         interactionCount += 1;
         tab.el.click();
         reportProgress(`Đang gom thêm đánh giá ${item.name}…`, collected.length);
         const batch = await waitForReviewsChange("Shopee", prevFp, item.star, 2800);
-        addBatch(batch, HARD_MAX_REVIEWS);
+        const addedFirst = addBatch(batch, starTargetLimit);
+        lowCollected += addedFirst;
         await sleep(320);
 
-        if (collected.length < HARD_MAX_REVIEWS && HARD_MAX_REVIEWS >= 30 && tab.count > 6) {
-          await paginateShopee(item.star, HARD_MAX_REVIEWS, 2, item.name);
+        if (collected.length < starTargetLimit && tab.count > 6) {
+          const beforePaginate = collected.length;
+          await paginateShopee(item.star, starTargetLimit, starMaxPages, item.name);
+          lowCollected += collected.length - beforePaginate;
         }
       }
     }
@@ -739,6 +751,11 @@
         const batch = await waitForReviewsChange("Shopee", prevFp, item.star, 2800);
         addBatch(batch, HARD_MAX_REVIEWS);
         await sleep(300);
+
+        if (collected.length < HARD_MAX_REVIEWS && tab.count > 6) {
+          const needPages = Math.min(20, Math.max(2, Math.ceil((HARD_MAX_REVIEWS - collected.length) / 5) + 1));
+          await paginateShopee(item.star, HARD_MAX_REVIEWS, needPages, item.name);
+        }
       }
     }
   }
@@ -746,9 +763,10 @@
   async function collectTikiAuto() {
     reportProgress("Đang quét đánh giá Tiki…", 0);
     addBatch(extractTiki(), HARD_MAX_REVIEWS);
+    const maxPages = Math.min(40, Math.max(6, Math.ceil(HARD_MAX_REVIEWS / 4) + 2));
     let page = 1;
     while (
-      page < 6 &&
+      page < maxPages &&
       collected.length < HARD_MAX_REVIEWS &&
       interactionCount < MAX_INTERACTIONS &&
       !isAborted() &&
