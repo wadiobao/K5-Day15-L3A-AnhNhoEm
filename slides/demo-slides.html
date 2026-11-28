@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReviewShield — Pitch Deck CP4 (Nhóm AnhNhoEM · L3A · Track D)</title>
+  <style>
+    :root {
+      --bg: #0B0D12;
+      --bg-2: #121622;
+      --card: #151A26;
+      --card-2: #1B2232;
+      --border: rgba(255, 255, 255, 0.10);
+      --text: #F4F6FA;
+      --muted: #A4AEC2;
+      --coral: #FF6B4A;
+      --coral-soft: rgba(255, 107, 74, 0.14);
+      --mint: #2ED8A3;
+      --mint-soft: rgba(46, 216, 163, 0.14);
+      --amber: #F5B942;
+      --amber-soft: rgba(245, 185, 66, 0.14);
+      --blue: #52A5FF;
+      --blue-soft: rgba(82, 165, 255, 0.14);
+      --red: #FF5C77;
+      --red-soft: rgba(255, 92, 119, 0.15);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: #06070A;
+      color: var(--text);
+      font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    @page {
+      size: 13.333in 7.5in;
+      margin: 0;
+    }
+
+    .deck {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      padding: 24px 0 64px;
+    }
+
+    .slide {
+      position: relative;
+      width: 1280px;
+      height: 720px;
+      background:
+        radial-gradient(640px 380px at 92% 8%, rgba(255, 107, 74, 0.16), transparent 65%),
+        radial-gradient(520px 340px at 8% 95%, rgba(46, 216, 163, 0.11), transparent 65%),
+        linear-gradient(155deg, #0D1018 0%, #090B10 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 40px 52px 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+    }
+
+    @media print {
+      html, body { background: var(--bg); }
+      .deck { display: block; padding: 0; gap: 0; }
+      .nav-bar { display: none !important; }
+      .slide {
+        width: 13.333in;
+        height: 7.5in;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        page-break-after: always;
+        break-after: page;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      .slide:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+    }
+
+    /* Header & Footer */
+    .slide-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--coral);
+      background: var(--coral-soft);
+      border: 1px solid rgba(255, 107, 74, 0.35);
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+    .brand-tag {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .brand-tag strong { color: var(--text); }
+
+    h1.action-title {
+      font-size: 31px;
+      line-height: 1.22;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 18px;
+    }
+    h1.action-title .hl-coral { color: var(--coral); }
+    h1.action-title .hl-mint { color: var(--mint); }
+    h1.action-title .hl-amber { color: var(--amber); }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+    }
+
+    .slide-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      margin-top: 12px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .slide-num {
+      font-weight: 700;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.07);
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Layout Helpers */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .grid-2-wide { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 24px; }
+    .grid-2-right { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 22px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+    }
+    .card-accent-coral { border-color: rgba(255, 107, 74, 0.35); background: linear-gradient(160deg, rgba(255, 107, 74, 0.09), var(--card)); }
+    .card-accent-mint { border-color: rgba(46, 216, 163, 0.35); background: linear-gradient(160deg, rgba(46, 216, 163, 0.09), var(--card)); }
+    .card-accent-amber { border-color: rgba(245, 185, 66, 0.35); background: linear-gradient(160deg, rgba(245, 185, 66, 0.08), var(--card)); }
+    .card-accent-blue { border-color: rgba(82, 165, 255, 0.35); background: linear-gradient(160deg, rgba(82, 165, 255, 0.08), var(--card)); }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .kpi-big {
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1.08;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 6px;
+    }
+    .kpi-sub { font-size: 13.5px; color: var(--muted); line-height: 1.42; }
+
+    .pill {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .pill-mint { background: var(--mint-soft); color: var(--mint); border: 1px solid rgba(46,216,163,0.35); }
+    .pill-coral { background: var(--coral-soft); color: var(--coral); border: 1px solid rgba(255,107,74,0.35); }
+    .pill-amber { background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(245,185,66,0.35); }
+    .pill-blue { background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(82,165,255,0.35); }
+    .pill-red { background: var(--red-soft); color: var(--red); border: 1px solid rgba(255,92,119,0.35); }
+
+    ul.clean { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    ul.clean li {
+      position: relative;
+      padding-left: 18px;
+      font-size: 14px;
+      line-height: 1.45;
+      color: #DCE2EE;
+    }
+    ul.clean li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--coral);
+      font-weight: 800;
+    }
+    ul.clean li strong { color: var(--text); }
+
+    table.data-tbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+    }
+    table.data-tbl th {
+      text-align: left;
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--border);
+    }
+    table.data-tbl td {
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: #E3E8F2;
+      vertical-align: top;
+    }
+    table.data-tbl tr:last-child td { border-bottom: none; }
+    .num { text-align: right; white-space: nowrap; }
+
+    .quote-box {
+      background: rgba(255, 255, 255, 0.035);
+      border-left: 3px solid var(--coral);
+      border-radius: 0 10px 10px 0;
+      padding: 9px 13px;
+      font-size: 12.8px;
+      line-height: 1.42;
+      color: #D7DFEE;
+    }
+    .quote-box .q-src { display: block; margin-top: 4px; font-size: 11.5px; color: var(--muted); font-style: normal; }
+
+    /* Slide 1 Hero */
+    .hero-title {
+      font-size: 50px;
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin: 14px 0 14px;
+    }
+    .hero-lead {
+      font-size: 19px;
+      line-height: 1.45;
+      color: #CED6E6;
+      max-width: 650px;
+      margin-bottom: 22px;
+    }
+    .team-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .team-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 12.5px;
+      color: #D7DFEE;
+    }
+    .team-chip strong { color: var(--text); display: block; font-size: 13px; }
+    .team-chip span { color: var(--muted); font-size: 11.5px; }
+
+    /* Pipeline Diagram (Slide 4) */
+    .pipe-flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      align-items: stretch;
+      margin-bottom: 18px;
+    }
+    .pipe-step {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .pipe-step .step-tag {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .pipe-step h3 { font-size: 14.5px; line-height: 1.25; color: var(--text); }
+    .pipe-step p { font-size: 12.3px; line-height: 1.4; color: var(--muted); }
+    .pipe-step code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 11.2px;
+      color: #B9F6DE;
+      background: rgba(46, 216, 163, 0.1);
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+
+    /* Demo Mockup Card (Slide 5) */
+    .demo-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0F131D;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      font-family: Consolas, monospace;
+    }
+    .score-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .score-box {
+      background: #10141F;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+    .score-box .lbl { font-size: 11.5px; color: var(--muted); margin-bottom: 4px; }
+    .score-box .val { font-size: 28px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .dist-bar {
+      display: flex;
+      height: 16px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 8px 0 8px;
+      background: #0E111A;
+    }
+    .mark-mint { background: rgba(46, 216, 163, 0.24); color: #A6F8DE; padding: 1px 4px; border-radius: 4px; font-weight: 600; }
+    .mark-coral { background: rgba(255, 107, 74, 0.24); color: #FFD1C5; padding: 1px 4px; border-radius: 4px; font-weight: 600; }
+    .mark-amber { background: rgba(245, 185, 66, 0.24); color: #FCE1A6; padding: 1px 4px; border-radius: 4px; font-weight: 600; }
+
+    /* On-screen navigation */
+    .nav-bar {
+      position: fixed;
+      bottom: 14px;
+      right: 18px;
+      background: rgba(18, 22, 34, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 7px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12.5px;
+      color: var(--muted);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+    .nav-bar button {
+      background: var(--coral);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+
+    <!-- ==================== SLIDE 1 ==================== -->
+    <section class="slide" id="slide-1">
+      <div class="slide-top">
+        <span class="eyebrow">Track D · Thương Mại Điện Tử · AI20K Hackathon</span>
+        <span class="brand-tag">Nhóm <strong>AnhNhoEM</strong> · Lớp <strong>L3A</strong></span>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-2-wide" style="align-items: center;">
+          <div>
+            <div style="display:flex; gap:8px; margin-bottom:10px;">
+              <span class="pill pill-mint">Grounding 100%</span>
+              <span class="pill pill-blue">gemini-3.5-flash-lite</span>
+              <span class="pill pill-coral">Human-in-the-loop</span>
+            </div>
+            <div class="hero-title">Review<span style="color:var(--coral);">Shield</span></div>
+            <p class="hero-lead">
+              <strong>Đừng tin 4.9★ nếu chưa biết bao nhiêu người thực sự đã dùng.</strong><br />
+              Bóc tách nhiễu nhận xu &amp; seeding bằng AI thật kèm trích dẫn nguyên văn 100%, tính lại <em>Điểm tin cậy thực</em> bằng Python tất định và gợi ý 3 câu hỏi kiểm chứng shop.
+            </p>
+            <div class="team-row">
+              <div class="team-chip"><strong>Dương Quang Bảo</strong><span>Đội trưởng · Core AI &amp; Pipeline</span></div>
+              <div class="team-chip"><strong>Nguyễn Vũ Khanh</strong><span>Deterministic Tools &amp; UI</span></div>
+              <div class="team-chip"><strong>Nguyễn Mạnh Tường</strong><span>Data, Evidence &amp; Eval</span></div>
+              <div class="team-chip"><strong>Đặng Long Nhật</strong><span>Cost, Interviews &amp; Pitch</span></div>
+            </div>
+          </div>
+
+          <div class="card card-accent-coral" style="padding: 24px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+              <span class="pill pill-coral">Ví dụ chạy thật · sp_21 (Shopee)</span>
+              <span style="font-size:12px; color:var(--muted);">14 review ẩn danh</span>
+            </div>
+            <div style="font-size:16px; font-weight:700; margin-bottom:14px; line-height:1.35;">
+              Chuột Không Dây G304 thế hệ mới chơi game
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+              <div style="background:#0F131D; border:1px solid var(--border); border-radius:12px; padding:14px;">
+                <div style="font-size:12px; color:var(--muted);">Điểm hiển thị trên sàn</div>
+                <div style="font-size:34px; font-weight:900; color:var(--amber); margin-top:4px;">4.2<span style="font-size:16px; color:var(--muted);"> / 5.0</span></div>
+              </div>
+              <div style="background:rgba(255,92,119,0.10); border:1px solid rgba(255,92,119,0.38); border-radius:12px; padding:14px;">
+                <div style="font-size:12px; color:#FFB3C0;">Điểm tin cậy thực</div>
+                <div style="font-size:34px; font-weight:900; color:var(--red); margin-top:4px;">2.3<span style="font-size:16px; color:#FFB3C0;"> (-1.9★)</span></div>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
+              <div style="display:flex; justify-content:space-between; background:rgba(255,255,255,0.04); padding:8px 12px; border-radius:8px;">
+                <span style="color:var(--muted);">Tỷ lệ trải nghiệm thật</span>
+                <strong style="color:var(--mint);">57,1% (8/14 review)</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; background:rgba(255,255,255,0.04); padding:8px 12px; border-radius:8px;">
+                <span style="color:var(--muted);">Khớp trích dẫn nguyên văn</span>
+                <strong style="color:var(--mint);">100% (Grounding Guard)</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; background:rgba(255,255,255,0.04); padding:8px 12px; border-radius:8px;">
+                <span style="color:var(--muted);">Top rủi ro phát hiện</span>
+                <strong style="color:var(--coral);">Giật lag · Phím cứng · Hao pin 4h</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Repo công khai: github.com/wadiobao/K5-Day15-L3A-AnhNhoEm · Chạy 1 lệnh: python run.py</span>
+        <span class="slide-num">1 / 7</span>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 2 ==================== -->
+    <section class="slide" id="slide-2">
+      <div class="slide-top">
+        <span class="eyebrow">01 · Vấn đề &amp; Bằng chứng Pain (2 nguồn đạt ngưỡng)</span>
+        <span class="brand-tag">Nguồn: <strong>evidence/summary.md</strong> · <strong>evidence/count_reviews.py</strong></span>
+      </div>
+
+      <h1 class="action-title">
+        <span class="hl-coral">44,9%</span> review 5★ tự nhiên thiếu thông tin sản phẩm; người mua gặp pain rõ ở <span class="hl-amber">hàng giá trị trung bình–cao</span>
+      </h1>
+
+      <div class="slide-body">
+        <div class="grid-3" style="margin-bottom:16px;">
+          <div class="card card-accent-coral">
+            <div class="card-title">Đào data · H1 (Đúng)</div>
+            <div class="kpi-big" style="color:var(--coral);">44,9% <span style="font-size:17px; color:var(--muted);">(40/89)</span></div>
+            <div class="kpi-sub">Review 5★ <strong>tự nhiên</strong> trên 13 SP Điện Máy Xanh thuộc nhóm <code>low_signal</code> / <code>suspicious_pattern</code>. Trên 26 SP (317 review), <strong>15/26 (57,7%)</strong> có Điểm thực thấp hơn điểm sàn &gt; 0,3★.</div>
+          </div>
+          <div class="card card-accent-amber">
+            <div class="card-title">Phỏng vấn P1–P3 · H2 (Thu hẹp)</div>
+            <div class="kpi-big" style="color:var(--amber);">1/3 bỏ mua <span style="font-size:15px; color:var(--muted);">(2/3 lướt 7s)</span></div>
+            <div class="kpi-sub"><strong>P2</strong> lọc thẳng 1★ thấy rất lâu và bỏ mua; <strong>P1</strong> (6–7 đơn/tháng) chỉ đọc kỹ ~10p ở 1–2 đơn; <strong>P3</strong> mua kẹp gắp lướt 7s → <strong>tập trung hàng giá trị TB–cao / dễ lỗi kỹ thuật</strong>.</div>
+          </div>
+          <div class="card card-accent-blue">
+            <div class="card-title">Đào data · H3 (Phải đổi)</div>
+            <div class="kpi-big" style="color:var(--blue);">5,7% <span style="font-size:17px; color:var(--muted);">(2/35)</span></div>
+            <div class="kpi-sub">Review 1–2★ tự nhiên chỉ nói vận chuyển/lắp đặt khá hiếm (đa số 29/35 nêu lỗi sản phẩm thật). Nhóm <strong>hạ "tách lỗi shipper" thành tính năng phụ</strong>, không phóng đại trong pitch.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Bằng chứng nguyên văn từ kho 26 sản phẩm thật ẩn danh (Shopee + Điện Máy Xanh)</div>
+          <div class="grid-3">
+            <div class="quote-box">
+              "Hàng đóng gói rất đẹp… bộ phận vận chuyển đã nâng như nâng trứng, hứng như hứng hoa. Xin nghiêng mình cảm ơn vì tất cả."
+              <span class="q-src"><strong>sp_21/r5 (5★ · Shopee)</strong> — Văn mẫu lặp 100% nguyên câu ở <strong>sp_22/r1</strong> (sản phẩm khác)</span>
+            </div>
+            <div class="quote-box" style="border-left-color: var(--amber);">
+              "Mình mua vì cần cục pin nhỏ gọn mang đi làm… 5000mAh chủ yếu cứu pin lúc gần hết… Sạc không dây lâu có hơi ấm nhẹ."
+              <span class="q-src"><strong>sp_22/r4 (5★ · Shopee)</strong> — Dán nhầm review pin sạc dự phòng lên trang <strong>Bàn phím + Chuột</strong></span>
+            </div>
+            <div class="quote-box" style="border-left-color: var(--blue);">
+              "Shop ship hàng nhanh… sản phẩm chưa dùng nên sẽ đánh giá chất lượng sau nè" &nbsp;/&nbsp; "Tốt . Đẹp"
+              <span class="q-src"><strong>sp_19/r2 &amp; sp_04/r3 (5★)</strong> — Chưa dùng vẫn chấm 5★ hoặc khen chung chung không có thông tin</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Chạy lại thống kê độc lập: python3 evidence/count_reviews.py · 0 PII · Không bịa phỏng vấn</span>
+        <span class="slide-num">2 / 7</span>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 3 ==================== -->
+    <section class="slide" id="slide-3">
+      <div class="slide-top">
+        <span class="eyebrow">02 · Giải pháp &amp; Lát cắt MVP</span>
+        <span class="brand-tag">Chuẩn đặc tả: <strong>spec.md §2–§5</strong> · <strong>docs/AI_PROMPT_AND_SCORING.md</strong></span>
+      </div>
+
+      <h1 class="action-title">
+        Phân loại <span class="hl-mint">4 tín hiệu có dẫn chứng</span>, tính Điểm tin cậy thực tất định &amp; gợi ý <span class="hl-coral">3 câu hỏi shop</span>
+      </h1>
+
+      <div class="slide-body">
+        <div class="grid-4" style="margin-bottom:18px;">
+          <div class="card card-accent-mint">
+            <span class="pill pill-mint">w = 1.00</span>
+            <h3 style="margin:10px 0 6px; font-size:16px;">verified_insight</h3>
+            <p style="font-size:13px; color:#CFD7E6; line-height:1.45;">Trải nghiệm cụ thể về chất lượng, độ bền, hiệu năng, kích thước hoặc lỗi thực tế. Giữ đủ 100% trọng số.</p>
+          </div>
+          <div class="card card-accent-amber">
+            <span class="pill pill-amber">w = 0.15</span>
+            <h3 style="margin:10px 0 6px; font-size:16px;">low_signal</h3>
+            <p style="font-size:13px; color:#CFD7E6; line-height:1.45;">Review nhận xu, "chưa dùng cho 5★", khen ngắn chung chung ("tốt", "đẹp") không nêu chi tiết sản phẩm.</p>
+          </div>
+          <div class="card card-accent-coral">
+            <span class="pill pill-coral">w = 0.10</span>
+            <h3 style="margin:10px 0 6px; font-size:16px;">suspicious_pattern</h3>
+            <p style="font-size:13px; color:#CFD7E6; line-height:1.45;">Lặp nguyên mẫu câu, văn phong quảng cáo quá mức, hoặc nội dung lệch sản phẩm. Giảm mạnh trọng số.</p>
+          </div>
+          <div class="card card-accent-blue">
+            <span class="pill pill-blue">w = 0.00 (Phụ)</span>
+            <h3 style="margin:10px 0 6px; font-size:16px;">logistics_only</h3>
+            <p style="font-size:13px; color:#CFD7E6; line-height:1.45;">Chỉ phản ánh giao chậm, shipper, móp hộp ngoài; tách thành cảnh báo vận chuyển riêng, tránh kéo oan điểm.</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Công thức tất định (Python 100%, không giao cho LLM)</div>
+            <div style="background:#0E121C; border:1px solid var(--border); border-radius:10px; padding:12px 14px; font-family:Consolas, monospace; font-size:13.5px; color:#B7F5DC; margin-bottom:10px;">
+              real_trust_score = round( Σ(rating_i × w_i) / Σ(w_i), 1 )
+            </div>
+            <ul class="clean">
+              <li>Xử lý an toàn biên chia cho 0 khi 100% review là <code>logistics_only</code> → trả <code>insufficient_data</code>.</li>
+              <li><strong>Insight quan trọng từ data (<code>sp_17–sp_19</code>):</strong> SP seeding toàn 5★ vẫn có Điểm thực = 5.0 → giao diện hiển thị nổi bật <strong><code>verified_ratio</code></strong> và <strong><code>trust_level</code></strong> để bóc lộ rủi ro.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Đầu ra hành động được &amp; Nguyên tắc chịu trách nhiệm</div>
+            <ul class="clean">
+              <li><strong>Top 3 rủi ro thực tế:</strong> Chỉ tổng hợp từ <code>verified_insight</code>, bắt buộc kèm ID nguồn (<code>r8, r14</code>…), không bịa nhược điểm khi hàng tốt.</li>
+              <li><strong>3 câu hỏi kiểm chứng shop (Human-in-the-loop):</strong> Chỉ xuất <strong>bản nháp gợi ý</strong> kèm nút sao chép — hệ thống <strong>không tự nhắn tin cho shop</strong>.</li>
+              <li><strong>Ngôn ngữ trung lập:</strong> Tuyệt đối không kết luận "review giả 100%" — mọi nhãn đi kèm trích dẫn nguyên văn cho người mua tự đối chiếu.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Phạm vi không làm ở MVP: không server scraper cào sàn · không đăng nhập/DB ngoài · không tự gửi tin</span>
+        <span class="slide-num">3 / 7</span>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 4 ==================== -->
+    <section class="slide" id="slide-4">
+      <div class="slide-top">
+        <span class="eyebrow">03 · Kiến trúc hệ thống chuẩn khung AI20K</span>
+        <span class="brand-tag">Mã nguồn: <strong>codebase/agent.py · ai.py · tools.py · app.py</strong></span>
+      </div>
+
+      <h1 class="action-title">
+        Tách bạch tuyệt đối: <span class="hl-coral">AI thật hiểu ngữ nghĩa</span> + <span class="hl-mint">Python tất định khóa trích dẫn &amp; tính điểm</span>
+      </h1>
+
+      <div class="slide-body">
+        <div class="pipe-flow">
+          <div class="pipe-step" style="border-color:rgba(255,92,119,0.35);">
+            <span class="step-tag" style="color:var(--red);">Chặng 0 · Guardrail</span>
+            <h3>Chặn ngoài phạm vi &amp; Tấn công</h3>
+            <p>Chặn input rỗng, cào link Shopee, tự nhắn shop, prompt injection trước khi tốn token.</p>
+            <p><code>agent.py</code> · Đạt <strong>3/3 (100%)</strong> ca <code>tu_choi</code>.</p>
+          </div>
+
+          <div class="pipe-step" style="border-color:rgba(82,165,255,0.35);">
+            <span class="step-tag" style="color:var(--blue);">Chặng 1 · @tool</span>
+            <h3>Tiền xử lý tất định</h3>
+            <p>Parse JSON/text, lọc review trống, chuẩn hóa khoảng trắng, đếm trùng lặp, cắt phân tầng ≤ 20 review.</p>
+            <p><code>preprocess_reviews()</code></p>
+          </div>
+
+          <div class="pipe-step" style="border-color:rgba(255,107,74,0.45); background:linear-gradient(160deg, rgba(255,107,74,0.10), var(--card));">
+            <span class="step-tag" style="color:var(--coral);">Chặng 2 · @model_call</span>
+            <h3>LLM thật (JSON Mode)</h3>
+            <p><code>gemini-3.5-flash-lite</code> (temp 0.1) phân loại 4 nhãn, trích <code>evidence_quote</code>, rút Top 3 rủi ro &amp; 3 câu hỏi.</p>
+            <p>Retry backoff <strong>3 lần</strong> (429/503) + retry JSON 1 lần.</p>
+          </div>
+
+          <div class="pipe-step" style="border-color:rgba(46,216,163,0.45); background:linear-gradient(160deg, rgba(46,216,163,0.10), var(--card));">
+            <span class="step-tag" style="color:var(--mint);">Chặng 3A · @tool</span>
+            <h3>Grounding Guard</h3>
+            <p>So khớp nguyên văn từng <code>evidence_quote</code> với review gốc; lệch ký tự lập tức fallback cắt đoạn gốc.</p>
+            <p><code>verify_grounding()</code> · <strong>317/317 (100%)</strong>.</p>
+          </div>
+
+          <div class="pipe-step" style="border-color:rgba(245,185,66,0.4);">
+            <span class="step-tag" style="color:var(--amber);">Chặng 3B · @tool</span>
+            <h3>Tính điểm tất định</h3>
+            <p>Tính <code>real_trust_score</code>, <code>score_delta</code>, <code>direction</code>, <code>verified_ratio</code>, <code>trust_level</code> hoàn toàn bằng Python.</p>
+            <p><code>compute_real_trust_score()</code></p>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-title">Không bịa trích dẫn (Hallucination)</div>
+            <p style="font-size:13.5px; color:#D8E0EE; line-height:1.45;">Mọi câu trích dẫn phải đi qua <code>verify_grounding</code>. Kết quả thực đo trên cả Lượt 1 (305/305) và Lượt 2 (317/317): <strong>100% nguyên văn</strong>.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">Không lệ thuộc SDK nặng &amp; Trace đầy đủ</div>
+            <p style="font-size:13.5px; color:#D8E0EE; line-height:1.45;">Lõi <code>ai.py</code> dùng <code>urllib</code> chuẩn Python, đọc token thật từ <code>usageMetadata</code> (gồm thinking tokens), ghi trace tự động qua <code>@model_call</code> &amp; <code>@tool</code>.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">Tương thích 100% khung kiểm thử</div>
+            <p style="font-size:13.5px; color:#D8E0EE; line-height:1.45;">Giữ nguyên chữ ký <code>answer(text) → {"output", "data"}</code> để chạy chung <code>python run.py</code>, <code>check</code>, <code>eval</code>, <code>score</code>, <code>simulate</code> không sửa 4 file khung.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Khóa API chỉ lưu trong .env cục bộ (.gitignore) · 100% mẫu dữ liệu ẩn danh tác giả user_01…</span>
+        <span class="slide-num">4 / 7</span>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 5 ==================== -->
+    <section class="slide" id="slide-5">
+      <div class="slide-top">
+        <span class="eyebrow">04 · Demo thực tế trên giao diện 1 màn hình (codebase/app.py)</span>
+        <span class="brand-tag">Chạy thật bằng <strong>python run.py</strong> · Model <strong>gemini-3.5-flash-lite</strong></span>
+      </div>
+
+      <h1 class="action-title">
+        Chuột G304 từ <span class="hl-amber">4.2★</span> lộ Điểm thực <span class="hl-coral">2.3★ (-1.9★)</span> kèm rủi ro &amp; dẫn chứng trong vài giây
+      </h1>
+
+      <div class="slide-body">
+        <div class="demo-bar">
+          <span>ReviewShield · sp_21 — Chuột Không Dây G304 (Shopee · 14 đánh giá)</span>
+          <span style="color:var(--mint);">● Grounding 100% &nbsp;|&nbsp; gemini-3.5-flash-lite &nbsp;|&nbsp; 1 AI / 3 tool &nbsp;|&nbsp; 1445/1470 tok</span>
+        </div>
+
+        <div class="grid-2-right">
+          <!-- Left: Score Lens + Distribution -->
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="card" style="padding:16px 18px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <span class="card-title" style="margin:0;">Lăng kính điểm tương tác</span>
+                <span class="pill pill-red">Rủi ro lệch điểm (-1.9★)</span>
+              </div>
+              <div class="score-pair">
+                <div class="score-box">
+                  <div class="lbl">Điểm sàn</div>
+                  <div class="val" style="color:var(--amber);">4.2<span style="font-size:13px; color:var(--muted);">/5.0</span></div>
+                </div>
+                <div class="score-box" style="border-color:rgba(255,92,119,0.4);">
+                  <div class="lbl">Điểm tin cậy thực</div>
+                  <div class="val" style="color:var(--red);">2.3<span style="font-size:13px; color:var(--muted);">/5.0</span></div>
+                </div>
+                <div class="score-box">
+                  <div class="lbl">Trải nghiệm thật</div>
+                  <div class="val" style="color:var(--mint);">57.1%</div>
+                </div>
+              </div>
+              <div style="font-size:12px; color:var(--muted); margin-bottom:4px;">Bóc tách 4 nhóm tín hiệu (14 review hợp lệ):</div>
+              <div class="dist-bar">
+                <div style="width:57%; background:var(--mint);"></div>
+                <div style="width:14%; background:var(--amber);"></div>
+                <div style="width:7%; background:var(--coral);"></div>
+                <div style="width:22%; background:var(--blue);"></div>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--muted);">
+                <span><strong style="color:var(--mint);">57%</strong> Thật (8)</span>
+                <span><strong style="color:var(--amber);">14%</strong> Nhận xu (2)</span>
+                <span><strong style="color:var(--coral);">7%</strong> Lặp mẫu (1)</span>
+                <span><strong style="color:var(--blue);">21%</strong> Vận chuyển (3)</span>
+              </div>
+            </div>
+
+            <div class="card" style="padding:14px 18px;">
+              <div class="card-title" style="margin-bottom:8px;">Đối chiếu trích dẫn nguyên văn (Grounding 100%)</div>
+              <div style="display:flex; flex-direction:column; gap:8px; font-size:12.5px;">
+                <div style="background:#0F131D; border:1px solid rgba(46,216,163,0.28); border-radius:9px; padding:8px 11px;">
+                  <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+                    <span><span class="pill pill-mint">R14 · 1★ · Trải nghiệm thật</span></span>
+                    <span style="color:var(--mint); font-size:11px; font-weight:700;">Khớp nguyên văn 100% · w=1.00</span>
+                  </div>
+                  <span class="mark-mint">Hao pin bất thường trong quá trình sử dụng, pin bị nóng lên và hết pin chỉ trong nửa buổi (4 tiếng).</span>
+                </div>
+                <div style="background:#0F131D; border:1px solid rgba(255,107,74,0.28); border-radius:9px; padding:8px 11px;">
+                  <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+                    <span><span class="pill pill-coral">R4 · 5★ · Nghi vấn lặp mẫu</span></span>
+                    <span style="color:var(--mint); font-size:11px; font-weight:700;">Khớp nguyên văn 100% · w=0.10</span>
+                  </div>
+                  Công nhận bên shop <span class="mark-coral">gửi hàng nhanh ghê, đặt hôm qua sáng nay mình nhận được hàng rồi… mua tặng người yêu nên chưa biết chất lượng thế nào</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Top 3 Risks + 3 Questions -->
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="card card-accent-coral" style="padding:15px 18px;">
+              <div class="card-title" style="color:var(--coral); margin-bottom:8px;">Top 3 điểm cần lưu ý (từ review thật)</div>
+              <ul class="clean" style="gap:8px;">
+                <li><strong>1. Lỗi kết nối và giật lag</strong> <span class="pill pill-red">Mức cao</span><br /><span style="color:var(--muted); font-size:12.5px;">Chuột khựng, chập chờn, con trỏ nhấp nháy không ổn định. Dẫn chứng: <code>r8, r9, r11, r13</code>.</span></li>
+                <li><strong>2. Phím bấm cứng</strong> <span class="pill pill-amber">Trung bình</span><br /><span style="color:var(--muted); font-size:12.5px;">Click chuột hơi cứng, bấm nhiều gây đau mỏi tay. Dẫn chứng: <code>r7</code>.</span></li>
+                <li><strong>3. Hao pin bất thường</strong> <span class="pill pill-red">Mức cao</span><br /><span style="color:var(--muted); font-size:12.5px;">Pin nóng lên và cạn sạch chỉ sau khoảng 4 tiếng sử dụng. Dẫn chứng: <code>r14</code>.</span></li>
+              </ul>
+            </div>
+
+            <div class="card card-accent-mint" style="padding:15px 18px;">
+              <div class="card-title" style="color:var(--mint); margin-bottom:8px;">3 câu nên nhắn hỏi shop (Bản nháp — người mua tự duyệt)</div>
+              <ul class="clean" style="gap:7px;">
+                <li><strong>Q1:</strong> Sản phẩm có được kiểm tra kết nối trước khi gửi để tránh lỗi chập chờn, đơ chuột không?</li>
+                <li><strong>Q2:</strong> Shop có hỗ trợ đổi mới ngay nếu chuột gặp lỗi di chuyển bị khựng hoặc hao pin nhanh không?</li>
+                <li><strong>Q3:</strong> Phím bấm của dòng chuột này có độ nặng thế nào, có mềm và dễ bấm không?</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Giao diện có sẵn 26 mẫu thật, chế độ dán review tự do, bộ gạt mô phỏng trọng số và nút Sao chép cả 3 câu hỏi</span>
+        <span class="slide-num">5 / 7</span>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 6 ==================== -->
+    <section class="slide" id="slide-6">
+      <div class="slide-top">
+        <span class="eyebrow">05 · Kết quả đánh giá (30 câu thật) &amp; Mô phỏng chi phí (50 phiên)</span>
+        <span class="brand-tag">Nguồn: <strong>eval/report.md</strong> · <strong>cost/cost-estimate.md</strong></span>
+      </div>
+
+      <h1 class="action-title">
+        Prompt v2 nâng nhãn đúng <span class="hl-mint">+8,8%</span>, trích dẫn <span class="hl-mint">100%</span>; chi phí chỉ <span class="hl-amber">2.394 ₫/người/tháng</span>
+      </h1>
+
+      <div class="slide-body">
+        <div class="grid-2" style="margin-bottom:14px;">
+          <!-- Eval Card -->
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <span class="card-title" style="margin:0;">Eval: Lượt 1 → Cải tiến → Lượt 2 (30 câu)</span>
+              <span class="pill pill-blue">gemini-3.5-flash-lite</span>
+            </div>
+            <table class="data-tbl">
+              <thead>
+                <tr>
+                  <th>Chỉ số (spec.md §7)</th>
+                  <th class="num">Ngưỡng</th>
+                  <th class="num">Lượt 1</th>
+                  <th class="num">Lượt 2</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Số câu đạt (<code>run.py score</code>)</strong></td>
+                  <td class="num">—</td>
+                  <td class="num">10/30 (33%)</td>
+                  <td class="num"><strong style="color:var(--mint);">13/30 (43%)</strong></td>
+                </tr>
+                <tr>
+                  <td><code>label_accuracy</code> <span style="font-size:11px; color:var(--muted);">(baseline V: 61,5%)</span></td>
+                  <td class="num">≥ 85%</td>
+                  <td class="num">71,0%</td>
+                  <td class="num"><strong style="color:var(--amber);">79,8% (+8,8%)</strong></td>
+                </tr>
+                <tr>
+                  <td><code>direction_match</code></td>
+                  <td class="num">≥ 85%</td>
+                  <td class="num">88,5%</td>
+                  <td class="num"><strong style="color:var(--mint);">92,3% ✅</strong></td>
+                </tr>
+                <tr>
+                  <td><code>citation_grounding</code></td>
+                  <td class="num">= 100%</td>
+                  <td class="num">100%</td>
+                  <td class="num"><strong style="color:var(--mint);">100% (317/317) ✅</strong></td>
+                </tr>
+                <tr>
+                  <td><code>tu_choi</code> · <code>kho</code> · Lỗi API</td>
+                  <td class="num">—</td>
+                  <td class="num">3/3 · 2/6 · 1 lỗi</td>
+                  <td class="num"><strong style="color:var(--mint);">3/3 · 4/6 · 0 lỗi ✅</strong></td>
+                </tr>
+              </tbody>
+            </table>
+            <p style="font-size:12px; color:var(--muted); margin-top:9px; line-height:1.42;">
+              <strong>Cải tiến (PR #8, #12, #13):</strong> Retry backoff 3 lần (hết lỗi 503 ở <code>RS08</code>) + Prompt v2 đối chiếu chéo cụm review → nhãn <code>S</code> tăng <strong>12% → 39%</strong> (<code>RS28</code> 2/12→9/12, <code>RS30</code> 0/12→6/12). Ghi trung thực: 79,8% <em>chưa đạt ngưỡng 85%</em>; <code>actionable_quality</code> đạt 9/9 trên câu đạt (do AI đối chiếu).
+            </p>
+          </div>
+
+          <!-- Cost Card -->
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <span class="card-title" style="margin:0;">Mô phỏng 50 phiên thật (simulate-1 · 43% đạt)</span>
+              <span class="pill pill-mint">Rất đáng làm</span>
+            </div>
+            <table class="data-tbl">
+              <thead>
+                <tr>
+                  <th>Model (Paid Tier, 27/11)</th>
+                  <th class="num">/ phiên</th>
+                  <th class="num">/ task đạt</th>
+                  <th class="num">700 user/tháng</th>
+                  <th class="num">/ user/tháng</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong style="color:var(--mint);">gemini-3.5-flash-lite</strong><br /><span style="font-size:11px; color:var(--muted);">$0.30 vào · $2.50 ra /1M</span></td>
+                  <td class="num">177 ₫</td>
+                  <td class="num"><strong style="color:var(--mint);">407 ₫</strong></td>
+                  <td class="num"><strong style="color:var(--mint);">1,68 tr ₫</strong></td>
+                  <td class="num"><strong style="color:var(--mint);">2.394 ₫</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>gemini-3.1-pro-preview</strong><br /><span style="font-size:11px; color:var(--muted);">$2.00 vào · $12.00 ra /1M</span></td>
+                  <td class="num">900 ₫</td>
+                  <td class="num">2.076 ₫</td>
+                  <td class="num">8,55 tr ₫</td>
+                  <td class="num">12.209 ₫</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:11px;">
+              <div style="background:#0F131D; border:1px solid var(--border); border-radius:9px; padding:8px 10px;">
+                <div style="font-size:11px; color:var(--muted);">Thấp (300 user)</div>
+                <div style="font-size:15px; font-weight:800; color:var(--text);">718k ₫<span style="font-size:11px; color:var(--muted);">/th</span></div>
+              </div>
+              <div style="background:rgba(46,216,163,0.10); border:1px solid rgba(46,216,163,0.35); border-radius:9px; padding:8px 10px;">
+                <div style="font-size:11px; color:var(--mint);">Cơ sở (700 user)</div>
+                <div style="font-size:15px; font-weight:800; color:var(--mint);">1,68 tr ₫<span style="font-size:11px;">/th</span></div>
+              </div>
+              <div style="background:#0F131D; border:1px solid var(--border); border-radius:9px; padding:8px 10px;">
+                <div style="font-size:11px; color:var(--muted);">Cao (1.000 user)</div>
+                <div style="font-size:15px; font-weight:800; color:var(--text);">2,39 tr ₫<span style="font-size:11px; color:var(--muted);">/th</span></div>
+              </div>
+            </div>
+
+            <p style="font-size:12px; color:var(--muted); margin-top:9px; line-height:1.42;">
+              Đo token trên <code>gemini-3.5-flash-lite</code> (44/50 phiên OK, 6 lỗi 503 tạm thời; tỷ giá 25.500 ₫/USD <em>tự ước tính</em>). Chỉ cần tránh <strong>1 đơn hàng lỗi 200–500k ₫</strong> là lợi ích gấp hàng trăm lần chi phí <strong>2.394 ₫/người/tháng</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Không sửa chuẩn đạt sau CP2 · Không sửa file kết quả run-1/run-2/simulate-1 · Chi phí/task đã chia tỉ lệ đạt 43%</span>
+        <span class="slide-num">6 / 7</span>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 7 ==================== -->
+    <section class="slide" id="slide-7">
+      <div class="slide-top">
+        <span class="eyebrow">06 · Giới hạn MVP trung thực &amp; Lộ trình Production</span>
+        <span class="brand-tag">ReviewShield · <strong>AnhNhoEM (L3A · Track D)</strong></span>
+      </div>
+
+      <h1 class="action-title">
+        Nhìn thẳng giới hạn <span class="hl-amber">79,8%</span> hôm nay → Nâng chất lượng bằng <span class="hl-mint">code tất định</span> &amp; <span class="hl-coral">Chrome Extension</span>
+      </h1>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card card-accent-amber">
+            <div class="card-title" style="color:var(--amber);">Giới hạn trung thực của bản MVP hiện tại</div>
+            <ul class="clean">
+              <li><strong><code>label_accuracy</code> 79,8% &lt; 85%:</strong> Nhãn <code>suspicious_pattern</code> vẫn sai 30/49 (61%); Prompt v2 có đánh đổi làm 2 câu <code>RS10</code>, <code>RS22</code> bị gán quá tay sang <code>logistics_only</code>.</li>
+              <li><strong>Ranh giới nhãn còn mơ hồ:</strong> Tự kiểm độc lập 30 review chỉ khớp 18/30 (60%) ở ranh giới V/L/S; <code>actionable_quality</code> mới kiểm AI 9/9 câu đạt, chưa có người chấm độc lập trên cả 26 câu.</li>
+              <li><strong>Đầu vào thủ công:</strong> Người dùng chọn kho mẫu 26 SP hoặc dán review (không xây server scraper vì sàn TMĐT chặn CAPTCHA/HTTP 403).</li>
+              <li><strong>Độ ổn định hạ tầng:</strong> Gói API miễn phí dễ gặp HTTP 503 khi gọi dồn (6/50 phiên ở <code>simulate-1</code>).</li>
+            </ul>
+          </div>
+
+          <div class="card card-accent-mint">
+            <div class="card-title" style="color:var(--mint);">Lộ trình phát triển (1 tuần → Production)</div>
+            <ul class="clean">
+              <li><strong>Tuần 1 — Đưa <code>label_accuracy</code> ≥ 85%:</strong> Chuyển phát hiện gần trùng lặp (<em>fuzzy near-duplicate</em>) về Python tất định trong <code>tools.py</code> + thêm few-shot ngoài benchmark + người gán nhãn thứ hai độc lập → đẩy tỉ lệ đạt lên ≥75%, giảm chi phí/task đạt còn <strong>~230 ₫</strong> <em>(tự ước tính)</em>.</li>
+              <li><strong>Tháng 1 — Chrome Extension 1-click &amp; Mobile OCR:</strong> Đọc DOM trực tiếp trên trình duyệt người dùng (ẩn danh PII ngay tại client, không vượt anti-bot) và hỗ trợ OCR ảnh chụp màn hình cho người mua trên điện thoại.</li>
+              <li><strong>Scale — Redis Cache + Paid Tier:</strong> Cache theo khóa <code>(product_id, reviews_hash)</code> (TTL 12–24h) giảm <strong>70–85%</strong> chi phí token → 700 người dùng cơ sở chỉ còn <strong>~250k–500k ₫/tháng</strong> <em>(tự ước tính)</em>.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px; display:flex; align-items:center; justify-content:space-between; background:linear-gradient(90deg, rgba(255,107,74,0.12), rgba(46,216,163,0.10)); border-color:rgba(255,255,255,0.15);">
+          <div>
+            <div style="font-size:17px; font-weight:800; color:var(--text);">ReviewShield — Bóc tách sao ảo, giữ quyết định trung thực trong tay người mua</div>
+            <div style="font-size:13px; color:var(--muted); margin-top:3px;">Trải nghiệm ngay: <code>python run.py</code> · Kiểm tra khung: <code>python run.py check</code> · 0 cảnh báo · 100% Grounding Guard</div>
+          </div>
+          <span class="pill pill-coral" style="font-size:13px; padding:7px 14px;">Cảm ơn BGK &amp; Q&amp;A</span>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <span>Nhóm AnhNhoEM · Dương Quang Bảo · Nguyễn Vũ Khanh · Nguyễn Mạnh Tường · Đặng Long Nhật</span>
+        <span class="slide-num">7 / 7</span>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="nav-bar">
+    <span>Phím ← / → để chuyển slide</span>
+    <button onclick="window.print()">Xuất PDF</button>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    let cur = 0;
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        cur = Math.min(slides.length - 1, cur + 1);
+        slides[cur].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        cur = Math.max(0, cur - 1);
+        slides[cur].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  </script>
+</body>
+</html>

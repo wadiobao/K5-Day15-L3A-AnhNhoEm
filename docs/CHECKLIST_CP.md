@@ -83,7 +83,7 @@ Tài liệu theo dõi tiến độ từng mốc Checkpoint (CP1–CP4) và đầ
 - [ ] *(Bonus)* Tổ chức test 2–3 người dùng thật ngoài nhóm và ghi log vào `validation/log.md`; fix lỗi ưu tiên cao trước demo *(Nhật & Khanh)*
 
 ### Slide, Video Dự Phòng & Nộp bài
-- [ ] Đẩy file **`demo-slides.pdf`** vào **thư mục gốc repo** (`./demo-slides.pdf`) *(Nhật)*
+- [x] Đẩy file **`demo-slides.pdf`** vào **thư mục gốc repo** (`./demo-slides.pdf`) *(Nhật — 7 trang 16:9 nền Obsidian Noir, đồng bộ 100% số liệu `main`, nguồn HTML tại `slides/demo-slides.html` & dàn ý tại `slides/outline.md`)*
 - [ ] Quay **Video Demo dự phòng** (2 phút, chạy AI thật, kiểm Tab Ẩn Danh) và cập nhật link vào `README.md` *(Nhật)*
 - [x] Hoàn thiện `docs/ai-usage.md` và mục "Dùng AI vào việc gì" trong `README.md` *(Nhật & Cả nhóm — đã điền đủ `README.md` và cả 4 thành viên TV1–TV4 trong `docs/ai-usage.md`)*
 - [ ] Hoàn thiện `reflection/<ten>.md` (hạn chót 23:59 Thứ Bảy 28/11) *(Cả nhóm — đã có `tuong.md`, `bao.md`, `khanh.md`; còn Nhật)*
