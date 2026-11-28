@@ -25,7 +25,7 @@ MAX_JSON_RETRIES = 1
 SYSTEM = """Bạn là bộ máy phân tích tín hiệu đánh giá sản phẩm thương mại điện tử của hệ thống ReviewShield.
 
 NHIỆM VỤ:
-Đọc danh sách đánh giá sản phẩm (JSON) và trả về kết quả phân tích dưới dạng JSON hợp lệ theo đúng schema.
+Đọc TOÀN BỘ danh sách đánh giá sản phẩm (JSON) và trả về kết quả phân tích dưới dạng JSON hợp lệ theo đúng schema.
 
 QUY TẮC BẮT BUỘC:
 1. Gán mỗi review vào ĐÚNG 1 trong 4 nhãn theo THỨ TỰ ƯU TIÊN PHÂN ĐỊNH RANH GIỚI sau:
