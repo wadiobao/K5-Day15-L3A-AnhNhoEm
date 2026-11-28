@@ -1,9 +1,11 @@
 """Kiểm thử tự động cho Backend API (`api/server.py`) của ReviewShield Chrome Extension."""
 from __future__ import annotations
 
+import io
 import json
 import os
 import sys
+import zipfile
 from unittest.mock import patch
 
 from fastapi.testclient import TestClient
@@ -133,7 +135,23 @@ def run_all_tests() -> None:
         server.rate_limiter.reset()
     print("[PASS] 6. Rate limiter returns HTTP 429 when limit exceeded")
 
+    # 7. Tải gói Chrome Extension (/api/extension/info & /api/extension/download)
+    r_info = client.get("/api/extension/info")
+    assert r_info.status_code == 200, r_info.text
+    info_data = r_info.json()
+    assert info_data["filename"] == "reviewshield-extension.zip"
+    assert "manifest.json" in info_data["files"]
+
+    r_dl = client.get("/api/extension/download")
+    assert r_dl.status_code == 200, r_dl.text
+    assert r_dl.headers.get("content-type", "").startswith("application/zip")
+    with zipfile.ZipFile(io.BytesIO(r_dl.content)) as zf:
+        names = set(zf.namelist())
+        assert {"manifest.json", "background.js", "content.js", "sidepanel.html", "sidepanel.js", "icons/icon128.png"}.issubset(names)
+        assert not any(n.endswith(".env") or n.endswith(".md") for n in names)
+    print("[PASS] 7. GET /api/extension/download returns clean reviewshield-extension.zip")
+
 
 if __name__ == "__main__":
     run_all_tests()
-    print("ALL API TESTS PASSED (6/6).")
+    print("ALL API TESTS PASSED (7/7).")

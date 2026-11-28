@@ -99,7 +99,9 @@ EOF
 sudo caddy validate --config /etc/caddy/Caddyfile
 sudo systemctl reload caddy
 
-echo "==> [6/6] Kiểm tra trực tiếp qua HTTPS công khai: https://${DOMAIN}/api/health"
+echo "==> [6/6] Kiểm tra trực tiếp qua HTTPS công khai: https://${DOMAIN}/api/health & /api/extension/info"
 curl -fsS "https://${DOMAIN}/api/health"
 echo ""
-echo "HOÀN TẤT! Mở lại Extension ReviewShield → chọn VPS HTTPS (https://${DOMAIN}) → Lưu & Kiểm tra."
+curl -fsS "https://${DOMAIN}/api/extension/info"
+echo ""
+echo "HOÀN TẤT! Mở lại https://${DOMAIN} (bấm F5 để thấy nút Tải Extension) và kiểm tra Extension ReviewShield."

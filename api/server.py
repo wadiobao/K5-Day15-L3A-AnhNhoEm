@@ -14,22 +14,36 @@ Chạy trên VPS:
 from __future__ import annotations
 
 import hashlib
+import io
 import json
 import os
 import re
 import sys
 import threading
 import time
+import zipfile
 from collections import OrderedDict, deque
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, Field, model_validator
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CODEBASE_DIR = os.path.join(ROOT_DIR, "codebase")
+EXTENSION_DIR = os.path.join(ROOT_DIR, "extension")
+EXTENSION_PACKAGE_FILES = (
+    "manifest.json",
+    "background.js",
+    "content.js",
+    "sidepanel.html",
+    "sidepanel.css",
+    "sidepanel.js",
+    "icons/icon16.png",
+    "icons/icon48.png",
+    "icons/icon128.png",
+)
 if CODEBASE_DIR not in sys.path:
     sys.path.insert(0, CODEBASE_DIR)
 
@@ -295,6 +309,59 @@ def health() -> dict[str, Any]:
         "cache_ttl_seconds": cache_store.ttl_seconds,
         "rate_limit_per_min": rate_limiter.max_requests,
     }
+
+
+def build_extension_zip_bytes(extension_dir: str = EXTENSION_DIR) -> tuple[bytes, list[str]]:
+    """Đóng gói động các file runtime sạch của Chrome Extension thành gói `.zip` trong bộ nhớ."""
+    manifest_path = os.path.join(extension_dir, "manifest.json")
+    if not os.path.isfile(manifest_path):
+        raise FileNotFoundError("Không tìm thấy thư mục extension/manifest.json trên máy chủ.")
+
+    buf = io.BytesIO()
+    packed: list[str] = []
+    with zipfile.ZipFile(buf, mode="w", compression=zipfile.ZIP_DEFLATED) as zf:
+        for rel_path in EXTENSION_PACKAGE_FILES:
+            abs_path = os.path.join(extension_dir, *rel_path.split("/"))
+            if os.path.isfile(abs_path):
+                zf.write(abs_path, arcname=rel_path)
+                packed.append(rel_path)
+    return buf.getvalue(), packed
+
+
+@app.get("/api/extension/info")
+def extension_info() -> dict[str, Any]:
+    """Trả thông tin phiên bản và đường dẫn tải gói Chrome Extension Manifest V3."""
+    manifest_path = os.path.join(EXTENSION_DIR, "manifest.json")
+    if not os.path.isfile(manifest_path):
+        raise HTTPException(status_code=404, detail="Chưa có gói Chrome Extension trên máy chủ.")
+    with open(manifest_path, encoding="utf-8") as f:
+        manifest = json.load(f)
+    zip_bytes, packed = build_extension_zip_bytes(EXTENSION_DIR)
+    return {
+        "name": manifest.get("name", "ReviewShield"),
+        "version": manifest.get("version", "1.0.0"),
+        "filename": "reviewshield-extension.zip",
+        "size_bytes": len(zip_bytes),
+        "download_url": "/api/extension/download",
+        "files": packed,
+    }
+
+
+@app.get("/api/extension/download")
+def extension_download() -> Response:
+    """Tải trực tiếp file `reviewshield-extension.zip` sạch (đạt chuẩn Load unpacked & Chrome Web Store)."""
+    try:
+        zip_bytes, _ = build_extension_zip_bytes(EXTENSION_DIR)
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return Response(
+        content=zip_bytes,
+        media_type="application/zip",
+        headers={
+            "Content-Disposition": 'attachment; filename="reviewshield-extension.zip"',
+            "Cache-Control": "no-cache",
+        },
+    )
 
 
 @app.post("/api/analyze")
