@@ -1,0 +1,17 @@
+# Mẫu cấu hình Caddy cho VPS Google Cloud (https://hackathonane.duckdns.org)
+# Định tuyến chung 1 domain HTTPS cho cả FastAPI Extension Backend (/api/*) và Streamlit Web UI (/).
+# Cách áp dụng trên VPS:
+#   sudo cp api/Caddyfile.example /etc/caddy/Caddyfile
+#   sudo systemctl reload caddy
+
+hackathonane.duckdns.org {
+    encode gzip
+
+    handle /api/* {
+        reverse_proxy 127.0.0.1:8000
+    }
+
+    handle {
+        reverse_proxy 127.0.0.1:8501
+    }
+}
