@@ -19,7 +19,7 @@ Bốn chỉ số theo `spec.md` §7 (tính trên toàn bộ review, không phả
 | `label_accuracy` | ≥ 85% | 71,0% (225/317) ❌ | **79,8%** (253/317) ❌ |
 | `direction_match` | ≥ 85% | 88,5% (23/26) ✅ | **92,3%** (24/26) ✅ |
 | `citation_grounding` | = 100% | 100% (305/305) ✅ | 100% (317/317) ✅ |
-| `actionable_quality` | ≥ 80% | chưa đo độc lập (xem §4) | chưa đo độc lập (xem §4) |
+| `actionable_quality` | ≥ 80% | chưa đo | 9/9 câu sản phẩm đạt ở lượt 2 được Claude đối chiếu là sát (xem §4; **chưa đo trên các câu trượt**) |
 
 Một câu "đạt" khi đồng thời: đúng `direction`, ≥85% nhãn review khớp `expected`, mọi trích dẫn nằm nguyên văn trong review gốc, và Top rủi ro + 3 câu hỏi sát phàn nàn thật (`eval/README.md` §3). Với ngưỡng 85% áp dụng cho **từng câu**, khó đạt hơn ngưỡng 85% trên toàn bộ, nên số câu đạt (43%) thấp hơn nhiều so với `label_accuracy` chung.
 
@@ -74,7 +74,7 @@ Một hệ thống gán **mọi review là `verified_insight`** đạt `label_ac
 - **Nhãn chuẩn do AI gán** (Claude Code, Codex) theo tiêu chí do Thành viên 3 đặt, có rà các dòng ranh giới. Nhãn đo lượng thông tin về sản phẩm, không kết luận review thật hay giả.
 - **Độ đồng thuận người – nhãn chuẩn chỉ 60%.** Thành viên 3 tự gán độc lập 30 review (lấy cân theo nhãn: 10 V · 6 L · 10 S · 4 G, seed 42) rồi so với nhãn chuẩn: **khớp 18/30 (60%)**. Theo nhãn: V 8/10, L 2/6, S 6/10, G 2/4. Phần lớn lệch (10/12) là người chọn V ở chỗ nhãn chuẩn là L, S hoặc G, tức **ranh giới V/L/S/G là chỗ mơ hồ nhất**, và định nghĩa V "có chi tiết về sản phẩm" khác với cách hiểu "giọng người thật". Với cùng 29 review, Gemini lượt 1 khớp nhãn chuẩn 18/29 nhưng chỉ khớp nhãn tay 14/29. Hệ quả: ngưỡng `label_accuracy` ≥ 85% có thể vượt quá độ đồng thuận giữa hai người chấm, nên một phần "lỗi" của AI nằm ở ranh giới mơ hồ. Thành viên 3 quyết định giữ nhãn hiện có làm chuẩn vì nhãn đó bám đúng định nghĩa chính thức ở `docs/AI_PROMPT_AND_SCORING.md`, không phải vì đã được chứng minh là đúng. Mẫu 30 này lấy cân, **chỉ đọc theo từng nhãn**, không phải tỷ lệ tự nhiên.
 - **Chưa có người gán nhãn thứ hai** độc lập trên toàn bộ 317 review.
-- **`actionable_quality` chưa được đo độc lập:** cột `ghi_chu` ghi "đạt" cho các câu vượt `code_pass`, nhưng Top 3 rủi ro và 3 câu hỏi chưa được người thứ hai đọc đối chiếu; con số ≥80% vì vậy chưa có bằng chứng.
+- **`actionable_quality` chỉ được kiểm trên tập con và do AI chấm:** Claude Code đọc Top 3 rủi ro và 3 câu hỏi của **9 câu sản phẩm đạt ở lượt 2** (`RS01`, `RS03`, `RS05`, `RS06`, `RS07`, `RS16`, `RS23`, `RS24`, `RS27`) và đối chiếu với review 1–3★ thật của từng sản phẩm: **9/9 sát** — mọi rủi ro dẫn `source_review_ids` có thật và nội dung review đó đúng với rủi ro nêu; câu hỏi bám theo các rủi ro. Điểm yếu nhỏ: `RS27` rủi ro 1 chỉ dựa vào 1 review; `RS23` bỏ sót phàn nàn "hư ron báo thay 500 nghìn" (review 1★); `RS24` rủi ro 3 ("cơm khô") lấy từ một review 5★ chỉ nhắc nhẹ. Hạn chế: (1) người chấm là AI, **chưa có người đọc độc lập**; (2) tập này **đã lọc** bằng các tiêu chí nhãn/direction nên có thiên lệch chọn lọc, chưa đo trên 17 câu trượt; (3) vì vậy con số 9/9 **không đủ để khẳng định** ngưỡng ≥80% trên toàn bộ bộ thử. Một phát hiện đáng giữ: ở `RS16`, hệ thống rút ra rủi ro "phồng pin" từ **3 review 5★** có nội dung phàn nàn mà số sao cao.
 - **Mất cân bằng nhãn:** V chiếm ~61,5%; G chỉ 6/317 (1,9%), nên độ chính xác nhãn G rất nhiễu. `seeding_heavy` chỉ 3 câu và `logistics_bias` 2 câu, ít hơn mục tiêu 8 và 5.
 - **"Điểm sàn" của 13 sản phẩm Điện Máy Xanh** là điểm suy ra (trung bình review trong bộ dữ liệu), không phải điểm hiển thị trên web.
 - Lượt 1 và 2 chạy ở hai thời điểm khác nhau trên cùng model nhưng không chạy lặp lại để đo độ dao động giữa các lần chạy; chênh lệch 1–2 câu có thể nằm trong nhiễu.
@@ -91,4 +91,4 @@ Một hệ thống gán **mọi review là `verified_insight`** đạt `label_ac
   2. Thêm ví dụ minh họa (few-shot) lấy từ dữ liệu **ngoài** bộ benchmark.
   3. Có người thứ hai gán nhãn độc lập để đo độ đồng thuận trên toàn bộ benchmark và làm rõ ranh giới V/L/S/G.
   4. Thêm sản phẩm `seeding_heavy` và `logistics_bias`, chạy mỗi lượt nhiều lần để đo độ dao động.
-  5. Đo `actionable_quality` bằng người đọc độc lập.
+  5. Đo `actionable_quality` bằng người đọc độc lập trên cả câu đạt lẫn câu trượt.
