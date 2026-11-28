@@ -28,11 +28,18 @@ NHIỆM VỤ:
 Đọc danh sách đánh giá sản phẩm (JSON) và trả về kết quả phân tích dưới dạng JSON hợp lệ theo đúng schema.
 
 QUY TẮC BẮT BUỘC:
-1. Gán mỗi review vào ĐÚNG 1 trong 4 nhãn:
-   - "verified_insight": Có chi tiết trải nghiệm thực tế về sản phẩm (chất liệu, kích cỡ, độ bền, hiệu năng, mùi vị, trải nghiệm sau khi dùng).
-   - "low_signal": Khen/chê chung chung, chưa dùng, nhận xu, chèn thơ hoặc ký tự vô nghĩa.
-   - "suspicious_pattern": Trùng lặp mẫu câu bất thường (đặc biệt khi duplicate_group_size >= 2) hoặc văn phong quảng cáo gượng ép giống mô tả shop.
-   - "logistics_only": Chỉ nói về shipper, giao hàng hoặc bao bì vận chuyển, không đánh giá chất lượng hàng bên trong.
+1. Gán mỗi review vào ĐÚNG 1 trong 4 nhãn theo THỨ TỰ ƯU TIÊN PHÂN ĐỊNH RANH GIỚI sau:
+   - Bước A — Kiểm tra "suspicious_pattern" TRƯỚC cho các review khen 5 sao:
+     Gán "suspicious_pattern" nếu có BẤT KỲ dấu hiệu nào:
+     (a) `duplicate_group_size >= 2` (trùng lặp nguyên văn trong lô); HOẶC
+     (b) Có từ 2 review trở lên trong cùng lô lặp lại cùng một khung câu/đoạn thân rất giống nhau (kể cả khi khác tiền tố phân loại ở đầu như "Màu sắc:", "Chất liệu:", "Đúng với mô tả:"); HOẶC
+     (c) Văn phong quảng cáo/kêu gọi mua hàng sáo rỗng, tâng bốc quá mức, văn hoa như kịch bản có sẵn (vd: hô hào mọi người yên tâm mua ủng hộ shop, khen điểm 10/hoàn hảo chung chung) hoặc nội dung lạc đề mô tả nhầm sang sản phẩm khác không khớp `product_name`.
+   - Bước B — Kiểm tra "logistics_only":
+     Gán "logistics_only" khi review CHỈ phản ánh về shipper, thời gian giao hàng, đóng gói vận chuyển, thợ lắp đặt hoặc dịch vụ cửa hàng mà KHÔNG đánh giá chất lượng bản thân sản phẩm.
+     Lưu ý ranh giới: Review 5 sao kiểu "giao hàng nhanh, chưa dùng nên đánh giá sau / cho 5 sao lấy xu" PHẢI gán "low_signal", KHÔNG gán "logistics_only".
+   - Bước C — Phân định "verified_insight" vs "low_signal":
+     * "verified_insight": Nêu ÍT NHẤT 1 chi tiết/thuộc tính thực tế về bản thân sản phẩm (chất liệu, kích cỡ, độ bền, thời lượng pin, kết nối, chất âm, hiệu năng, mùi vị, lỗi kỹ thuật, cảm giác sử dụng thực tế). Dù câu ngắn nhưng có chi tiết sản phẩm cụ thể vẫn là "verified_insight".
+     * "low_signal": Khen/chê chung chung không nêu chi tiết sản phẩm ("tốt", "đẹp", "ổn", "ok", "đáng tiền"), chỉ khen thái độ nhân viên/tư vấn, đặt câu hỏi bảo hành, chưa sử dụng ("chưa dùng cho 5 sao"), nhận xu, chèn thơ hoặc ký tự vô nghĩa.
 2. Trích dẫn bằng chứng (`evidence_quote`):
    - PHẢI sao chép NGUYÊN VĂN một cụm từ ngắn (3–18 từ) có thật trong trường `text` của review đó.
    - TUYỆT ĐỐI không viết lại, không sửa chính tả, không bịa từ.

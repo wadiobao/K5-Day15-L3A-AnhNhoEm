@@ -63,12 +63,14 @@ Hệ thống đạt chuẩn phát hành MVP khi chạy `python run.py eval` trê
 3. **`citation_grounding` = 100%**: Mọi `evidence_quote` hiển thị cho người dùng phải khớp nguyên văn chuỗi con trong review gốc.
 4. **`actionable_quality` >= 80%**: Đánh giá bởi người chấm xem Top 3 rủi ro và 3 câu hỏi kiểm chứng shop có sát với phàn nàn thực tế trong cụm review hay không.
 
-## §8. Kết quả đánh giá thực tế (Điền tại CP3–CP4)
-* `[Dán tóm tắt kết quả từ eval/report.md sau khi chạy python run.py eval và python run.py score]`
+## §8. Kết quả đánh giá thực tế (CP3–CP4 · Model `gemini-3.5-flash-lite`)
+* **Lượt 1 (`run-1@20261127-184552`):** `10/30` câu đạt (`33%`: `thuong` 5/21, `kho` 2/6, `tu_choi` 3/3); `citation_grounding` **100,0%** (305/305), `direction_match` **88,5%** (23/26), `label_accuracy` **71,0%** (225/317), 1 lỗi kỹ thuật HTTP 503 tại `RS08`.
+* **Lượt 2 (`run-2@20261128-073745` — sau cải tiến Prompt v2 + retry backoff 3 lần):** `13/30` câu đạt (`43%`: `thuong` 6/21, `kho` **4/6 [67%]**, `tu_choi` **3/3 [100%]**); **0 lỗi kỹ thuật**; `citation_grounding` **100,0%** (317/317 — đạt), `direction_match` **92,3%** (24/26 — đạt, +3,8%), `label_accuracy` **79,8%** (253/317 — tăng **+8,8%**, riêng `RS28` từ 2/12 → 9/12, `RS30` từ 0/12 → 6/12). Chi tiết so sánh tại `eval/report.md`.
 
 ## §9. Ước tính chi phí vận hành (Điền tại CP4)
 * `[Dán bảng mô phỏng từ cost/simulate-N-summary.md sau khi chạy python run.py simulate]`
 
 ## §10. Nhật ký thay đổi (Changelog — cập nhật đến 23:59 Thứ Bảy 28/11)
-* **2026-11-27 (CP1):** Khởi tạo đặc tả ReviewShield (Track D), chốt kiến trúc 3 chặng và bộ 4 nhãn tín hiệu.
-* `[Cập nhật tiếp các mốc chỉnh prompt, chạy eval và sửa lỗi đến hạn cuối]`
+* **2026-11-27 (CP1–CP2):** Khởi tạo đặc tả ReviewShield (Track D), bổ sung sơ đồ kiến trúc AI (`§4`), chốt khóa 4 ngưỡng đạt (`§7` khớp `eval/metric_spec.yaml`), hoàn thiện lõi `ai.py`, `agent.py`, `tools.py` và 14 câu benchmark CP2.
+* **2026-11-27 (CP3):** Mở rộng bộ đánh giá lên 30 câu thật (26 SP Shopee + Điện Máy Xanh, `kho: 6`, `tu_choi: 3`), hoàn thiện bằng chứng 2 nguồn (`evidence/data-mining.md` + phỏng vấn `P1–P3`), UI Streamlit (`codebase/app.py`), và chạy Eval Lượt 1 (`run-1@20261127-184552`, `gemini-3.5-flash-lite`: 10/30 câu đạt, `citation_grounding` 100%, `direction_match` 88,5%, `label_accuracy` 71,0%, 1 lỗi HTTP 503 tại `RS08`).
+* **2026-11-28 (Cải tiến cho Lượt 2 — CP4):** (1) Nâng retry exponential backoff 3 lần (`2s → 4s → 8s`) cho HTTP 429/503 trong `codebase/ai.py` (PR #8); (2) Cải tiến System Prompt v2 trong `codebase/agent.py` bổ sung thứ tự ưu tiên phân định ranh giới 4 nhãn (ưu tiên bắt `suspicious_pattern` khi lặp thân câu khác tiền tố phân loại hoặc văn phong quảng cáo/lạc đề, tách ranh giới `low_signal` vs `logistics_only` cho câu 5★ chưa dùng, và ghi nhận câu ngắn có thuộc tính sản phẩm thật là `verified_insight`).

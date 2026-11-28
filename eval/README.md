@@ -75,13 +75,12 @@ Trên máy dùng `python3`, thay `python` bằng `python3`. Lượt có lỗi k�
 | Lượt | Run ID | Ngày giờ | Model | Đạt/tổng | % | Ghi chú lỗi kỹ thuật |
 |---|---|---|---|---|---|---|
 | `run-1` | `run-1@20261127-184552` | 2026-11-27 18:45 | `gemini-3.5-flash-lite` | 10/30 | 33% | 1 lỗi HTTP 503 (high demand) tại `RS08`; metric tổng: `citation_grounding` 100.0% (305/305), `direction_match` 88.5% (23/26), `label_accuracy` 71.0% (225/317), `tu_choi` 3/3 (100%). |
+| `run-2` | `run-2@20261128-073745` | 2026-11-28 07:37 | `gemini-3.5-flash-lite` | 13/30 | 43% | 0 lỗi kỹ thuật (sau khi thêm retry backoff 3 lần & Prompt v2); metric tổng: `citation_grounding` 100.0% (317/317), `direction_match` 92.3% (24/26), `label_accuracy` 79.8% (253/317), `kho` 4/6 (67%), `tu_choi` 3/3 (100%). |
 
 ## 5. Kết quả tổng hợp
 
-- Lượt dùng báo cáo: __.
-- Đạt/tổng: __ / __; tỷ lệ đạt: __%.
-- `label_accuracy`: __; `direction_match`: __; `citation_grounding`: __; `actionable_quality`: __.
-- `schema_compliance`: __.
-- Nhóm lỗi chính và giới hạn: __.
-
-(Điền sau khi chạy, chấm và đối chiếu `eval/report.md`; chưa có kết quả thực tế.)
+- Lượt dùng báo cáo: `eval/run-2.csv` (`run-2@20261128-073745`, model `gemini-3.5-flash-lite`).
+- Đạt/tổng: **13 / 30**; tỷ lệ đạt: **43%** (tăng từ 10/30 [33%] ở `run-1`; `thuong` 6/21 [29%], `kho` 4/6 [67%], `tu_choi` 3/3 [100%]).
+- `label_accuracy`: **79.8%** (`253/317`, tăng +8.8% từ 71.0% ở `run-1`); `direction_match`: **92.3%** (`24/26`, đạt >=85%); `citation_grounding`: **100.0%** (`317/317`, đạt ==100%); `actionable_quality`: đạt trên các câu vượt qua `code_pass` (chờ Tường rà tổng hợp đầy đủ 26 câu sản phẩm vào `eval/report.md`).
+- `schema_compliance`: **100.0%** (`30/30`, 0 lỗi JSON/API).
+- Nhóm lỗi chính và giới hạn: Ranh giới `suspicious_pattern` vs `low_signal` trên các câu khen 5★ ngắn không lặp nguyên văn (`RS30`: cải thiện từ 0/12 lên 6/12; `RS28`: cải thiện từ 2/12 lên 9/12).
