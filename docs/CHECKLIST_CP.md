@@ -71,15 +71,15 @@ Tài liệu theo dõi tiến độ từng mốc Checkpoint (CP1–CP4) và đầ
 ### Vòng lặp Cải tiến & Eval Lượt 2
 - [x] Đọc các câu trượt ở `eval/run-1.csv` → chọn **1 cải tiến rõ ràng** trong prompt/code (`agent.py` Prompt v2 + `ai.py` retry backoff 3 lần), ghi nhật ký vào `spec.md §10` *(Bảo & Khanh)*
 - [x] Chạy lại `python run.py eval` tạo **Lượt 2** (`eval/run-2.csv`, Run ID `run-2@20261128-073745`, 0 lỗi), chấm `pass` & chạy `python run.py score eval/run-2.csv` (13/30 đạt [43%], `label_accuracy` 71.0% → 79.8%, `direction_match` 88.5% → 92.3%, `citation_grounding` 100%) *(Bảo & Tường)*
-- [ ] Hoàn thiện bảng so sánh **Lượt 1 → Lượt 2** trong `eval/report.md` và tóm tắt vào `spec.md §8` *(Tường & Bảo)*
+- [x] Hoàn thiện bảng so sánh **Lượt 1 → Lượt 2** trong `eval/report.md` và tóm tắt vào `spec.md §8` *(Tường & Bảo)*
 
 ### Mô phỏng Chi phí & Kiểm thử Người dùng
-- [ ] Chạy mô phỏng chi phí ≥50 phiên thật bằng đúng model đã chấm Lượt 2:
+- [x] Chạy mô phỏng chi phí ≥50 phiên thật bằng đúng model đã chấm Lượt 2:
   ```bash
   python run.py simulate --rate-from eval/run-2.csv
   ```
-  *(Nhật & Bảo)*
-- [ ] Dán bảng chi phí vào `cost/cost-estimate.md` (có chi phí/task thành công + tên model) và tóm tắt vào `spec.md §9` *(Nhật)*
+  *(Nhật & Bảo — `simulate-1@20261128-123636`, 50 phiên, `gemini-3.5-flash-lite`: 407 ₫/task thành công, 2.394 ₫/người/tháng)*
+- [x] Dán bảng chi phí vào `cost/cost-estimate.md` (có chi phí/task thành công + tên model) và tóm tắt vào `spec.md §9` *(Nhật & Bảo)*
 - [ ] *(Bonus)* Tổ chức test 2–3 người dùng thật ngoài nhóm và ghi log vào `validation/log.md`; fix lỗi ưu tiên cao trước demo *(Nhật & Khanh)*
 
 ### Slide, Video Dự Phòng & Nộp bài
