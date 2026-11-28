@@ -94,14 +94,15 @@ Nhóm dùng stack khác (Node, Streamlit, notebook…): sửa hàm `run_app()` t
 
 | Thành phần | Thật / Giả | Ghi chú |
 |---|---|---|
-| Lời gọi AI ở quyết định trung tâm | **Thật** (bắt buộc từ CP3) | Model: ____ |
-|  |  |  |
+| Lời gọi AI ở quyết định trung tâm | **Thật** (từ CP3) | Model chính: `gemini-3.5-flash-lite` (đo token thật qua `eval/run-1.csv`, `run-2.csv` và `cost/simulate-1.csv`; đối chiếu giá với `gemini-3.1-pro-preview`) |
+| 3 công cụ tiền xử lý, Grounding Guard & Tính điểm | **Thật** (100% Python tất định) | `codebase/tools.py`: `preprocess_reviews`, `verify_grounding` (100% khớp nguyên văn), `compute_real_trust_score` |
+| Dữ liệu sản phẩm & bằng chứng pain | **Thật** (đã ẩn danh PII) | 26 sản phẩm / 317 review công khai (Shopee + Điện Máy Xanh) + 3 phỏng vấn thật ngoài nhóm (`P1–P3.md`) |
 
 ## Dùng AI vào việc gì
 
 2–3 dòng (bắt buộc): nhóm dùng công cụ AI nào để làm gì, người kiểm lại phần nào. Chi tiết: [docs/ai-usage.md](docs/ai-usage.md). Coding agent đọc [AGENTS.md](AGENTS.md).
 
-____
+Nhóm sử dụng **Antigravity** (TV1, TV4) và **Claude Code + Codex** (TV3) để hỗ trợ lập kế hoạch, viết code lõi `codebase/ai.py`/`agent.py`, script chuẩn hóa dữ liệu/eval, tinh chỉnh System Prompt v2 và đối chiếu nháp `actionable_quality`. Toàn bộ 4 thành viên tự kiểm tra diff, chạy unit test & kiểm thử tích hợp thực tế, kiểm 0 PII trên 26 mẫu dữ liệu, đối chiếu bảng giá Paid Tier và tự thực hiện 3 cuộc phỏng vấn người thật ngoài nhóm (`P1–P3.md`). Nhóm **không dùng AI** để bịa người phỏng vấn/trích dẫn hay chỉnh sửa kết quả các lượt đã chạy (`eval/run-*.csv`, `cost/simulate-*.csv`, `traces/`).
 
 ## File mẫu — điền ở bước nào
 
