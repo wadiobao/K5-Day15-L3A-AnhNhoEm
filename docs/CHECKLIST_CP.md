@@ -61,16 +61,16 @@ Tài liệu theo dõi tiến độ từng mốc Checkpoint (CP1–CP4) và đầ
 - [x] Hoàn thiện giao diện demo 1 màn hình Streamlit trong `codebase/app.py` *(Khanh — PR #9)*
 - [x] Chạy `python run.py eval` tạo kết quả **Lượt 1** (`eval/run-1.csv` + `traces/run-1.jsonl`, Run ID `run-1@20261127-184552`) *(Bảo)*
 - [x] Chấm đủ cột `pass` (`1`/`0`) và `ghi_chu` trong `eval/run-1.csv`, chạy `python run.py score eval/run-1.csv` (10/30 đạt · `tu_choi` 3/3 · `direction_match` 88.5% · `citation_grounding` 100%) *(Bảo & Tường)*
-- [ ] Quay **Video 30 giây** bản chạy thử gọi **AI THẬT** (không lộ `.env`/API key), tải YouTube Unlisted / Drive công khai và kiểm tra bằng **Tab Ẩn Danh** *(Nhật)*
-- [ ] Nộp **Form 2 → Nhánh CP3** trước 10:00 *(Bảo)*
+- [x] Quay **Video 30 giây** bản chạy thử gọi **AI THẬT** (không lộ `.env`/API key), tải YouTube Unlisted / Drive công khai và kiểm tra bằng **Tab Ẩn Danh** *(Nhật)*
+- [x] Nộp **Form 2 → Nhánh CP3** trước 10:00 *(Bảo)*
 
 ---
 
 ## CP4 — 14:30 Chiều Thứ Bảy 28/11 (4 điểm · CHỐT DEMO)
 
 ### Vòng lặp Cải tiến & Eval Lượt 2
-- [x] Đọc các câu trượt ở `eval/run-1.csv` → chọn **1 cải tiến rõ ràng** trong prompt/code (`agent.py` hoặc `tools.py`), ghi nhật ký vào `spec.md §10` *(Bảo & Khanh)*
-- [ ] Chạy lại `python run.py eval` tạo **Lượt 2** (`eval/run-2.csv`), chấm `pass` & chạy `python run.py score eval/run-2.csv` *(Bảo & Tường)*
+- [x] Đọc các câu trượt ở `eval/run-1.csv` → chọn **1 cải tiến rõ ràng** trong prompt/code (`agent.py` Prompt v2 + `ai.py` retry backoff 3 lần), ghi nhật ký vào `spec.md §10` *(Bảo & Khanh)*
+- [x] Chạy lại `python run.py eval` tạo **Lượt 2** (`eval/run-2.csv`, Run ID `run-2@20261128-073745`, 0 lỗi), chấm `pass` & chạy `python run.py score eval/run-2.csv` (13/30 đạt [43%], `label_accuracy` 71.0% → 79.8%, `direction_match` 88.5% → 92.3%, `citation_grounding` 100%) *(Bảo & Tường)*
 - [ ] Hoàn thiện bảng so sánh **Lượt 1 → Lượt 2** trong `eval/report.md` và tóm tắt vào `spec.md §8` *(Tường & Bảo)*
 
 ### Mô phỏng Chi phí & Kiểm thử Người dùng
