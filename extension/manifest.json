@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "ReviewShield — Bóc Tách Sao Ảo & Điểm Tin Cậy Thực",
+  "short_name": "ReviewShield",
+  "version": "1.0.0",
+  "description": "Đọc đánh giá trên trang sản phẩm đang mở khi bạn bấm nút, ẩn danh PII tại trình duyệt, bóc tách nhiễu seeding và tính Điểm tin cậy thực.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "sidePanel",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://shopee.vn/*",
+    "https://*.shopee.vn/*",
+    "https://tiki.vn/*",
+    "https://*.tiki.vn/*",
+    "https://*.dienmayxanh.com/*",
+    "https://*.thegioididong.com/*",
+    "https://*.lazada.vn/*",
+    "https://*.tiktok.com/*",
+    "https://hackathonane.duckdns.org/*",
+    "http://localhost:8000/*",
+    "http://127.0.0.1:8000/*"
+  ],
+  "optional_host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "action": {
+    "default_title": "Mở ReviewShield Side Panel",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  }
+}

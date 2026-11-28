@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReviewShield Side Panel</title>
+  <link rel="stylesheet" href="sidepanel.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Top Header -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-badge">RS</div>
+        <div>
+          <div class="brand-name">Review<span>Shield</span></div>
+          <div class="brand-sub">Bóc tách sao ảo · Grounding 100%</div>
+        </div>
+      </div>
+      <button id="healthBadge" class="status-pill status-btn" type="button" title="Bấm để mở cài đặt Backend API">Đang kiểm tra…</button>
+    </header>
+
+    <!-- Mode Switcher -->
+    <div class="mode-tabs" role="tablist">
+      <button id="tabScan" class="tab-btn active" type="button">Quét trang đang mở</button>
+      <button id="tabManual" class="tab-btn" type="button">Dán review thủ công</button>
+    </div>
+
+    <!-- Mode 1: Auto-Scroll + Balanced Review Collector -->
+    <section id="panelScan" class="card">
+      <div class="section-head">
+        <span class="section-title">1. Tự động gom đánh giá trên trang</span>
+        <span id="collectedCount" class="pill pill-mint">0 review</span>
+      </div>
+      <p class="hint">
+        Không cần tự cuộn tay — bấm <strong>Tự động quét review</strong> để Extension tự cuộn tải mục Đánh giá, gom cân bằng <strong>5★ + 1–3★</strong> và ẩn danh 100% PII ngay tại máy.
+      </p>
+
+      <div class="scan-options">
+        <label class="field-inline">
+          <span>Số lượng:</span>
+          <select id="selectTargetCount">
+            <option value="20" selected>20 review (Chuẩn AI · ~5s)</option>
+            <option value="30">30 review (Chi tiết · ~8s)</option>
+            <option value="50">50 review (Tối đa API · ~12s)</option>
+          </select>
+        </label>
+        <label class="checkbox-row">
+          <input id="chkBalanceStars" type="checkbox" checked />
+          <span>Tự lấy cân bằng 5★ + 1–3★</span>
+        </label>
+      </div>
+
+      <div class="btn-row">
+        <button id="btnScanPage" class="btn btn-secondary" type="button">Tự động quét review</button>
+        <button id="btnStopScan" class="btn btn-danger hidden" type="button" title="Dừng quét và giữ các review đã gom">Dừng</button>
+        <button id="btnClearList" class="btn btn-ghost" type="button" title="Xóa danh sách đang gom">Xóa</button>
+      </div>
+
+      <div class="mini-actions">
+        <button id="btnScanVisible" class="btn-link" type="button" title="Chỉ quét ngay các review đang hiện trên màn hình (không cuộn)">+ Quét nhanh màn hình hiện tại</button>
+      </div>
+
+      <div id="scanNotice" class="notice hidden"></div>
+
+      <div class="meta-grid">
+        <label class="field">
+          <span>Tên sản phẩm</span>
+          <input id="inputProductName" type="text" placeholder="Tự điền sau khi quét hoặc nhập tay…" />
+        </label>
+        <label class="field field-sm">
+          <span>Điểm sàn</span>
+          <input id="inputPlatformRating" type="number" min="1" max="5" step="0.1" placeholder="4.8" />
+        </label>
+      </div>
+
+      <div id="starSummary" class="star-summary hidden"></div>
+
+      <div class="mini-actions">
+        <button id="btnCopyJson" class="btn-link" type="button">Sao chép JSON</button>
+        <button id="btnDownloadJson" class="btn-link" type="button">Tải file .json</button>
+      </div>
+
+      <details id="jsonDetails" class="details-box">
+        <summary>Xem trước JSON đã ẩn danh PII (user_01…)</summary>
+        <pre id="jsonPreview" class="code-box">[]</pre>
+      </details>
+    </section>
+
+    <!-- Mode 2: Manual Paste -->
+    <section id="panelManual" class="card hidden">
+      <div class="section-head">
+        <span class="section-title">Dán văn bản hoặc JSON đánh giá</span>
+      </div>
+      <p class="hint">Hỗ trợ mỗi dòng <code>[5] nội dung…</code> hoặc dán nguyên JSON sản phẩm (không dán link sàn).</p>
+      <textarea id="manualInput" rows="7" placeholder="[5] Giao hàng nhanh, chưa dùng nhưng cho 5 sao lấy xu&#10;[1] Pin dùng được 1 tiếng đã sập nguồn, sạc rất nóng…"></textarea>
+    </section>
+
+    <!-- Primary Analyze CTA -->
+    <div class="cta-wrap">
+      <button id="btnAnalyze" class="btn btn-primary" type="button">
+        <span id="btnAnalyzeText">Soi đánh giá bằng AI</span>
+      </button>
+      <label class="checkbox-row">
+        <input id="chkBypassCache" type="checkbox" />
+        <span>Bỏ qua Cache (gọi lại AI mới)</span>
+      </label>
+    </div>
+
+    <div id="errorBox" class="alert alert-error hidden"></div>
+
+    <!-- Refusal / Guardrail Result -->
+    <section id="refusalBox" class="card card-coral hidden">
+      <div class="section-head">
+        <span class="section-title" style="color: var(--coral);">Chặn an toàn (Guardrail)</span>
+        <span id="refusalCode" class="pill pill-coral">guardrail</span>
+      </div>
+      <p id="refusalText" class="body-text"></p>
+    </section>
+
+    <!-- Analysis Result -->
+    <section id="resultSection" class="result-stack hidden">
+      <!-- Trace & Cache Badges -->
+      <div class="trace-bar">
+        <span id="badgeGrounding" class="pill pill-mint">Grounding 100%</span>
+        <span id="badgeCache" class="pill pill-blue hidden">Từ Cache (0 token)</span>
+        <span id="traceInfo" class="trace-meta"></span>
+      </div>
+
+      <!-- Score Verdict Card -->
+      <div class="card card-verdict">
+        <div class="section-head">
+          <span id="resProductName" class="product-heading"></span>
+          <span id="resTrustBadge" class="pill"></span>
+        </div>
+
+        <div class="score-grid">
+          <div class="score-tile">
+            <div class="tile-lbl">Điểm sàn</div>
+            <div id="resPlatformScore" class="tile-val amber">—</div>
+          </div>
+          <div class="score-tile">
+            <div class="tile-lbl">Điểm thực</div>
+            <div id="resRealScore" class="tile-val coral">—</div>
+          </div>
+          <div class="score-tile">
+            <div class="tile-lbl">Trải nghiệm thật</div>
+            <div id="resVerifiedRatio" class="tile-val mint">—</div>
+          </div>
+        </div>
+
+        <div id="resDeltaLine" class="delta-line"></div>
+        <div id="resLogisticsWarn" class="notice notice-blue hidden"></div>
+
+        <!-- 4-label distribution bar -->
+        <div class="dist-bar" id="distBar"></div>
+        <div class="dist-legend" id="distLegend"></div>
+      </div>
+
+      <!-- Top 3 Risks -->
+      <div class="card card-coral">
+        <div class="section-head">
+          <span class="section-title" style="color: var(--coral);">Top 3 điểm cần lưu ý</span>
+        </div>
+        <div id="risksList" class="list-stack"></div>
+      </div>
+
+      <!-- 3 Questions Draft -->
+      <div class="card card-mint">
+        <div class="section-head">
+          <span class="section-title" style="color: var(--mint);">3 câu nên nhắn hỏi shop</span>
+          <button id="btnCopyQuestions" class="btn-chip" type="button">Sao chép cả 3</button>
+        </div>
+        <p class="hint" style="margin-bottom:8px;">Bản nháp gợi ý — người mua tự duyệt trước khi nhắn (hệ thống không tự gửi).</p>
+        <ol id="questionsList" class="questions-list"></ol>
+      </div>
+
+      <!-- Review Details with Filter -->
+      <div class="card">
+        <div class="section-head">
+          <span class="section-title">Đối chiếu trích dẫn nguyên văn</span>
+        </div>
+        <div id="filterChips" class="filter-row"></div>
+        <div id="reviewsList" class="reviews-stack"></div>
+      </div>
+    </section>
+
+    <!-- Backend Settings (Collapsible) -->
+    <details id="settingsBox" class="card settings-box">
+      <summary>Cài đặt Backend API (không lưu API key trên trình duyệt)</summary>
+      <div class="settings-body">
+        <label class="field">
+          <span>URL Backend ReviewShield</span>
+          <input id="inputBackendUrl" type="url" placeholder="https://hackathonane.duckdns.org" />
+        </label>
+        <div class="btn-row">
+          <button id="btnPresetVps" class="btn btn-ghost btn-sm" type="button">VPS HTTPS</button>
+          <button id="btnPresetLocal" class="btn btn-ghost btn-sm" type="button">Localhost :8000</button>
+          <button id="btnSaveBackend" class="btn btn-secondary btn-sm" type="button">Lưu &amp; Kiểm tra</button>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>
